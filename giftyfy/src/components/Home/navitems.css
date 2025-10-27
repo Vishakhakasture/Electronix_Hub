@@ -1,0 +1,88 @@
+/* Container for all nav items */
+.nav-items-bar {
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: center;
+  font-family: "Poppins", sans-serif;
+  z-index: 10;
+}
+
+/* List of nav items */
+.nav-items-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin: 0;
+  padding: 12px 0;
+  list-style: none;
+}
+
+/* Each item */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  position: relative;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Arrow icon */
+.nav-arrow {
+  font-size: 10px;
+  transition: transform 0.3s ease, color 0.3s ease;
+  color: #666;
+}
+
+/* Hover effects */
+.nav-item:hover {
+  color: #e91e63;
+}
+
+.nav-item:hover .nav-arrow {
+  transform: rotate(180deg);
+  color: #e91e63;
+}
+
+/* Underline animation */
+.nav-item::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #e91e63;
+  transition: width 0.3s ease;
+}
+
+.nav-item:hover::after {
+  width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .nav-items-list {
+    gap: 18px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .nav-items-list {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .nav-item::after {
+    display: none;
+  }
+}
