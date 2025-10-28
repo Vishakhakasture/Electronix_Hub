@@ -5,8 +5,8 @@ const navData = [
       "Android Phones",
       "iPhones",
       "5G Phones",
-      "Gaming Phones",
       "Foldable Phones",
+      "Tablets",
     ],
   },
   {
@@ -19,12 +19,12 @@ const navData = [
     ],
   },
   {
-    title: "Tablets",
+    title: "Watches",
     subCategories: [
-      "Android Tablets",
-      "iPads",
-      "Drawing Tablets",
-      "Kids Tablets",
+      "Analogue Watch",
+      "Digital Watch",
+      "Samrt Watch",
+      "Fitness Watch",
     ],
   },
   {
@@ -33,7 +33,7 @@ const navData = [
       "Earbuds",
       "Wireless Headphones",
       "Gaming Headsets",
-      "Noise Cancelling",
+      "Wired Headphones",
     ],
   },
   {
