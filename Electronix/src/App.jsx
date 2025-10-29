@@ -3,6 +3,7 @@ import Home from './components/home-page/Home.jsx';
 import Auth from './components/auth-page/Auth.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SubCategoryPage from './components/home-page/SubCategoryPage.jsx';
+import ProductList from './components/product-page/ProductList.jsx';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           path="/electronics/:category/:subCategory"
           element={<SubCategoryPage/>}
         />
+         <Route path="/products/:category" element={<ProductList />} />
       </Routes>
     </BrowserRouter>
   );

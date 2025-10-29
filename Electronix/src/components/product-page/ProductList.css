@@ -1,0 +1,224 @@
+/* ProductList.css - replace your existing file with this */
+
+/* page container */
+.product-page-container {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff; /* page white background */
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Category header (keeps the dark gradient background) */
+.category-header {
+  background: linear-gradient(90deg, #0d1137, #1b1f52); /* header gradient */
+  color: #ffffff;
+  text-align: center;
+  padding: 48px 20px; /* taller header */
+  border-bottom-left-radius: 22px;
+  border-bottom-right-radius: 22px;
+  margin-bottom: 18px;
+  box-sizing: border-box;
+}
+
+.category-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+/* main content: left filter + right product area */
+.product-page-content {
+  display: flex;
+  gap: 40px;
+  padding: 28px 60px 60px 60px; /* spacing around main area */
+  box-sizing: border-box;
+}
+
+/* ---- Sidebar (left) ---- */
+.filter-sidebar {
+  flex: 0 0 260px;
+  background: #ffffff; /* keep sidebar white like screenshot */
+  border-radius: 16px;
+  padding: 22px;
+  border: 1px solid #f0f0f2;
+  box-shadow: 0 6px 22px rgba(12, 16, 43, 0.06);
+  height: fit-content;
+}
+
+.filter-sidebar h4 {
+  font-size: 1.4rem;
+  color: #1b1f52;
+  margin: 0 0 14px 0;
+  font-weight: 600;
+}
+
+.filter-section {
+  margin-bottom: 18px;
+}
+
+.filter-section h5 {
+  font-size: 1rem;
+  color: #0d1137;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.filter-section label {
+  display: block;
+  color: #444;
+  font-size: 0.95rem;
+  margin: 8px 0;
+  cursor: pointer;
+}
+
+/* ---- Product area (right) ---- */
+.product-list-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sort bar aligned to the right like screenshot */
+.sort-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* push to right */
+  margin-bottom: 26px;
+  gap: 12px;
+  padding-right: 8px;
+}
+
+.sort-bar label {
+  color: #1b1f52;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* styled select similar to screenshot */
+.sort-bar select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #cfcfcf;
+  background: #fff;
+  font-size: 0.95rem;
+  color: #222;
+  outline: none;
+  min-width: 190px;
+  cursor: pointer;
+}
+
+/* ---- Grid: 3 cards per row on desktop ---- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  gap: 28px;
+  align-items: start;
+}
+
+/* Card look */
+.product-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 6px 24px rgba(12, 16, 43, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  min-height: 320px; /* keeps cards consistent height */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(12, 16, 43, 0.10);
+}
+
+.product-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover; /* use cover to match product visuals */
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+
+.product-card h3 {
+  font-size: 1rem;
+  color: #0d1137;
+  margin: 6px 0 6px 0;
+  line-height: 1.2;
+}
+
+.product-card .brand {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.product-card .price {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1b1f52;
+  margin-top: auto; /* keep price pinned to bottom area */
+}
+
+/* No-products message */
+.no-products {
+  padding: 40px;
+  font-size: 1.15rem;
+  color: #444;
+  text-align: center;
+}
+
+/* Load more button */
+.load-more-container {
+  text-align: center;
+  margin-top: 28px;
+}
+
+.load-more-container button {
+  background: linear-gradient(90deg, #0d1137, #1b1f52);
+  border: none;
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on medium */
+  }
+
+  .product-page-content {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+@media (max-width: 780px) {
+  .product-page-content {
+    flex-direction: column;
+    gap: 20px;
+    padding: 18px;
+  }
+
+  .filter-sidebar {
+    width: 100%;
+  }
+
+  .sort-bar {
+    justify-content: center;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr; /* single column on small screens */
+  }
+
+  .category-header h2 {
+    font-size: 1.8rem;
+  }
+}
