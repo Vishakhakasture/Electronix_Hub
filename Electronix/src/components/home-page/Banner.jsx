@@ -8,10 +8,10 @@ const Banner = () => {
   return (
     <Carousel
       fade
-      interval={4000}   // Auto-slide every 4 seconds
+      interval={4000}   
       controls={true}
       indicators={true}
-      pause={false}     // Keeps moving even if user hovers
+      pause={false}     
       className="banner-carousel"
     >
       {bannerData.map((item) => (

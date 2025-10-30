@@ -4,9 +4,20 @@ import { FaUser, FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const categories = [
+    { name: "Smartphones", path: "/products/smartphones" },
+    { name: "Laptops", path: "/products/laptops" },
+    { name: "Watches", path: "/products/watches" },
+    { name: "Headphones", path: "/products/headphones" },
+    { name: "Cameras", path: "/products/cameras" },
+  ];
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+
+    const handleCategoryClick = (path) => {
+      navigate(path);
+    };
 
   // Toggle dropdown visibility when user icon clicked
   const handleUserClick = () => {

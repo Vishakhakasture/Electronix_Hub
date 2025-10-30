@@ -1,6 +1,27 @@
-/* ProductList.css - replace your existing file with this */
+/* Breadcrumb */
+.breadcrumb {
+  padding: 15px 40px;
+  background: #f9f9f9;
+  font-size: 14px;
+  color: navy;
+  border-bottom: 1px solid #e0e0e0;
+}
 
-/* page container */
+.breadcrumb a {
+  color: navy;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb span {
+  color: #666;
+  margin: 0 5px;
+}
+
 .product-page-container {
   display: flex;
   flex-direction: column;
@@ -11,10 +32,10 @@
 
 /* Category header (keeps the dark gradient background) */
 .category-header {
-  background: linear-gradient(90deg, #0d1137, #1b1f52); /* header gradient */
-  color: #ffffff;
+  background: #ffffff; /* header gradient */
+  color: linear-gradient(90deg, #0d1137, #1b1f52);
   text-align: center;
-  padding: 48px 20px; /* taller header */
+  padding: 34px 14px; /* taller header */
   border-bottom-left-radius: 22px;
   border-bottom-right-radius: 22px;
   margin-bottom: 18px;
@@ -129,11 +150,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-}
-
-.product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 30px rgba(12, 16, 43, 0.10);
+  cursor: pointer;
 }
 
 .product-card img {
@@ -215,7 +232,7 @@
   }
 
   .product-grid {
-    grid-template-columns: 1fr; /* single column on small screens */
+    grid-template-columns: 1fr; 
   }
 
   .category-header h2 {

@@ -5,6 +5,7 @@ import navData from "./navData";
 import { useNavigate } from "react-router-dom"; 
 
 const NavbarItems = () => {
+  
   const navigate = useNavigate();
 
   const handleSubCategoryClick = (category, subCategory) => {
