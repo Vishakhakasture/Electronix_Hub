@@ -19,7 +19,7 @@ const ProductDetails = () => {
   }, [id]);
 
   if (!product) {
-    return <div>Loading...</div>;
+    return <div className="no-products">No products found</div>;
   }
 
   return (
@@ -28,20 +28,24 @@ const ProductDetails = () => {
       <NavbarItems />
       <div className="product-details-container">
         <div className="breadcrumb">
-            <Link to="/">Home</Link>
-                <span> / </span>
-            <Link to={`product/category/${product.category.toLowerCase()}`}>
-            {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
-            </Link>
-            <span> / </span>
-            <span>{product.title}</span>
+          <Link to="/">Home</Link>
+          <span> / </span>
+          <Link to={`/products/${product.category.toLowerCase()}`}>
+            {product.category}
+          </Link>
+          <span> / </span>
+          <span>{product.title}</span>
         </div>
 
         <div className="product-details-content">
           <div className="product-gallery">
-            <img src={selectedImage} alt={product.title} className="main-image" />
+            <img
+              src={selectedImage}
+              alt={product.title}
+              className="main-image"
+            />
             <div className="thumbnail-row">
-              {[product.image, ...(product.gallery || [])].map((img, index) => (
+              {[product.image, ...(product.images || [])].map((img, index) => (
                 <img
                   key={index}
                   src={img}
@@ -53,6 +57,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
+          {/* Product Info */}
           <div className="product-info">
             <h2>{product.title}</h2>
             <p className="brand">{product.brand}</p>
@@ -63,7 +68,9 @@ const ProductDetails = () => {
             <div className="quantity-section">
               <label>Quantity:</label>
               <div className="quantity-controls">
-                <button onClick={() => setQuantity((q) => Math.max(1, q - 1))}>−</button>
+                <button onClick={() => setQuantity((q) => Math.max(1, q - 1))}>
+                  −
+                </button>
                 <span>{quantity}</span>
                 <button onClick={() => setQuantity((q) => q + 1)}>+</button>
               </div>
@@ -74,22 +81,31 @@ const ProductDetails = () => {
               <button className="buy-now">Buy Now</button>
             </div>
 
+            {/* Specs */}
             <div className="product-specs">
               <h4>Technical Specifications</h4>
               <ul>
-                {product.specs?.map((spec, i) => (
-                  <li key={i}>{spec}</li>
-                ))}
+                {product.specs &&
+                  Object.entries(product.specs).map(([key, value], i) => (
+                    <li key={i}>
+                      <strong>{key}:</strong> {value}
+                    </li>
+                  ))}
               </ul>
             </div>
 
+            {/* Reviews */}
             <div className="reviews">
               <h4>Customer Reviews</h4>
-              {product.reviews?.map((rev, i) => (
-                <p key={i} className="review">
-                  ⭐ {rev.rating}/5 – {rev.comment}
-                </p>
-              ))}
+              {product.reviews?.length > 0 ? (
+                product.reviews.map((rev, i) => (
+                  <p key={i} className="review">
+                    <strong>{rev.user}:</strong> {rev.comment}
+                  </p>
+                ))
+              ) : (
+                <p>No reviews yet.</p>
+              )}
             </div>
           </div>
         </div>

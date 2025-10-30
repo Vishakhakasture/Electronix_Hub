@@ -5,7 +5,6 @@ const navData = [
       "Android Phones",
       "iPhones",
       "5G Phones",
-      "Foldable Phones",
       "Tablets",
     ],
   },
@@ -14,7 +13,6 @@ const navData = [
     subCategories: [
       "Gaming Laptops",
       "Business Laptops",
-      "Student Laptops",
       "MacBooks",
     ],
   },
@@ -23,15 +21,13 @@ const navData = [
     subCategories: [
       "Analogue Watch",
       "Digital Watch",
-      "Samrt Watch",
-      "Fitness Watch",
+      "Smart Watch",
     ],
   },
   {
     title: "Headphones",
     subCategories: [
       "Earbuds",
-      "Wireless Headphones",
       "Gaming Headsets",
       "Wired Headphones",
     ],
@@ -40,7 +36,6 @@ const navData = [
     title: "Cameras",
     subCategories: [
       "DSLR Cameras",
-      "Mirrorless Cameras",
       "Action Cameras",
       "Security Cameras",
     ],

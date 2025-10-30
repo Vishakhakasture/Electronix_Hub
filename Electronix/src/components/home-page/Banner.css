@@ -8,19 +8,19 @@
   height: 75vh;
   width: 100%;
   object-fit: cover;
-  filter: brightness(90%); /* Keeps the image slightly dim */
+  filter: brightness(90%); 
+  cursor: pointer;
 }
 
-/* Soft gradient overlay for subtle shade */
 .banner-carousel::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to right,
-    rgba(0, 0, 0, 0.45) 15%,   /* Left side darker */
-    rgba(0, 0, 0, 0.25) 45%,   /* Center mild */
-    rgba(0, 0, 0, 0.10) 85%    /* Right side lighter */
+    rgba(0, 0, 0, 0.45) 15%,   
+    rgba(0, 0, 0, 0.25) 45%,   
+    rgba(0, 0, 0, 0.10) 85%    
   );
   z-index: 1;
   pointer-events: none;
@@ -49,7 +49,6 @@
   text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
 }
 
-/* Button with stronger focus and depth */
 .banner-btn {
   display: inline-block;
   margin-top: 18px;

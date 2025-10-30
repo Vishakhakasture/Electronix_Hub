@@ -1,3 +1,4 @@
+// src/components/product-page/ProductList.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import productData from "./ProductData";
@@ -6,47 +7,85 @@ import Navbar from "../home-page/Navbar";
 import NavbarItems from "../home-page/NavbarItems";
 
 const ProductList = () => {
-  const { category } = useParams();
+  const { category } = useParams(); // param from /products/:category
   const navigate = useNavigate();
+
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [sortOption, setSortOption] = useState("Select");
 
-  // Filtering logic
-  useEffect(() => {
-    let products = category
-      ? productData.filter(
-          (p) => p.category.toLowerCase() === category.toLowerCase()
-        )
-      : [...productData];
+  // Helper: prettify category param for display
+  const formatLabel = (raw) => {
+    if (!raw) return "";
+    return raw
+      .toString()
+      .replace(/-/g, " ")
+      .split(" ")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  };
 
+  // Mapping main categories -> list of subcategories (these are the product.category values)
+  const categoryMapping = {
+    smartphones: ["Android Phones", "iPhones", "5G Phones", "Foldable Phones", "Tablets"],
+    laptops: ["Gaming Laptops", "Business Laptops", "Student Laptops", "MacBooks"],
+    watches: ["Analogue Watch", "Digital Watch", "Smart Watch", "Fitness Watch"],
+    headphones: ["Earbuds", "Wireless Headphones", "Gaming Headsets", "Wired Headphones"],
+    cameras: ["DSLR Cameras", "Mirrorless Cameras", "Action Cameras", "Security Cameras"],
+  };
+
+  useEffect(() => {
+    let filtered = [...productData];
+    const normalizedCategory = category?.toLowerCase();
+
+    if (normalizedCategory) {
+      // 1) If it's a main category like "smartphones", show all its mapped subcategories
+      if (categoryMapping[normalizedCategory]) {
+        filtered = productData.filter((p) =>
+          categoryMapping[normalizedCategory].includes(p.category)
+        );
+      } else {
+        // 2) If it's a subcategory param (could be "iPhones" or urlified "i-phones" or "iphones")
+        // Try matching product.category in few ways:
+        filtered = productData.filter((p) => {
+          const productCat = (p.category || "").toString().toLowerCase();
+          // normalizedCategory may be "iphones" or "i-phones" or "android-phones"
+          const urlifiedProductCat = productCat.replace(/\s+/g, "-");
+          return (
+            productCat === normalizedCategory ||
+            urlifiedProductCat === normalizedCategory ||
+            productCat.replace(/[^a-z0-9]/g, "") === normalizedCategory.replace(/[^a-z0-9]/g, "")
+          );
+        });
+      }
+    } else {
+      // No category provided -> show all products
+      filtered = [...productData];
+    }
+
+    // Apply sidebar filters (if any)
     if (selectedCategories.length > 0) {
-      products = products.filter((p) => selectedCategories.includes(p.category));
+      filtered = filtered.filter((p) => selectedCategories.includes(p.category));
     }
 
     if (selectedBrands.length > 0) {
-      products = products.filter((p) => selectedBrands.includes(p.brand));
+      filtered = filtered.filter((p) => selectedBrands.includes(p.brand));
     }
 
     if (selectedPrice) {
-      if (selectedPrice === "low") {
-        products = products.filter((p) => p.price < 1000);
-      } else if (selectedPrice === "medium") {
-        products = products.filter((p) => p.price >= 1000 && p.price < 2000);
-      } else if (selectedPrice === "high") {
-        products = products.filter((p) => p.price >= 2000);
-      }
+      if (selectedPrice === "low") filtered = filtered.filter((p) => p.price < 1000);
+      else if (selectedPrice === "medium")
+        filtered = filtered.filter((p) => p.price >= 1000 && p.price < 2000);
+      else if (selectedPrice === "high") filtered = filtered.filter((p) => p.price >= 2000);
     }
 
-    if (sortOption === "low-high") {
-      products.sort((a, b) => a.price - b.price);
-    } else if (sortOption === "high-low") {
-      products.sort((a, b) => b.price - a.price);
-    }
+    // Sorting
+    if (sortOption === "low-high") filtered.sort((a, b) => a.price - b.price);
+    else if (sortOption === "high-low") filtered.sort((a, b) => b.price - a.price);
 
-    setFilteredProducts(products);
+    setFilteredProducts(filtered);
   }, [category, selectedCategories, selectedBrands, selectedPrice, sortOption]);
 
   // Handlers
@@ -66,20 +105,21 @@ const ProductList = () => {
     setSelectedPrice(selectedPrice === range ? null : range);
   };
 
+  // Build breadcrumb category link path (keep consistent with your routes)
+  const categoryLinkPath = category ? `/products/${category}` : "/products";
+
   return (
     <>
       <Navbar />
       <NavbarItems />
 
-      {/* Breadcrumb Section */}
+      {/* Breadcrumb */}
       <div className="breadcrumb">
         <Link to="/">Home</Link>
         {category && (
           <>
             <span> / </span>
-            <Link to={`/category/${category.toLowerCase()}`}>
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </Link>
+            <Link to={categoryLinkPath}>{formatLabel(category)}</Link>
           </>
         )}
         <span> / Products</span>
@@ -93,7 +133,7 @@ const ProductList = () => {
 
             <div className="filter-section">
               <h5>Category</h5>
-              {["Smartphones", "Laptops", "Watches"].map((cat) => (
+              {["Smartphones", "Laptops", "Watches", "Headphones", "Cameras"].map((cat) => (
                 <label key={cat}>
                   <input
                     type="checkbox"
@@ -148,14 +188,11 @@ const ProductList = () => {
             </div>
           </aside>
 
-          {/* Product Section */}
+          {/* Product List Section */}
           <div className="product-list-section">
             <div className="sort-section">
               <label>Sort By:&nbsp;</label>
-              <select
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
-              >
+              <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
                 <option value="Select">Select</option>
                 <option value="low-high">Price: Low → High</option>
                 <option value="high-low">Price: High → Low</option>
