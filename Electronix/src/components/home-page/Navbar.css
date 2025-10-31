@@ -1,23 +1,25 @@
+/* 🌐 Base Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: linear-gradient(90deg, #0d1137, #1b1f52);
+  padding: 0.8rem 2rem;
   height: 80px;
-  padding: 0 120px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
   position: sticky;
   top: 0;
   z-index: 1000;
+  flex-wrap: wrap;
 }
 
+/* 🔷 Logo */
 .logo-text {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #ffffff;
   letter-spacing: 0.5px;
   font-family: "Poppins", sans-serif;
-  margin-left: 40px;
   cursor: pointer;
   transition: color 0.3s ease;
 }
@@ -26,34 +28,77 @@
   color: #ffd700;
 }
 
+/* 🔍 Search Area */
 .nav-center {
+  position: relative;
   flex: 1;
   display: flex;
   justify-content: center;
+  min-width: 250px;
+  margin: 0 1rem;
 }
 
 .search-input {
-  width: 40%;
-  max-width: 450px;
-  padding: 8px 14px;
+  width: 100%;
+  max-width: 480px;
+  padding: 10px 16px;
+  border-radius: 30px;
   border: none;
-  border-radius: 25px;
-  font-size: 0.9rem;
   outline: none;
+  font-size: 15px;
+  background-color: #fff;
   color: #333;
-  background: #ffffff;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .search-input:focus {
-  box-shadow: 0 0 8px #ffd700;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
 }
 
+/* 💡 Suggestions Dropdown */
+.suggestions-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 5px 0;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.suggestion-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 15px;
+  color: #333;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover,
+.suggestion-item.active {
+  background-color: #f3f6ff;
+  color: #1b1f52;
+  font-weight: 500;
+}
+
+/* 🛒 User + Cart Icons */
 .nav-right {
   display: flex;
   align-items: center;
   gap: 25px;
-  margin-right: 40px;
   position: relative;
 }
 
@@ -64,120 +109,28 @@
   color: #ffffff;
   font-size: 1.3rem;
   transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.cart-icon {
   position: relative;
 }
+
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: #ff4757;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
 
 .icon-container:hover {
   color: #ffd700;
   transform: scale(1.08);
-}
-
-/* =========================
-   DROPDOWN MENU STYLING
-   ========================= */
-.user-menu {
-  position: relative;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 45px;
-  right: 0;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-  padding: 10px 15px;
-  z-index: 2000;
-  min-width: 160px;
-  animation: fadeIn 0.25s ease-in-out;
-}
-
-.dropdown-menu button {
-  background: none;
-  border: none;
-  color: #1b1f52;
-  font-size: 15px;
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
-  padding: 8px 0;
-  transition: color 0.2s ease;
-}
-
-.dropdown-menu button:hover {
-  color: #ffd700;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* =========================
-   RESPONSIVE DESIGN
-   ========================= */
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    height: auto;
-    gap: 10px;
-    padding: 15px 25px;
-  }
-
-  .search-input {
-    width: 80%;
-  }
-
-  .logo-text {
-    font-size: 1.2rem;
-    margin-left: 0;
-  }
-
-  .icon-container {
-    font-size: 1.1rem;
-  }
-
-  .dropdown-menu {
-    top: 38px;
-    right: -10px;
-    min-width: 130px;
-  }
-}
-
-/* --- User dropdown styles --- */
-.user-menu {
-  position: relative;
-}
-
-.user-dropdown {
-  position: absolute;
-  top: 40px;
-  right: 0;
-  background: white;
-  color: #333;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  padding: 10px 15px;
-  min-width: 150px;
-  z-index: 100;
-}
-
-.user-dropdown p {
-  margin: 0;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.user-dropdown p:hover {
-  color: #0d1137;
-  font-weight: 600;
 }
 
 .user-menu {
@@ -220,5 +173,95 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar {
+    padding: 0.8rem 1.5rem;
+  }
+
+  .search-input {
+    max-width: 400px;
+  }
+
+  .suggestions-list {
+    max-width: 400px;
+  }
+
+  .nav-right {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: auto;
+    padding: 1rem;
+  }
+
+  .logo-text {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+  }
+
+  .nav-center {
+    order: 2;
+    width: 90%;
+  }
+
+  .nav-right {
+    order: 3;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 25px;
+  }
+
+  .icon-container {
+    font-size: 1.2rem;
+  }
+
+  .suggestions-list {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.8rem;
+    gap: 8px;
+  }
+
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  .search-input {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .nav-center {
+    width: 100%;
+  }
+
+  .nav-right {
+    gap: 15px;
+  }
+
+  .icon-container {
+    font-size: 1.1rem;
+  }
+
+  .suggestions-list {
+    width: 95%;
+    max-width: none;
   }
 }
