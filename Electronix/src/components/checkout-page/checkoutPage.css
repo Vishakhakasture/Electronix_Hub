@@ -1,0 +1,46 @@
+.checkout-page {
+  background-color: #f7f8fc;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+.breadcrumb {
+  font-size: 15px;
+  color: #555;
+  padding: 20px 80px 0;
+}
+
+.breadcrumb a {
+  color: #0d1137;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumb span {
+  margin: 0 8px;
+}
+
+.address-section h3,
+.order-summary h3 {
+  font-weight: 700;
+  color: #0d1137;
+  margin-bottom: 25px;
+}
+
+.saved-address {
+  background: #f9f9fc;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.order-success {
+  text-align: center;
+  padding: 80px 20px;
+  color: #0d1137;
+}
+
+@media (max-width: 768px) {
+  .breadcrumb {
+    padding: 15px;
+  }
+}

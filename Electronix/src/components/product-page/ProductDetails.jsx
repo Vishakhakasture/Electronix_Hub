@@ -25,7 +25,6 @@ const ProductDetails = () => {
     return <div className="no-products">No products found</div>;
   }
 
-  // Detect where user came from (category, search, etc.)
   const path = location.pathname;
   const fromSearch = path.includes("search");
   const category = product.category;
@@ -36,7 +35,6 @@ const ProductDetails = () => {
       <NavbarItems />
 
       <div className="product-details-container">
-        {/* ---------- Breadcrumb ---------- */}
         <div className="breadcrumb">
           <Link to="/">Home</Link>
 
@@ -60,9 +58,7 @@ const ProductDetails = () => {
           <span>{product.title}</span>
         </div>
 
-        {/* ---------- Product Details Layout ---------- */}
         <div className="product-details-content">
-          {/* Left: Image Gallery */}
           <div className="product-gallery">
             <img
               src={selectedImage}
@@ -86,14 +82,12 @@ const ProductDetails = () => {
             )}
           </div>
 
-          {/* Right: Info */}
           <div className="product-info">
             <h2>{product.title}</h2>
             <p className="brand">{product.brand}</p>
             <p className="price">₹{product.price}</p>
             <p className="description">{product.description}</p>
 
-            {/* Quantity Control */}
             <div className="quantity-section">
               <div className="quantity-controls">
                 <button
@@ -110,15 +104,12 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* Buttons */}
             <div className="action-buttons">
               <button className="add-to-cart" onClick={() => addToCart(product)}>
                 Add to Cart
               </button>
-              <button className="buy-now">Buy Now</button>
             </div>
 
-            {/* ---------- Specs Section ---------- */}
             {product.specs && (
               <div className="product-specs">
                 <h4>Specifications:</h4>
@@ -132,7 +123,6 @@ const ProductDetails = () => {
               </div>
             )}
 
-            {/* ---------- Reviews Section ---------- */}
             {product.reviews && (
               <div className="reviews">
                 <h4>Customer Reviews:</h4>
