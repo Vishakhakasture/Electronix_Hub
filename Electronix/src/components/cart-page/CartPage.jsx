@@ -1,30 +1,21 @@
 // src/components/cart-page/CartPage.jsx
-import React, { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../home-page/Navbar";
 import NavbarItems from "../home-page/NavbarItems";
 import "./CartPage.css";
 import { useCart } from "../../context/CartContext";
 
 const CartPage = () => {
-  const { cartItems, removeFromCart, clearCart } = useCart();
-  const location = useLocation();
+  const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
+  const navigate = useNavigate();
 
-  // Generate breadcrumb dynamically
-  const generateBreadcrumb = () => {
-    const pathnames = location.pathname.split("/").filter((x) => x);
-    const crumbs = [{ label: "Home", path: "/" }];
-
-    if (pathnames.includes("products"))
-      crumbs.push({ label: "Products", path: "/products" });
-    if (pathnames.includes("product"))
-      crumbs.push({ label: "Product Details", path: "#" });
-
-    crumbs.push({ label: "Cart", path: "/cart" });
-    return crumbs;
-  };
-
-  const breadcrumbs = generateBreadcrumb();
+  const subtotal = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
+  const shipping = cartItems.length > 0 ? 20 : 0;
+  const total = subtotal + shipping;
 
   return (
     <>
@@ -32,46 +23,96 @@ const CartPage = () => {
       <NavbarItems />
 
       <div className="cart-page">
-        {/* Breadcrumb */}
         <div className="breadcrumb">
-          {breadcrumbs.map((crumb, index) => (
-            <span key={index}>
-              {index > 0 && " / "}
-              {index === breadcrumbs.length - 1 ? (
-                <span>{crumb.label}</span>
-              ) : (
-                <Link to={crumb.path}>{crumb.label}</Link>
-              )}
-            </span>
-          ))}
+          <Link to="/">Home</Link>
+          <span> / </span>
+          <span>Shopping Cart</span>
         </div>
 
-        <h2>Your Shopping Cart</h2>
+        <div className="cart-container">
+          {/* Left side - cart items */}
+          <div className="cart-items-section">
+            {cartItems.length === 0 ? (
+              <p className="empty-cart">Your cart is empty.</p>
+            ) : (
+              cartItems.map((item) => (
+                <div className="cart-item" key={item.id}>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="cart-item-image"
+                  />
+                  <div className="cart-item-info">
+                    <h3>{item.title}</h3>
+                    <p className="item-price">₹{item.price.toLocaleString()}</p>
 
-        {cartItems.length === 0 ? (
-          <p className="empty-cart">Your cart is empty.</p>
-        ) : (
-          <div className="cart-items">
-            {cartItems.map((item, index) => (
-              <div className="cart-item" key={index}>
-                <img src={item.image} alt={item.title} className="cart-item-image" />
-                <div className="cart-item-details">
-                  <h3>{item.title}</h3>
-                  <p>₹{item.price}</p>
-                  <button className="remove-btn" onClick={() => removeFromCart(item.id)}>
-                    Remove
-                  </button>
+                    <div className="quantity-section">
+                      <button
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity - 1)
+                        }
+                        disabled={item.quantity <= 1}
+                      >
+                        -
+                      </button>
+                      <span>{item.quantity}</span>
+                      <button
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    <p className="subtotal">
+                      Subtotal: ₹{(item.price * item.quantity).toLocaleString()}
+                    </p>
+
+                    <button
+                      className="remove-btn"
+                      onClick={() => removeFromCart(item.id)}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-            <div className="cart-actions">
+              ))
+            )}
+
+            {cartItems.length > 0 && (
               <button className="clear-cart" onClick={clearCart}>
                 Clear Cart
               </button>
-              <button className="checkout-btn">Proceed to Checkout</button>
-            </div>
+            )}
           </div>
-        )}
+
+          {/* Right side - Summary */}
+          {cartItems.length > 0 && (
+            <div className="cart-summary">
+              <h3>Summary</h3>
+              <div className="summary-row">
+                <span>Subtotal</span>
+                <span>₹{subtotal.toLocaleString()}</span>
+              </div>
+              <div className="summary-row">
+                <span>Shipping</span>
+                <span>₹{shipping.toLocaleString()}</span>
+              </div>
+              <hr />
+              <div className="summary-row total">
+                <span>Total</span>
+                <span>₹{total.toLocaleString()}</span>
+              </div>
+              <button
+                className="checkout-btn"
+                onClick={() => navigate("/checkout")}
+              >
+                Proceed to Checkout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

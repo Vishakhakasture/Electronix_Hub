@@ -1,6 +1,5 @@
-// src/components/product-page/ProductDetails.jsx
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import productData from "./ProductData";
 import Navbar from "../home-page/Navbar";
 import NavbarItems from "../home-page/NavbarItems";
@@ -9,25 +8,27 @@ import { useCart } from "../../context/CartContext";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const location = useLocation();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState("");
 
   const { addToCart } = useCart();
 
-  const handleAddToCart = () => {
-    addToCart(product);
-  };
-
   useEffect(() => {
     const found = productData.find((p) => p.id === parseInt(id));
     setProduct(found);
-    setSelectedImage(found?.image);
+    setSelectedImage(found?.image || found?.images?.[0]);
   }, [id]);
 
   if (!product) {
     return <div className="no-products">No products found</div>;
   }
+
+  // Detect where user came from (category, search, etc.)
+  const path = location.pathname;
+  const fromSearch = path.includes("search");
+  const category = product.category;
 
   return (
     <>
@@ -35,20 +36,114 @@ const ProductDetails = () => {
       <NavbarItems />
 
       <div className="product-details-container">
-        {/* Breadcrumb */}
+        {/* ---------- Breadcrumb ---------- */}
         <div className="breadcrumb">
           <Link to="/">Home</Link>
-          <span> / </span>
-          <Link to={`/products/${product.category.toLowerCase()}`}>
-            {product.category}
-          </Link>
+
+          {category && !fromSearch && (
+            <>
+              <span> / </span>
+              <Link to={`/products/${category.toLowerCase()}`}>{category}</Link>
+              <span> / </span>
+              <span>Products</span>
+            </>
+          )}
+
+          {fromSearch && (
+            <>
+              <span> / </span>
+              <Link to="/products">Products</Link>
+            </>
+          )}
+
           <span> / </span>
           <span>{product.title}</span>
         </div>
 
-        {/* Product content same */}
+        {/* ---------- Product Details Layout ---------- */}
         <div className="product-details-content">
-          {/* ... keep rest of your product details code unchanged ... */}
+          {/* Left: Image Gallery */}
+          <div className="product-gallery">
+            <img
+              src={selectedImage}
+              alt={product.title}
+              className="main-image"
+            />
+            {product.images && product.images.length > 1 && (
+              <div className="thumbnail-row">
+                {product.images.map((img, index) => (
+                  <img
+                    key={index}
+                    src={img}
+                    alt={`thumb-${index}`}
+                    className={`thumb ${
+                      selectedImage === img ? "active" : ""
+                    }`}
+                    onClick={() => setSelectedImage(img)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Right: Info */}
+          <div className="product-info">
+            <h2>{product.title}</h2>
+            <p className="brand">{product.brand}</p>
+            <p className="price">₹{product.price}</p>
+            <p className="description">{product.description}</p>
+
+            {/* Quantity Control */}
+            <div className="quantity-section">
+              <div className="quantity-controls">
+                <button
+                  onClick={() =>
+                    setQuantity((prev) => (prev > 1 ? prev - 1 : 1))
+                  }
+                >
+                  −
+                </button>
+                <span>{quantity}</span>
+                <button onClick={() => setQuantity((prev) => prev + 1)}>
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="action-buttons">
+              <button className="add-to-cart" onClick={() => addToCart(product)}>
+                Add to Cart
+              </button>
+              <button className="buy-now">Buy Now</button>
+            </div>
+
+            {/* ---------- Specs Section ---------- */}
+            {product.specs && (
+              <div className="product-specs">
+                <h4>Specifications:</h4>
+                <ul>
+                  {Object.entries(product.specs).map(([key, value], index) => (
+                    <li key={index}>
+                      <strong>{key}:</strong> {value}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* ---------- Reviews Section ---------- */}
+            {product.reviews && (
+              <div className="reviews">
+                <h4>Customer Reviews:</h4>
+                {product.reviews.map((review, index) => (
+                  <div key={index} className="review">
+                    <strong>{review.user}:</strong> {review.comment}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
