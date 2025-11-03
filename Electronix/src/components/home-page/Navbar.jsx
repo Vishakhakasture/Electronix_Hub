@@ -17,7 +17,6 @@ const Navbar = () => {
   const { cartItems } = useCart();
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-  // Toggle user dropdown
   const handleUserClick = () => {
     setShowDropdown((prev) => !prev);
   };
@@ -27,7 +26,6 @@ const Navbar = () => {
     navigate("/auth");
   };
 
-  // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -41,7 +39,6 @@ const Navbar = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Handle search input changes
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -51,21 +48,18 @@ const Navbar = () => {
       return;
     }
 
-    // Filter products by name or category
     const filtered = productData.filter((item) =>
       item.title.toLowerCase().includes(value.toLowerCase())
     );
-    setSuggestions(filtered.slice(0, 5)); // limit to 5 suggestions
+    setSuggestions(filtered.slice(0, 5)); 
   };
 
-  // Handle suggestion click
   const handleSuggestionClick = (product) => {
     setSearchTerm(product.title);
     setSuggestions([]);
     navigate(`/product/${product.id}`);
   };
 
-  // Handle Enter key or arrow navigation
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown") {
       setActiveIndex((prev) => (prev + 1) % suggestions.length);

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../home-page/Navbar";
-import NavbarItems from "../home-page/NavbarItems";
 import "./CheckoutPage.css";
 import { useCart } from "../../context/CartContext";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -62,8 +60,6 @@ const CheckoutPage = () => {
   if (orderPlaced) {
     return (
       <>
-        <Navbar />
-        <NavbarItems />
         <div className="order-success text-center mt-5">
           <h2>Your Order Placed Successfully!</h2>
           <p>Thank you for shopping with ElectroNix.</p>
@@ -75,8 +71,6 @@ const CheckoutPage = () => {
 
   return (
     <>
-      <Navbar />
-      <NavbarItems />
 
       <div className="checkout-page">
         <div className="breadcrumb">
@@ -97,7 +91,7 @@ const CheckoutPage = () => {
                     className="needs-validation"
                   >
                     <div className="mb-3">
-                      <label className="form-label">Full Name *</label>
+                      <label className="form-label">Full Name </label>
                       <input
                         type="text"
                         name="fullName"
@@ -113,7 +107,7 @@ const CheckoutPage = () => {
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label">Phone Number *</label>
+                      <label className="form-label">Phone Number </label>
                       <input
                         type="tel"
                         name="phone"
@@ -129,7 +123,7 @@ const CheckoutPage = () => {
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label">Email *</label>
+                      <label className="form-label">Email </label>
                       <input
                         type="email"
                         name="email"
@@ -145,7 +139,7 @@ const CheckoutPage = () => {
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label">Address *</label>
+                      <label className="form-label">Address </label>
                       <input
                         type="text"
                         name="addressLine"
@@ -162,7 +156,7 @@ const CheckoutPage = () => {
 
                     <div className="row">
                       <div className="col-md-4 mb-3">
-                        <label className="form-label">City *</label>
+                        <label className="form-label">City </label>
                         <input
                           type="text"
                           name="city"
@@ -177,7 +171,7 @@ const CheckoutPage = () => {
                         </div>
                       </div>
                       <div className="col-md-4 mb-3">
-                        <label className="form-label">State *</label>
+                        <label className="form-label">State </label>
                         <input
                           type="text"
                           name="state"
@@ -192,7 +186,7 @@ const CheckoutPage = () => {
                         </div>
                       </div>
                       <div className="col-md-4 mb-3">
-                        <label className="form-label">Zip *</label>
+                        <label className="form-label">Zip </label>
                         <input
                           type="text"
                           name="zip"

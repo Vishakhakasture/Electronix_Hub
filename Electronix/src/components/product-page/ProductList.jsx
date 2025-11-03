@@ -35,11 +35,11 @@ const ProductList = () => {
   };
 
   const categoryMapping = {
-    smartphones: ["Android Phones", "iPhones", "5G Phones", "Foldable Phones", "Tablets"],
+    smartphones: ["Android Phones", "iPhones", "5G Phones", "Tablets"],
     laptops: ["Gaming Laptops", "Business Laptops", "Student Laptops", "MacBooks"],
-    watches: ["Analogue Watch", "Digital Watch", "Smart Watch", "Fitness Watch"],
-    headphones: ["Earbuds", "Wireless Headphones", "Gaming Headsets", "Wired Headphones"],
-    cameras: ["DSLR Cameras", "Mirrorless Cameras", "Action Cameras", "Security Cameras"],
+    watches: ["Analogue Watch", "Digital Watch", "Smart Watch"],
+    headphones: ["Earbuds", "Gaming Headsets", "Wired Headphones"],
+    cameras: ["DSLR Cameras", "Action Cameras", "Security Cameras"],
   };
 
   useEffect(() => {
@@ -82,14 +82,12 @@ const ProductList = () => {
       else if (selectedPrice === "high") filtered = filtered.filter((p) => p.price >= 2000);
     }
 
-    // Sorting
     if (sortOption === "low-high") filtered.sort((a, b) => a.price - b.price);
     else if (sortOption === "high-low") filtered.sort((a, b) => b.price - a.price);
 
     setFilteredProducts(filtered);
   }, [category, selectedCategories, selectedBrands, selectedPrice, sortOption]);
 
-  // Handlers
   const handleCategoryChange = (cat) => {
     setSelectedCategories((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
@@ -106,7 +104,6 @@ const ProductList = () => {
     setSelectedPrice(selectedPrice === range ? null : range);
   };
 
-  // Build breadcrumb category link path (keep consistent with your routes)
   const categoryLinkPath = category ? `/products/${category}` : "/products";
 
   return (
@@ -114,7 +111,6 @@ const ProductList = () => {
       <Navbar />
       <NavbarItems />
 
-      {/* Breadcrumb */}
       <div className="breadcrumb">
   <Link to="/">Home</Link>
   {category && (
@@ -129,7 +125,6 @@ const ProductList = () => {
 
       <div className="product-page-container">
         <div className="product-page-content">
-          {/* Sidebar Filters */}
           <aside className="filter-sidebar">
             <h4>Filters</h4>
 
@@ -190,7 +185,6 @@ const ProductList = () => {
             </div>
           </aside>
 
-          {/* Product List Section */}
           <div className="product-list-section">
             <div className="sort-section">
               <label>Sort By:&nbsp;</label>
