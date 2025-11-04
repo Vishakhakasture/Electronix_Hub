@@ -23,12 +23,8 @@ const Banner = () => {
             alt={item.title}
           />
           <Carousel.Caption className="banner-caption">
-            <h2>{item.title}</h2>
-            <p>{item.description}</p>
+            
 
-            <Link to={item.link} className="banner-btn">
-              {item.buttonText}
-            </Link>
           </Carousel.Caption>
         </Carousel.Item>
       ))}

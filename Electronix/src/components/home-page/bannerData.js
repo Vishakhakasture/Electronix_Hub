@@ -2,30 +2,28 @@ const bannerData = [
   {
     id: 1,
     image:
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1600&q=80",
-    title: "Latest Smartphones for Everyone",
-    description: "Experience next-level speed and design with our newest range.",
-    link: "/products/smartphones",
-    buttonText: "Shop Now",
+      "https://pbs.twimg.com/media/D4VuBEAUUAAdru8?format=jpg&name=large",
   },
   {
     id: 2,
     image:
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80",
-    title: "Powerful Laptops for Work & Play",
-    description: "Performance meets design. Upgrade your productivity today.",
-    link: "/products/fashion",
-    buttonText: "Explore Laptops",
+      "https://img.freepik.com/free-psd/black-friday-sale-social-media-cover-design-template_47987-25244.jpg?semt=ais_hybrid&w=740&q=80", 
   },
   {
     id: 3,
     image:
-      "https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=1600&q=80",
-    title: "Smart Gadgets for Your Home",
-    description: "Make life simpler with smart devices that work for you.",
-    link: "/productlist",
-    buttonText: "Discover More",
+      "https://img.freepik.com/premium-psd/headphone-sale-facebook-cover-web-banner-template_179771-243.jpg",
   },
+   {
+    id: 4,
+    image:
+      "https://dcassetcdn.com/design_img/3080524/587367/587367_17038361_3080524_4a495b72_image.jpg",
+  },
+   {
+    id: 5,
+    image:
+      "https://img.freepik.com/premium-psd/camera-sale-facebook-cover-web-banner-template_179771-231.jpg",
+  }
 ];
 
 export default bannerData;

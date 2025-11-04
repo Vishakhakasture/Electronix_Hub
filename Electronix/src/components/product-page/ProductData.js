@@ -52,10 +52,113 @@ const productData = [
       { user: "Simran", comment: "Battery life and camera zoom are amazing!" },
     ],
   },
-
-  // 🟩 LAPTOPS
   {
     id: 3,
+    title: "OnePlus 12",
+    brand: "smartphones",
+    category: "Android",
+    price: 69999,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjtu0mA7xmyVCj2uXzfwc6ozgyOkgPMzIhDQ&usqp=CAU",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjtu0mA7xmyVCj2uXzfwc6ozgyOkgPMzIhDQ&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCzQfDrkNsQXQDErG2B8jzYqk1qO_zf-kRkg&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm7-Fe8n1aUhcGPDPX7t1sa5tFWC_7h8hQZg&usqp=CAU"
+    ],
+    description:
+      "OnePlus 12 comes with Snapdragon 8 Gen 3, a 120Hz AMOLED display, and Hasselblad-tuned cameras for stunning photography.",
+    specs: {
+      Display: "6.7-inch AMOLED, 120Hz",
+      Processor: "Snapdragon 8 Gen 3",
+      Battery: "5000mAh",
+      Storage: "256GB",
+      Camera: "50MP + 48MP + 64MP"
+    },
+    reviews: [
+      { user: "Karan", comment: "Super fast and smooth experience!" },
+      { user: "Priya", comment: "Camera is way better than before." }
+    ]
+  },
+  {
+    id: 4,
+    title: "Google Pixel 8 Pro",
+    brand: "Google",
+    category: "Android phones",
+    price: 99999,
+    image: "https://m.media-amazon.com/images/I/71r0349s3cL.jpg",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuq16RG2Ok2lJyaHz_ZxYf88o0qbXw02uG4NJFpHaJD2xirt5d7kMqr3CefBTapYzVc90&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF8cNqjDeidiGl0G3vnBrvlbqPVR3ZGLaHqZJk2uQDUzSLC9EQszoXwnrG8jeMlVYtQgM&usqp=CAU",
+      "https://st1.techlusive.in/wp-content/uploads/2023/11/Google-Pixel-8-Pro-featured.jpg"
+    ],
+    description:
+      "Google Pixel 8 Pro features the Google Tensor G3 chip, pro-level cameras, and AI-powered photo and video tools.",
+    specs: {
+      Display: "6.7-inch LTPO OLED, 120Hz",
+      Processor: "Google Tensor G3",
+      Battery: "5050mAh",
+      Storage: "256GB",
+      Camera: "50MP + 48MP + 48MP"
+    },
+    reviews: [
+      { user: "Rohit", comment: "Best phone for photography lovers!" },
+      { user: "Isha", comment: "Clean Android experience with smart AI tools." }
+    ]
+  },
+  {
+    id: 5,
+    title: "Xiaomi 14 Pro",
+    brand: "Xiaomi",
+    category: "Android phones",
+    price: 74999,
+    image: "https://www.giztop.com/media/catalog/product/cache/97cc1143d2e20f2b0c8ea91aaa12053c/p/m/pms_1698307430.32273950_2_1_1.png",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlKdO_0Z5ePm8lAXMDX0z2kEMK9JpyL5mgSLTODg4cLfTrpkNsmea-pX_02siKnaWyWSk&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqBnAlhF2tEiIwoPfM3pwGN3xzycnEnOum8bH9wA0E66_YX7rl5cUCWZJs9vK99dNqp2I&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvZHwXn41gZ0RJNZ9BHzF7ChVUCpFoDPE3iCAF7yXcP-Wh2utMC2H1LGqaHq-EOAlFrAY&usqp=CAU"
+    ],
+    description:
+      "Xiaomi 14 Pro comes with Snapdragon 8 Gen 3, Leica-tuned cameras, and a 120W fast-charging 4880mAh battery.",
+    specs: {
+      Display: "6.73-inch AMOLED, 120Hz",
+      Processor: "Snapdragon 8 Gen 3",
+      Battery: "4880mAh, 120W fast charging",
+      Storage: "512GB",
+      Camera: "50MP + 50MP + 50MP"
+    },
+    reviews: [
+      { user: "Ankit", comment: "Great performance for the price!" },
+      { user: "Tanya", comment: "Leica camera gives stunning colors and detail." }
+    ]
+  },
+  {
+  id: 6,
+  title: "Nothing Phone (2)",
+  brand: "Nothing",
+  category: "5g phones",
+  price: 45999,
+  image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYRmQm8Yf6THuhFuOnECMVAnDME0O_2zpOiv73_K_NUb1jSsChZpJL0BXx2PoVsB0EI6E&usqp=CAU",
+  images: [
+    "https://www.popio.in/wp-content/uploads/2024/11/123-22.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDyWebLlCIRTOOkMdYv_ZxYU8tCy6MhVwCq2nHDRg1J5TPGr7-v6Y8b15Zs4Mkls5efoU&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJmS3sB_EHrLqiiZcXi8RE0Np9Syts0j-TcZ58ZjmtDALe1lnZ2_v5zMn7911yLCDlLQI&usqp=CAU"
+  ],
+  description:
+    "Nothing Phone (2) brings a unique transparent design, Snapdragon 8+ Gen 1 performance, and an innovative Glyph Interface for notifications.",
+  specs: {
+    Display: "6.7-inch OLED, 120Hz",
+    Processor: "Snapdragon 8+ Gen 1",
+    Battery: "4700mAh",
+    Storage: "256GB",
+    Camera: "50MP + 50MP"
+  },
+  reviews: [
+    { user: "Deepak", comment: "Love the design and the Glyph lights are so cool!" },
+    { user: "Riya", comment: "Smooth UI and unique look, definitely stands out." }
+  ]
+},
+  // 🟩 LAPTOPS
+  {
+    id: 7,
     title: "MacBook Air M2",
     brand: "Apple",
     category: "MacBooks",
@@ -81,7 +184,7 @@ const productData = [
     ],
   },
   {
-    id: 4,
+    id: 8,
     title: "HP Victus Gaming Laptop",
     brand: "HP",
     category: "Gaming Laptops",
@@ -105,10 +208,114 @@ const productData = [
       { user: "Sneha", comment: "Runs games smoothly with minimal heat." },
     ],
   },
+  {
+    id: 9,
+    title: "Dell XPS 13 Plus",
+    brand: "Dell",
+    category: "Business Laptops",
+    price: 154999,
+    image: "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23904928/mchin_201020_5350_0012.jpg?quality=90&strip=all&crop=0,0,100,100",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc8XUGEXHpj7uBduHeXGqXdlC45vRa-l2dDSjyaMOPeSONP68NKZNz6FGTGF2AKwrc-DI&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc8XUGEXHpj7uBduHeXGqXdlC45vRa-l2dDSjyaMOPeSONP68NKZNz6FGTGF2AKwrc-DI&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc8XUGEXHpj7uBduHeXGqXdlC45vRa-l2dDSjyaMOPeSONP68NKZNz6FGTGF2AKwrc-DI&usqp=CAU"
+    ],
+    description:
+      "The Dell XPS 13 Plus delivers exceptional performance with 13th Gen Intel Core i7 processors and an ultra-thin, sleek design.",
+    specs: {
+      Display: "13.4-inch OLED 3.5K",
+      Processor: "Intel Core i7-1360P",
+      Battery: "Up to 14 hours",
+      RAM: "16GB",
+      Storage: "1TB SSD"
+    },
+    reviews: [
+      { user: "Arjun", comment: "Compact yet incredibly powerful!" },
+      { user: "Nisha", comment: "The display quality is top-notch." }
+    ]
+  },
+  {
+    id: 10,
+    title: "HP Spectre x360",
+    brand: "HP",
+    category: "Business Laptops",
+    price: 129999,
+    image: "https://www.phone-x.co.ke/wp-content/uploads/2021/06/hp-spectre-x360-1-e1623766521136.png",
+    images: [
+      "https://images-cdn.ubuy.co.in/634e6da59d4f06585e592af2-hp-spectre-x360-2-in-1-13-4k-ultra-hd.jpg",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJsCj7RYlFISeq9eZe_bGShR47YiP7ync0BKIs96FqAKCJReXoDK88NOKCQ1yMDqKK_As&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0uZP6NKlcYtH-oCxs5px1OoR-XknLRBJ2LOPwWItCuaABAM46dfrqeODE1mb0rYXzjoY&usqp=CAU"
+    ],
+    description:
+      "The HP Spectre x360 offers a 2-in-1 convertible design, OLED display, and 13th Gen Intel performance in a premium aluminum body.",
+    specs: {
+      Display: "13.5-inch OLED Touchscreen",
+      Processor: "Intel Core i7-1355U",
+      Battery: "16 hours",
+      RAM: "16GB",
+      Storage: "512GB SSD"
+    },
+    reviews: [
+      { user: "Vikram", comment: "Great convertible laptop for work and entertainment." },
+      { user: "Pooja", comment: "Stylish, fast, and lightweight!" }
+    ]
+  },
+  {
+    id: 11,
+    title: "ASUS ROG Zephyrus G14",
+    brand: "ASUS",
+    category: "Gaming Laptops",
+    price: 169999,
+    image: "https://m.media-amazon.com/images/I/81m-xYfxznL.jpg",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOExqFi2pPjRntdZk3TWYAcV5DZvWvwqzQaf4vVMu1RxPKVSxpWuMwLsUloz65-podyHg&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWonMDrJ89QjP-M3OPkmCJzE_JA5A48R39OfIhcVS_0CS5GKh8Vpx146O3GB8Y70Knkyc&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1EpsDYx-TbcUEqSlHSfzThWgFkbjr-HT5RtvCIf8xREvDY5QxYF7KXtLW2BALY38RdAY&usqp=CAU"
+    ],
+    description:
+      "The ASUS ROG Zephyrus G14 is a compact gaming powerhouse with Ryzen 9, RTX 4070 GPU, and QHD+ 165Hz display.",
+    specs: {
+      Display: "14-inch QHD+ 165Hz",
+      Processor: "AMD Ryzen 9 7940HS",
+      Battery: "10 hours",
+      RAM: "32GB",
+      Storage: "1TB SSD"
+    },
+    reviews: [
+      { user: "Aditya", comment: "Amazing gaming performance and portability!" },
+      { user: "Ritu", comment: "Love the design and keyboard feel." }
+    ]
+  },
+  {
+    id: 12,
+    title: "Lenovo Yoga 9i Gen 8",
+    brand: "Lenovo",
+    category: "Business Laptops",
+    price: 124999,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCK7L7D6xjsQqfbejViCmbEl-uNiKJ0t5Xjw&s",
+    images: [
+      "https://i.gadgets360cdn.com/products/large/lenovo-yoga-9i-gen-8-db-1362x800-1673933421.jpg",
+      "https://p3-ofp.static.pub/ShareResource/na/subseries/hero/lenovo-yoga-9i-14inch-gen8-storm-grey.png",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7L92JVBNtbXfBJEKaU_4Ilfspm5LyhKdMibqmxFWKaGbs0NQgNYe-7snbo1NaHg0Zhj4&usqp=CAU"
+    ],
+    description:
+      "The Lenovo Yoga 9i combines premium design with flexible 2-in-1 usability, featuring Intel Evo certification and a 4K OLED touchscreen.",
+    specs: {
+      Display: "14-inch 4K OLED Touch",
+      Processor: "Intel Core i7-1360P",
+      Battery: "15 hours",
+      RAM: "16GB",
+      Storage: "1TB SSD"
+    },
+    reviews: [
+      { user: "Saurabh", comment: "Premium look and solid performance." },
+      { user: "Mitali", comment: "The rotating soundbar is a cool touch!" }
+    ]
+  },
 
   // 🟨 WATCHES
   {
-    id: 5,
+    id: 13,
     title: "Apple Watch Series 9",
     brand: "Apple",
     category: "Smart Watch",
@@ -132,15 +339,15 @@ const productData = [
     ],
   },
   {
-    id: 6,
+    id: 14,
     title: "Noise ColorFit Pro 4",
     brand: "Noise",
     category: "Fitness Watch",
     price: 4999,
-    image: "https://m.media-amazon.com/images/I/71hUqNCL-zL._UF1000,1000_QL80_.jpg",
+    image: "https://5.imimg.com/data5/SELLER/Default/2023/7/324394920/ID/GH/HO/191602506/black-men-noise-bluetooth-smartwatch-500x500.jpg",
     images: [
-      "https://images-eu.ssl-images-amazon.com/images/I/61lKe3Lp68L._AC_UL210_SR210,210_.jpg",
-      "https://www.gonoise.com/cdn/shop/files/Carousel-500x500-1_3029f4e1-69ab-48fe-a088-41f4e79e2f2f_grande.png?v=1697711374",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAQakDQapsuWbFvTu_SpXOf-MJyeSzkA3DoQefvDQHGa9Ctx-A_y8wq9pMEbf4U1XWN6o&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSATECCYHnxuhB3Qu0qnOb_KnTXjGGXAct-4PfOxW7eR-nLU7SSsF2kkWqOqwOSSBQpzLw&usqp=CAU",
     ],
     description:
       "Noise ColorFit Pro 4 offers a large display, customizable watch faces, and all-day SpO2 and heart rate monitoring.",
@@ -155,13 +362,253 @@ const productData = [
       { user: "Kunal", comment: "Battery lasts a week easily!" },
     ],
   },
+  {
+    id: 15,
+    title: "Casio F91W Digital Watch",
+    brand: "Casio",
+    category: "Digital Watch",
+    price: 1199,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr1CcS0TXZKNLxSmhfRZk_1qDHXKXkU6J885AODyZPo_SywzGWvXnRoBQbFIh1vDB3oO0&usqp=CAU",
+    images: [
+      "https://watches.ae/cdn/shop/files/casio-pac-man-a168wepc-7adr_400x.png?v=9418204005690887411",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJCwesV19uL-wGtFzlIUZ2oabRsoT7g23QkzZgjGn-o47EwllWGM6f8xLsccQLO0TPnOs&usqp=CAU"
+    ],
+    description:
+      "Classic digital watch with alarm, stopwatch, and water resistance up to 50 meters.",
+    specs: {
+      Display: "Digital LCD",
+      Battery: "7 years",
+      Connectivity: "None",
+      Features: "Alarm, Stopwatch, Backlight"
+    },
+    reviews: [
+      { user: "Arjun", comment: "A timeless digital classic!" },
+      { user: "Sophie", comment: "Reliable and super affordable." }
+    ]
+  },
+  {
+    id: 16,
+    title: "Fossil Grant Chronograph",
+    brand: "Fossil",
+    category: "Analogue Watch",
+    price: 9995,
+    image: "https://static.helioswatchstore.com/media/catalog/product/f/s/fs4736_1.jpg",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUWpBxKX7fctT3yYuzl7xReL48cfj1RZIrEkplgN5sgeeris8bIhpSpWE8RbGAjYiovI4&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6thQjEKbL-CkFTuh07wMsQyQU7HfjeoFoHD-ySxflltvsbttT47DGIAPrtx6k2Pkzv9A&usqp=CAU"
+    ],
+    description:
+      "Elegant analogue chronograph with Roman numerals and stainless steel case.",
+    specs: {
+      Display: "Analogue",
+      Battery: "2 years",
+      Connectivity: "None",
+      Features: "Chronograph, Water Resistant 50m"
+    },
+    reviews: [
+      { user: "Neha", comment: "Perfect for formal occasions." },
+      { user: "Vivek", comment: "Premium look and feel." }
+    ]
+  },
+  {
+    id: 17,
+    title: "Apple Watch Series 9",
+    brand: "Apple",
+    category: "Smart Watch",
+    price: 41999,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE1K_u76r_1Rvve4nwYFiv3um3wftFgW6WV_ITuHiUo7E1EgZYmy7Lmemj2eWJ5dFIjRk&usqp=CAU",
+    images: [
+      "https://rukminim2.flixcart.com/image/480/640/xif0q/smartwatch/a/a/z/-original-imagte4ry4ewjzej.jpeg?q=90",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSt9gHrMTm9T_R7wk7qOskcak5K7WrTMGiTHAxNlk2gFB8SytottPK-V0IPN3qaU-Sfshg&usqp=CAU"
+    ],
+    description:
+      "Smartwatch with advanced health sensors, Retina display, and Siri integration.",
+    specs: {
+      Display: "Always-On Retina OLED",
+      Battery: "18 hours",
+      Connectivity: "Bluetooth, Wi-Fi, LTE",
+      Features: "ECG, Blood Oxygen, Fitness Tracking, Siri"
+    },
+    reviews: [
+      { user: "Aarav", comment: "Best smartwatch for iPhone users." },
+      { user: "Maya", comment: "Beautiful display and smooth performance." }
+    ]
+  },
+  {
+    id: 18,
+    title: "Garmin Instinct 2 Solar",
+    brand: "Garmin",
+    category: "Smartwatch",
+    price: 38990,
+    image: "https://cmsprod.garmin-india.com/media/Screenshot%202024-08-09%20120211-1.webp",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsqX7-t11QgAKfBq8BzfF9COhCZeMX0W_2YhBaVeVkKfeqM9RdFLGoY46gucL7y8bTd3Q&usqp=CAU",
+      "https://uglydoghunting.com/wp-content/uploads/2023/11/Garmin-Instinct-2X-Moss.png"
+    ],
+    description:
+      "Rugged GPS smartwatch with solar charging and built-in multi-sport tracking.",
+    specs: {
+      Display: "Monochrome, Sunlight-visible",
+      Battery: "Unlimited (solar)",
+      Connectivity: "GPS, Bluetooth",
+      Features: "Heart Rate, GPS, Solar Charging, Altimeter"
+    },
+    reviews: [
+      { user: "Rahul", comment: "Perfect for hiking and outdoor sports." },
+      { user: "Ella", comment: "Battery life is insane with solar charging!" }
+    ]
+  },
+  {
+    id: 19,
+    title: "Seiko 5 Sports Automatic",
+    brand: "Seiko",
+    category: "Smart Watch",
+    price: 18999,
+    image: "https://justintime.in/cdn/shop/files/SSK033K1_1.png?v=1727255535",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSimWdHEC5MArpDXAUek9nRZaJSa4ftfocCiyNmQDx-5QJjqwck4xsd1rTMVPGSAuK00Js&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0a_rfjxS41SYvsyCz7xh9rVkWD97tPMHVCtnYCYnI9J4qvsXNAR8AhqPJ5ijcKKiIswk&usqp=CAU"
+    ],
+    description:
+      "Automatic mechanical watch with 24-jewel movement and stainless steel bracelet.",
+    specs: {
+      Display: "Analogue",
+      Battery: "Automatic (no battery)",
+      Connectivity: "None",
+      Features: "Self-Winding, Day-Date Display, 100m Water Resistance"
+    },
+    reviews: [
+      { user: "Nikhil", comment: "Smooth sweep second hand, true classic." },
+      { user: "Lara", comment: "Feels luxurious without breaking the bank." }
+    ]
+  },
+  {
+    id: 20,
+    title: "TAG Heuer Aquaracer Professional 300",
+    brand: "TAG Heuer",
+    category: "Smart Watch",
+    price: 254000,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgExwTzR9nYsote4GoCoqTcmpW5aPTqN7lDSEVtPEg9OiZxmYV1pNtknZyAKUHwAscp8Y&usqp=CAU",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoJ6z6YAfzQ5m1GdNpMBUPgW7LxNcjMehXSsWz1hRSADYLoxZnVl5wKBP7MCU6o2R1t4w&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYdBaJD-5A6apGIfbtdAnsReq4IjoNkHUNcg&s"
+    ],
+    description:
+      "Swiss luxury diving watch with ceramic bezel and automatic Calibre 5 movement.",
+    specs: {
+      Display: "Analogue",
+      Battery: "Automatic",
+      Connectivity: "None",
+      Features: "300m Water Resistance, Luminous Markers, Screw-down Crown"
+    },
+    reviews: [
+      { user: "Arnav", comment: "A diver’s dream watch." },
+      { user: "Jessica", comment: "Feels premium in every detail." }
+    ]
+  },
+  {
+    id: 21,
+    title: "Samsung Galaxy Watch 6 Classic",
+    brand: "Samsung",
+    category: "Smart Watch",
+    price: 36999,
+    image: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-watch6-classic.jpg",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOM9Hb7iQgrnivA3NAh2NlM3CeSPWSmyYdM1FG44dbeJTZc0lsdSmTJfaonCaJTmwiHds&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPqYsZvEK_AN3y5Wq8fpVXNLZSdPvDmc_qUWB0YBv5Z7qZShUlWpyslQUpMLQc16jcJOk&usqp=CAU"
+    ],
+    description:
+      "Smartwatch with rotating bezel, fitness tracking, and seamless Android integration.",
+    specs: {
+      Display: "Super AMOLED",
+      Battery: "2 days",
+      Connectivity: "Bluetooth, Wi-Fi, LTE",
+      Features: "Sleep Tracking, ECG, GPS, Rotating Bezel"
+    },
+    reviews: [
+      { user: "Dev", comment: "Amazing display and usability." },
+      { user: "Simran", comment: "Better battery than expected." }
+    ]
+  },
+  {
+    id: 22,
+    title: "Timex Ironman Classic 30",
+    brand: "Timex",
+    category: "Smart Watch",
+    price: 3995,
+    image: "https://www.watches.com/cdn/shop/files/timex-ironman-classic-30-lap-38mm-digital-black-orange-tw2w94000vq-327222_1200x630.jpg?v=1749277945",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvcln2MVldrzG4FODLPwRk3F_HGG1E2adlWuMNAr8vFq4cVZ_PATz6d-k-DlYVgRSqgUA&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRModyYYUfgnqHqSjDWiq4tjDaRmAVkdJ9HSvOb-CQP0Zco7MHiBOoHa2iPLPAjW7wFODw&usqp=CAU"
+    ],
+    description:
+      "Durable sports digital watch with lap timer and 100-meter water resistance.",
+    specs: {
+      Display: "Digital",
+      Battery: "2 years",
+      Connectivity: "None",
+      Features: "Chronograph, Timer, Indiglo Light, Alarm"
+    },
+    reviews: [
+      { user: "Kabir", comment: "Great for workouts and running." },
+      { user: "Nina", comment: "Simple and functional." }
+    ]
+  },
+  {
+    id: 23,
+    title: "Huawei Watch Fit 2",
+    brand: "Huawei",
+    category: "Fitness Watch",
+    price: 9999,
+    image: "https://m.media-amazon.com/images/I/61UsrpnwnhL.jpg",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGJvDYUjsbZG9Scl7u863IDEZgrFreoXvXAljVzRJL7QwY-uTst2NXB6JMzeqEdnSUPQk&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsuD3hW4ypJBIvsw9ZVSf61Ih-OsWgrYFlSpQ_ev1Ky_1iECcgqkXVEWjvTpywBygtnr0&usqp=CAU"
+    ],
+    description:
+      "Stylish fitness smartwatch with AMOLED display and advanced workout modes.",
+    specs: {
+      Display: "1.74-inch AMOLED",
+      Battery: "10 days",
+      Connectivity: "Bluetooth",
+      Features: "Heart Rate, SpO2, Sleep Tracking, GPS"
+    },
+    reviews: [
+      { user: "Sana", comment: "Lightweight and very comfortable." },
+      { user: "Irfan", comment: "Accurate step tracking!" }
+    ]
+  },
+  {
+    id: 24,
+    title: "Tissot PRX Powermatic 80",
+    brand: "Tissot",
+    category: "Smart Watch",
+    price: 84999,
+    image: "https://watchesbysjx.com/wp-content/uploads/2021/09/Tissot-PRX-Powermatic-80-review-2.jpg",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw3IYd4ByEhLJ_S2jQ7GRb9b7M_Pu3tmNxsqSpBpSf3GkK3hluVoFOym4UB3HfinX5RJk&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSP95MiRgpwLK9lNx-YPgrkXI69yn_TmhNVzTQEi9DYCIJW2knMva0PiUSxmXuJf7HF-0&usqp=CAU"
+    ],
+    description:
+      "Swiss automatic watch with 80-hour power reserve and stainless steel integrated bracelet.",
+    specs: {
+      Display: "Analogue",
+      Battery: "Automatic (80 hours reserve)",
+      Connectivity: "None",
+      Features: "Sapphire Crystal, Date Display, Swiss Made"
+    },
+    reviews: [
+      { user: "Rohan", comment: "Feels like a luxury Genta-inspired piece." },
+      { user: "Emily", comment: "Precision and elegance in one." }
+    ]
+  },
 
   // 🟥 HEADPHONES
   {
-    id: 7,
+    id: 25,
     title: "Sony WH-1000XM5",
     brand: "Sony",
-    category: "Wireless Headphones",
+    category: "Earbuds",
     price: 29999,
     image: "https://sony.scene7.com/is/image/sonyglobalsolutions/Primary_image_black?$S7Product$&fmt=png-alpha",
     images: [
@@ -181,10 +628,10 @@ const productData = [
     ],
   },
   {
-    id: 8,
+    id: 26,
     title: "Boat Rockerz 450",
     brand: "Boat",
-    category: "Wireless Headphones",
+    category: "Gaming Headsets",
     price: 1499,
     image: "https://friskyglobal.com/wp-content/uploads/2023/08/Black-main-img3_600x-Black.webp",
     images: [
@@ -206,7 +653,7 @@ const productData = [
 
   // 🟪 CAMERAS
   {
-    id: 9,
+    id: 27,
     title: "Canon EOS 1500D",
     brand: "Canon",
     category: "DSLR Cameras",
@@ -230,7 +677,7 @@ const productData = [
     ],
   },
   {
-    id: 10,
+    id: 28,
     title: "GoPro Hero 12 Black",
     brand: "GoPro",
     category: "Action Cameras",
@@ -253,9 +700,178 @@ const productData = [
       { user: "Mira", comment: "Super smooth videos!" },
     ],
   },
+  {
+    id: 29,
+    title: "Sony Alpha ZV-E10",
+    brand: "Sony",
+    category: "Mirrorless Cameras",
+    price: 72990,
+    image: "https://sony.scene7.com/is/image/sonyglobalsolutions/Mobile_ZV-E10_202507?$productIntroPlatemobile$&fmt=png-alpha",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdDyT1ypUvBRE5n3u_rXESp3q9ATNvaz_YFHiWGjP0Zze49ZOaS0PUrzy8F9W-D6OjW7w&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE0j7sL0X1Pfe0x3__WZ4_SV42rTAGDQg4YbOCwt7G4uxV0ofEi3XU63qx7gl0xVMlWtA&usqp=CAU"
+    ],
+    description:
+      "Sony Alpha ZV-E10 is a compact mirrorless camera designed for vloggers with 4K video and real-time tracking.",
+    specs: {
+      Sensor: "24.2MP APS-C CMOS",
+      Video: "4K30 / Full HD120",
+      Battery: "NP-FW50",
+      Connectivity: "Wi-Fi, Bluetooth, USB-C"
+    },
+    reviews: [
+      { user: "Arjun", comment: "Perfect for vlogging and YouTube." },
+      { user: "Megha", comment: "Compact and super crisp image quality." }
+    ]
+  },
+  {
+    id: 30,
+    title: "Fujifilm Instax Mini 12",
+    brand: "Fujifilm",
+    category: "Action Cameras",
+    price: 7999,
+    image: "https://retinapix.com/cdn/shop/files/Fujifilm_Instax_Mini_12_Standalone_Camera_-_White_1024x1024.webp?v=1735123161",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRchV1oJr82I-UjfwsvTn1UxXP0u77FLNkAG_67lqgqKD7vHkAX1sTefLblcdm_zyGFUqs&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRA-OgMp3EigjZMIERF6uh7MgpXtk_M7Ke4aLl735uqM7oY5NseF6gahE6U008E16jLFHs&usqp=CAU"
+    ],
+    description:
+      "Fun and easy-to-use instant camera that prints photos instantly with a built-in flash and selfie mirror.",
+    specs: {
+      FilmType: "Instax Mini",
+      Focus: "Fixed",
+      Battery: "2x AA",
+      Features: "Instant Print, Selfie Mode, Flash"
+    },
+    reviews: [
+      { user: "Ananya", comment: "Great for parties and instant memories!" },
+      { user: "Kabir", comment: "Cute design and easy to use." }
+    ]
+  },
+  {
+    id: 31,
+    title: "Nikon Coolpix B600",
+    brand: "Nikon",
+    category: "Action Cameras",
+    price: 24999,
+    image: "https://gppro.in/wp-content/uploads/2024/11/COOLPIX-B600_6.jpg",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2l2hTdzXArW875pahQQGSiyNcnpH9RAbu2Kw3tr6XkN9d1OzOP5vurLfebSV6FL_V3pA&usqp=CAU",
+      "https://m.media-amazon.com/images/I/51s04KYbIML._AC_UF894,1000_QL80_.jpg"
+    ],
+    description:
+      "Compact superzoom camera with 60x optical zoom and Full HD video recording.",
+    specs: {
+      Sensor: "16MP BSI CMOS",
+      Zoom: "60x Optical",
+      Video: "Full HD 1080p",
+      Connectivity: "Wi-Fi, Bluetooth"
+    },
+    reviews: [
+      { user: "Nina", comment: "Excellent zoom range for travel shots." },
+      { user: "Vikram", comment: "Easy to use and lightweight." }
+    ]
+  },
+  {
+    id: 32,
+    title: "DJI Osmo Pocket 3",
+    brand: "DJI",
+    category: "Action Cameras",
+    price: 54990,
+    image: "https://www.bhphotovideo.com/cdn-cgi/image/fit=scale-down,width=500,quality=95/https://www.bhphotovideo.com/images/images500x500/dji_cp_os_00000301_01_osmo_pocket_3_1698238226_1788803.jpg",
+    images: [
+      "https://cdn8.web4s.vn/media/products/2649/dji%20osmo%20pocket%203%20creator%20combo%20chinh%20hang%20-%209techvn.jpg",
+      "https://www.gearbooker.com/images/listing/00075232.jpg"
+    ],
+    description:
+      "Compact handheld 3-axis gimbal camera with 4K120 video and face tracking — perfect for cinematic footage.",
+    specs: {
+      Sensor: "1-inch CMOS",
+      Video: "4K120",
+      Battery: "1300mAh",
+      Connectivity: "Wi-Fi, Bluetooth, USB-C"
+    },
+    reviews: [
+      { user: "Dev", comment: "Smooth cinematic video quality." },
+      { user: "Sara", comment: "Perfect for travel and content creators." }
+    ]
+  },
+  {
+  id: 33,
+  title: "IMOU 2K 360° Outdoor WiFi Security Camera",
+  brand: "IMOU",
+  category: "Security Cameras",
+  price: 2999,
+  image: "https://m.media-amazon.com/images/I/41vKRDliB1L._AC_UF1000,1000_QL80_.jpg",
+  images: [
+    "https://m.media-amazon.com/images/I/31-9T9uTY2L._AC_UF350,350_QL80_.jpg",
+    "https://i.ebayimg.com/images/g/aIAAAOSwEThnBaJv/s-l400.jpg"
+  ],
+  description:
+    "IMOU 2K 360° outdoor WiFi camera with full-pan and tilt, smart tracking, colour night vision and two-way audio – ideal for home external monitoring.",
+  specs: {
+    Resolution: "2K (2560×1440)",
+    FieldOfView: "360° (pan) / 90° (tilt)",
+    Connectivity: "WiFi (2.4GHz)",
+    Features: "Smart tracking, Two-Way Audio, Colour Night Vision"
+  },
+  reviews: [
+    { user: "Priya", comment: "Covers entire yard with one camera – very handy." },
+    { user: "Ajay", comment: "Good value for the price and the 2K image is clear." }
+  ]
+},
+{
+  id: 34,
+  title: "TP-Link Tapo C210 3MP Pan/Tilt Home Security WiFi Camera",
+  brand: "TP-Link",
+  category: "Security Cameras",
+  price: 1399,
+  image: "https://firewallbazaar.in/wp-content/uploads/2024/08/tapo-c220-pan-tilt-ai-home-security-wi-fi-camera.jpg",
+  images: [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSyYY8tmeFKWK_9cEdVUT0OyTaze2TWEMEvloWxioSl_6nxV3n8IFkLPD6ySLnYODKKvs&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX5Vo-U3tN-Xso-Zb_Bk7KWE7x15BM-ehnQ9-zd7D8T57DMYdFziif9o9LYUcSvwzlZSI&usqp=CAU"
+  ],
+  description:
+    "TP-Link Tapo C210 is an indoor pan/tilt WiFi camera with 3MP resolution, 360° horizontal rotation, night vision and micro-SD card support – perfect for baby rooms or indoor surveillance.",
+  specs: {
+    Resolution: "3MP (2048×1536)",
+    FieldOfView: "360° horizontal / 90° vertical",
+    Connectivity: "WiFi (2.4GHz)",
+    Features: "Pan/Tilt Control, Night Vision, MicroSD Storage"
+  },
+  reviews: [
+    { user: "Sneha", comment: "Great for checking in on my toddler while I work." },
+    { user: "Rohit", comment: "Simple to install, app works smoothly." }
+  ]
+},
+{
+  id: 35,
+  title: "CP PLUS Smart CCTV Security Camera (Outdoor Bullet)",
+  brand: "CP PLUS",
+  category: "Security Cameras",
+  price: 2500,
+  image: "https://brandiinnovation.com/wp-content/uploads/2023/10/CP-Plus-Cp-V3-a1.jpg",
+  images: [
+    "https://5.imimg.com/data5/SELLER/Default/2024/3/399475323/QM/QC/WH/54791018/cp-plus-cctv-bullet-camera-500x500.jpg",
+    "https://d91ztqmtx7u1k.cloudfront.net/ClientContent/Images/Medium/cp-plus-cctv-bullet-camera-20241008101927500.jpg"
+  ],
+  description:
+    "CP PLUS Smart CCTV outdoor bullet camera with weather-proof housing, IR night vision and WiFi/Bluetooth connectivity – designed for perimeter monitoring.",
+  specs: {
+    Resolution: "2MP Full HD",
+    Housing: "Weather-proof (IP66)",
+    Connectivity: "WiFi + Bluetooth",
+    Features: "IR Night Vision, Motion Alerts, Outdoor Use"
+  },
+  reviews: [
+    { user: "Vikas", comment: "Mounted it on my exterior wall – works through rain fine." },
+    { user: "Monica", comment: "Good image clarity for the price." }
+  ]
+},
+
   // 🟧 TABLETS
 {
-  id: 11,
+  id: 36,
   title: "Apple iPad Pro M4",
   brand: "Apple",
   category: "Tablets",
@@ -282,7 +898,7 @@ const productData = [
 },
 
 {
-  id: 12,
+  id: 37,
   title: "Samsung Galaxy Tab S9 Ultra",
   brand: "Samsung",
   category: "Tablets",
@@ -306,158 +922,223 @@ const productData = [
     { user: "Priya", comment: "Multitasking feels seamless." },
   ],
 },
-
-// 🟦 ACCESSORIES
-{
-  id: 13,
-  title: "Apple MagSafe Charger",
-  brand: "Apple",
-  category: "Chargers",
-  price: 4499,
-  image: "https://photos5.appleinsider.com/price_guide/magsafe-accessories-pp-header.png",
-  images: [
-    "https://grandhub.co.ke/wp-content/uploads/2023/07/Apple-MagSafe-Battery-Pack-in-Kenya.jpg",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm_H0j4FZz3KLRA1EXXp9OTBB6es4DweDcPvEFZBWFBrPobQ7aW90VtYSboZjI1E3jmz8&usqp=CAU",
-  ],
-  description:
-    "The MagSafe Charger offers efficient wireless charging for iPhone and AirPods with magnetic alignment.",
-  specs: {
-    Output: "15W",
-    Compatibility: "iPhone 12 and later",
-    Connector: "USB-C",
-    CableLength: "1m",
+  {
+    id: 38,
+    title: "Sony WH-1000XM5",
+    brand: "Sony",
+    category: "Bluetooth",
+    price: 29990,
+    image: "https://onward.ph/cdn/shop/files/SONYWH-1000XM5_Pink_2_2048x.png?v=1757249765",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtgs02hTAoQ93zAb7zBVTXvmIhwHZDQ7LFYA&s",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREUU-OVjeJ4HRxFUzrKMPOY4Yjfc8o2LEZ1qGs-R1HRYediQr2ydLE5wbW2fZUiS7v9XM&usqp=CAU"
+    ],
+    description:
+      "Industry-leading wireless headphones with adaptive noise cancellation, crystal-clear calls, and 30-hour battery life.",
+    specs: {
+      Type: "Over-Ear",
+      Connectivity: "Bluetooth 5.2, USB-C",
+      Battery: "30 hours",
+      Features: "Noise Cancelling, Touch Controls, Alexa/Google Assistant"
+    },
+    reviews: [
+      { user: "Aarav", comment: "Unmatched noise cancellation and sound quality." },
+      { user: "Maya", comment: "Super comfortable for long flights." }
+    ]
   },
-  reviews: [
-    { user: "Tanya", comment: "Charges fast and looks elegant." },
-    { user: "Vivek", comment: "Magnetic connection is very convenient." },
-  ],
-},
-
-{
-  id: 14,
-  title: "Anker PowerCore 20000 PD",
-  brand: "Anker",
-  category: "Power Banks",
-  price: 6999,
-  image: "https://bcdn.alfuhod.com/media/catalog/product/cache/c49c6d580f7f24178041719fd0fed908/image/10143b16b/anker-powercore-metro-essential-20000-pd-black-fabric-limited-edition.png",
-  images: [
-    "https://telefon.gr/image/cache/catalog/yukatel/193575000893-550x550.png",
-    "https://i5.walmartimages.com/asr/ec3f5a5f-1459-48de-992d-523d1e75f597.2e4295b277e2d2a61ef9ac0d268a9010.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF",
-  ],
-  description:
-    "High-capacity power bank with 20,000mAh and Power Delivery fast charging support.",
-  specs: {
-    Capacity: "20000mAh",
-    Output: "20W PD",
-    Ports: "USB-C, USB-A",
-    Weight: "342g",
+  {
+    id: 39,
+    title: "JBL C100SI",
+    brand: "JBL",
+    category: "Wired Headphones",
+    price: 699,
+    image: "https://in.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dwb0b18e1d/C100SI_white-front_dvHAMaster.png?sw=300&sh=300",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbkw27-SoAuXBrwvnSoE4tHSZpZ6fuOgK4i7V_oqalcmcWs-Sh1WkSsbj8sGlAtpegcxA&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFW2b8G7tzN09yyuBVCEzDI2HHeCZ53WPQXCDHrc86T_EIVWph3BX59VIPnI2N-PkvnYU&usqp=CAU"
+    ],
+    description:
+      "Lightweight wired earphones with JBL Pure Bass sound and in-line mic for hands-free calls.",
+    specs: {
+      Type: "In-Ear (Wired)",
+      Connectivity: "3.5mm Jack",
+      CableLength: "1.2m",
+      Features: "Mic, Deep Bass, Lightweight"
+    },
+    reviews: [
+      { user: "Rahul", comment: "Best sound in this price range." },
+      { user: "Tina", comment: "Compact and works perfectly with my phone." }
+    ]
   },
-  reviews: [
-    { user: "Ravi", comment: "Charges my phone multiple times!" },
-    { user: "Minal", comment: "Compact yet powerful." },
-  ],
-},
-
-// 🟩 SMART HOME
-{
-  id: 15,
-  title: "Google Nest Mini (2nd Gen)",
-  brand: "Google",
-  category: "Smart Speakers",
-  price: 4499,
-  image: "https://bcdn.alfuhod.com/media/catalog/product/cache/c49c6d580f7f24178041719fd0fed908/image/10143b16b/anker-powercore-metro-essential-20000-pd-black-fabric-limited-edition.png",
-  images: [
-    "https://telefon.gr/image/cache/catalog/yukatel/193575000893-550x550.png",
-    "https://i5.walmartimages.com/asr/ec3f5a5f-1459-48de-992d-523d1e75f597.2e4295b277e2d2a61ef9ac0d268a9010.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF",
-  ],
-  description:
-    "Smart speaker powered by Google Assistant for music, news, and home automation control.",
-  specs: {
-    Audio: "360° Sound",
-    Connectivity: "Wi-Fi, Bluetooth",
-    VoiceAssistant: "Google Assistant",
+  {
+    id: 40,
+    title: "boAt Rockerz 255 Pro+",
+    brand: "boAt",
+    category: "Bluetooth",
+    price: 1699,
+    image: "https://assets.ajio.com/medias/sys_master/root/20230203/AsM6/63dcc868aeb269c6510d4576/-473Wx593H-4931793830-multi-MODEL.jpg",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyq7Mwg0xFGONqsV1nnfb9r1yXPK1MXLDSXRduj8Cr4RdOvNNcTQrokANmIyzp6SV78Ts&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg-GH-LgZobjaWa3nssNjO72S3yTXjJMr4wdh3iejqahgmZ9McGw9TBm0cEdT_QR7uxHM&usqp=CAU"
+    ],
+    description:
+      "Wireless Bluetooth neckband with ASAP charge, 40 hours of playback, and IPX7 water resistance.",
+    specs: {
+      Type: "Neckband",
+      Connectivity: "Bluetooth 5.0",
+      Battery: "40 hours",
+      Features: "Fast Charging, Water Resistant, Voice Assistant Support"
+    },
+    reviews: [
+      { user: "Simran", comment: "Battery backup is amazing!" },
+      { user: "Kunal", comment: "Fits well and great for workouts." }
+    ]
   },
-  reviews: [
-    { user: "Kabir", comment: "Perfect addition to my smart home." },
-    { user: "Sneha", comment: "Sound quality is excellent for its size." },
-  ],
-},
-
-{
-  id: 16,
-  title: "Amazon Echo Dot (5th Gen)",
-  brand: "Amazon",
-  category: "Smart Speakers",
-  price: 5499,
-  image: "https://m.media-amazon.com/images/I/71jNr0MoZEL._AC_UF894,1000_QL80_.jpg",
-  images: [
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyweArk2x45bMndgGdQkFtGjP8jltQhz9X6rPvc9JzCqhdcRMbrKn32TcV7Qhs_f_0eU4&usqp=CAU",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDkdXHG7PYT3Cby9HrAWM62AVFRQfkFrOboZIXQfWRhkHzD_UIpIQ2itiTVRhp3gzEtII&usqp=CAU",
-  ],
-  description:
-    "Alexa-powered smart speaker with improved bass and LED clock display.",
-  specs: {
-    Audio: "Front-firing 1.73-inch speaker",
-    Connectivity: "Wi-Fi, Bluetooth",
-    VoiceAssistant: "Alexa",
+  {
+    id: 41,
+    title: "Apple AirPods Pro (2nd Generation)",
+    brand: "Apple",
+    category: "Earbuds",
+    price: 24999,
+    image: "https://media-ik.croma.com/prod/https://media.tatacroma.com/Croma%20Assets/A+%20Content%20Images/Images/262015_M_1_fsj3ht.png?tr=w-1000",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiJms4NfcrSulUmFRux2CZwqVgm5lL0omTqgHI1Q5K0vnMLuE2fQEsMMSCWyQps1PGCXc&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsLef1XlaJI0ZZ4KxdPsIFUdSQplBm8WARAVFZybZyAa55Rf3i1qmpUPAA1mtdsair9HU&usqp=CAU"
+    ],
+    description:
+      "Premium TWS earbuds with adaptive transparency, active noise cancellation, and spatial audio with dynamic head tracking.",
+    specs: {
+      Type: "In-Ear (TWS)",
+      Connectivity: "Bluetooth 5.3, MagSafe Charging",
+      Battery: "6 hours + 30 hours (case)",
+      Features: "ANC, Spatial Audio, Siri, IPX4"
+    },
+    reviews: [
+      { user: "Riya", comment: "Crystal clear sound and deep bass." },
+      { user: "Arjun", comment: "Top-tier ANC for its size." }
+    ]
   },
-  reviews: [
-    { user: "Ananya", comment: "Very responsive and compact." },
-    { user: "Omkar", comment: "Good bass and clear voice output." },
-  ],
-},
-
-// 🟨 GAMING CONSOLES
-{
-  id: 17,
-  title: "Sony PlayStation 5",
-  brand: "Sony",
-  category: "Gaming Consoles",
-  price: 55999,
-  image: "https://i.extremetech.com/imagery/content-types/06EtefH72LzkSgz3DA4c9ch/hero-image.fit_lim.v1678673314.jpg",
-  images: [
-    "https://static.independent.co.uk/2024/02/23/16/playstation%205%20disc%20edition%20%281%29.png",
-    "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/110/MTA-85949264/oem_oem_full01.jpg",
-  ],
-  description:
-    "Next-gen console offering 4K gaming, ultra-fast SSD, and the revolutionary DualSense controller.",
-  specs: {
-    GPU: "Custom RDNA 2",
-    Storage: "825GB SSD",
-    Output: "4K UHD",
-    Controller: "DualSense Wireless",
+  {
+    id: 42,
+    title: "HyperX Cloud II",
+    brand: "HyperX",
+    category: "Wired Headphones",
+    price: 8490,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWSyfD6hU_uluNHb9YKCok1n6-DZ13svu-2aiMc3l7eZ_5uVVBfAtys9a-GQt-fSYC5Og&usqp=CAU",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRh9PC9ymuRL010wSc9xNH7nCnDXnJB0IIxJwJt-uUfdB71hdlL10EC45nuwsib-rpFtc4&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTX18GPVNdgrdCOm3a9ZbYiRlvV4y_HBbK-yEUaKtIxq_ls_--k40gNA-UGFw-IoCPRL8&usqp=CAU"
+    ],
+    description:
+      "Gaming headset with 7.1 virtual surround sound, memory foam ear cushions, and detachable noise-cancelling mic.",
+    specs: {
+      Type: "Over-Ear (Wired)",
+      Connectivity: "USB, 3.5mm",
+      Drivers: "53mm",
+      Features: "7.1 Surround Sound, Noise-Cancelling Mic, Memory Foam"
+    },
+    reviews: [
+      { user: "Dev", comment: "Best headset for long gaming sessions." },
+      { user: "Aman", comment: "Mic clarity is top-notch." }
+    ]
   },
-  reviews: [
-    { user: "Viraj", comment: "Gameplay feels super immersive." },
-    { user: "Isha", comment: "Lightning-fast load times!" },
-  ],
-},
-
-{
-  id: 18,
-  title: "Xbox Series X",
-  brand: "Microsoft",
-  category: "Gaming Consoles",
-  price: 54999,
-  image: "https://cms-assets.xboxservices.com/assets/bc/40/bc40fdf3-85a6-4c36-af92-dca2d36fc7e5.png?n=642227_Hero-Gallery-0_A1_857x676.png",
-  images: [
-    "https://m.media-amazon.com/images/I/71aBXvHYUpL._AC_UF894,1000_QL80_.jpg",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6jHkDskeGpuklFe9YkdHfxTYXcAFhOC4oN1t1IMkkvWMqIVy5F2_vKxyV14viKYLv53c&usqp=CAU",
-  ],
-  description:
-    "The most powerful Xbox console ever with 12 teraflops of processing power and 4K gaming support.",
-  specs: {
-    GPU: "12 TFLOPS RDNA 2",
-    Storage: "1TB SSD",
-    Output: "4K HDR",
-    RAM: "16GB GDDR6",
+  {
+    id: 43,
+    title: "Sennheiser HD 280 Pro",
+    brand: "Sennheiser",
+    category: "Wired Headphones",
+    price: 8999,
+    image: "https://m.media-amazon.com/images/I/61+XjHbWrZL._AC_UF1000,1000_QL80_.jpg",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWpRIu0iONWbgpE-E9zeg87-tIBzyrFzbqebv3Sy5jkV0RT8hX6AhLH8SIaDwWTC7UvDA&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwx01AyGwKkF5n21964kFiOYxpdYs9NHfy9n5iZsJMMQ0UmQEwY71PhiB0U5fPYjnbFR8&usqp=CAU"
+    ],
+    description:
+      "Closed-back studio headphones with accurate sound reproduction and excellent passive noise isolation.",
+    specs: {
+      Type: "Over-Ear (Wired)",
+      Connectivity: "3.5mm / 6.3mm Jack",
+      FrequencyResponse: "8Hz – 25kHz",
+      Features: "Studio Monitoring, Foldable Design, High Noise Isolation"
+    },
+    reviews: [
+      { user: "Nikhil", comment: "Perfect for mixing and mastering." },
+      { user: "Lara", comment: "Very balanced and natural sound." }
+    ]
   },
-  reviews: [
-    { user: "Arjun", comment: "Ultimate performance for Xbox Game Pass titles." },
-    { user: "Neha", comment: "Runs quietly and super smooth." },
-  ],
-},
-
+  {
+    id: 44,
+    title: "OnePlus Bullets Wireless Z2",
+    brand: "OnePlus",
+    category: "Earbuds",
+    price: 1999,
+    image: "https://image01-in.oneplus.net/media/202406/19/0ee6077679397b28e4dd6556c79635b3.png",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuPFTO78taAPDKsE_Cp00S4lFiNO5qyvod1OQMBct1jRJXL9BJWIXKWiOQR5sECXC2Bzg&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2CgRGJgG1gmJwJd2Mazy1aGdEjhUUqV3X1l5BUvMAypn0_NhAACPd0SGk5DHhNlaNq1k&usqp=CAU"
+    ],
+    description:
+      "Wireless earphones with massive 30-hour battery, fast charging, and deep bass drivers.",
+    specs: {
+      Type: "Neckband",
+      Connectivity: "Bluetooth 5.0",
+      Battery: "30 hours",
+      Features: "Fast Charging, IP55 Water Resistance, Voice Assistant"
+    },
+    reviews: [
+      { user: "Kriti", comment: "Charges super fast and lasts days!" },
+      { user: "Ravi", comment: "Deep bass, great for workouts." }
+    ]
+  },
+  {
+    id: 45,
+    title: "Bose QuietComfort Ultra Earbuds",
+    brand: "Bose",
+    category: "Earbuds",
+    price: 27990,
+    image: "https://img-prd-pim.poorvika.com/cdn-cgi/image/width=500,height=500,quality=75/product/Bose-quietcomfort-ultra-earbuds-moonstone-blue-Front-View.png",
+    images: [
+      "https://i.ebayimg.com/images/g/dVcAAOSwnA1nYxwI/s-l1200.jpg",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSJDVb9U452COyjVsh2gorC_P_ytzwZAvZTgVZnDKMd72hbpzi2mr55TZaC58aW4Z4zTI&usqp=CAU"
+    ],
+    description:
+      "Premium ANC earbuds with immersive audio, customizable EQ, and long-lasting comfort for travel and daily use.",
+    specs: {
+      Type: "In-Ear (TWS)",
+      Connectivity: "Bluetooth 5.3, USB-C",
+      Battery: "6 hours + 24 hours (case)",
+      Features: "Active Noise Cancelling, Custom EQ, IPX4"
+    },
+    reviews: [
+      { user: "Neha", comment: "Incredible ANC and clear vocals." },
+      { user: "Vikram", comment: "Feels luxurious and sounds even better." }
+    ]
+  },
+  {
+    id: 46,
+    title: "Logitech G Pro X Wireless Lightspeed",
+    brand: "Logitech",
+    category: "Gaming Headsets",
+    price: 16999,
+    image: "https://m.media-amazon.com/images/I/61aswwxb9aL._UF1000,1000_QL80_.jpg",
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDHeQIhvht3hy6Lqa8ESch-94i6zI4iR6DAqT7DUaKkpvhwwHtITvkvnYbqR8ceQfLPI&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlaxWD_wwuLcdNJ2g0cqY4TZu32OKnxQG12wcruF-TQU_ZEA0n6pPPeu2GPrpbSGcZy7Q&usqp=CAU"
+    ],
+    description:
+      "Wireless gaming headset with Blue VO!CE microphone technology and DTS Headphone:X 2.0 surround sound.",
+    specs: {
+      Type: "Over-Ear (Wireless)",
+      Connectivity: "2.4GHz Lightspeed Dongle",
+      Battery: "20 hours",
+      Features: "DTS Surround, Detachable Mic, Aluminum Frame"
+    },
+    reviews: [
+      { user: "Manav", comment: "Crystal-clear comms and deep surround sound." },
+      { user: "Zara", comment: "Lightweight and premium build." }
+    ]
+  }
 ];
+
 
 export default productData;

@@ -1,5 +1,5 @@
 // src/components/product-page/ProductList.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import productData from "./ProductData";
 import "./ProductList.css";
@@ -7,12 +7,15 @@ import Navbar from "../home-page/Navbar";
 import NavbarItems from "../home-page/NavbarItems";
 import { useBreadcrumb } from "../../context/BreadcrumbContext";
 
-
 const ProductList = () => {
-  const { category } = useParams(); // param from /products/:category
+  const { category } = useParams(); 
   const navigate = useNavigate();
 
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [displayProducts, setDisplayProducts] = useState([]);  
+  const [batchSize] = useState(20);
+  const [hasMore, setHasMore] = useState(true);
+
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState(null);
@@ -52,19 +55,17 @@ const ProductList = () => {
           categoryMapping[normalizedCategory].includes(p.category)
         );
       } else {
-      
         filtered = productData.filter((p) => {
           const productCat = (p.category || "").toString().toLowerCase();
           const urlifiedProductCat = productCat.replace(/\s+/g, "-");
           return (
             productCat === normalizedCategory ||
             urlifiedProductCat === normalizedCategory ||
-            productCat.replace(/[^a-z0-9]/g, "") === normalizedCategory.replace(/[^a-z0-9]/g, "")
+            productCat.replace(/[^a-z0-9]/g, "") ===
+              normalizedCategory.replace(/[^a-z0-9]/g, "")
           );
         });
       }
-    } else {
-      filtered = [...productData];
     }
 
     if (selectedCategories.length > 0) {
@@ -86,7 +87,41 @@ const ProductList = () => {
     else if (sortOption === "high-low") filtered.sort((a, b) => b.price - a.price);
 
     setFilteredProducts(filtered);
-  }, [category, selectedCategories, selectedBrands, selectedPrice, sortOption]);
+    setDisplayProducts(filtered.slice(0, batchSize));
+    setHasMore(filtered.length > 0);
+  }, [category, selectedCategories, selectedBrands, selectedPrice, sortOption, batchSize]);
+
+  const loadMore = useCallback(() => {
+    if (!hasMore) return;
+    setDisplayProducts((prev) => {
+      const currentLength = prev.length;
+      const additionalItems = [];
+
+      if (filteredProducts.length === 0) return prev;
+
+      for (let i = 0; i < batchSize; i++) {
+        const index = (currentLength + i) % filteredProducts.length;
+        additionalItems.push(filteredProducts[index]);
+      }
+
+      return [...prev, ...additionalItems];
+    });
+  }, [filteredProducts, hasMore, batchSize]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const windowHeight = window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+
+      if (scrollTop + windowHeight + 100 >= fullHeight) {
+        loadMore();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loadMore]);
 
   const handleCategoryChange = (cat) => {
     setSelectedCategories((prev) =>
@@ -112,36 +147,20 @@ const ProductList = () => {
       <NavbarItems />
 
       <div className="breadcrumb">
-  <Link to="/">Home</Link>
-  {category && (
-    <>
-      <span> / </span>
-      <Link to={`/products/${category}`}>{formatLabel(category)}</Link>
-    </>
-  )}
-  <span> / Products</span>
-</div>
-
+        <Link to="/">Home</Link>
+        {category && (
+          <>
+            <span> / </span>
+            <Link to={`/products/${category}`}>{formatLabel(category)}</Link>
+          </>
+        )}
+        <span> / Products</span>
+      </div>
 
       <div className="product-page-container">
         <div className="product-page-content">
           <aside className="filter-sidebar">
             <h4>Filters</h4>
-
-            <div className="filter-section">
-              <h5>Category</h5>
-              {["Smartphones", "Laptops", "Watches", "Headphones", "Cameras"].map((cat) => (
-                <label key={cat}>
-                  <input
-                    type="checkbox"
-                    checked={selectedCategories.includes(cat)}
-                    onChange={() => handleCategoryChange(cat)}
-                  />{" "}
-                  {cat}
-                </label>
-              ))}
-            </div>
-
             <div className="filter-section">
               <h5>Price Range</h5>
               <label>
@@ -172,7 +191,7 @@ const ProductList = () => {
 
             <div className="filter-section">
               <h5>Brand</h5>
-              {["Apple", "Samsung", "Dell", "HP"].map((brand) => (
+              {["Apple", "Samsung", "Dell", "HP", "Sony"].map((brand) => (
                 <label key={brand}>
                   <input
                     type="checkbox"
@@ -196,15 +215,17 @@ const ProductList = () => {
               </select>
             </div>
 
-            {filteredProducts.length > 0 ? (
+            {displayProducts.length > 0 ? (
               <div className="product-grid">
-                {filteredProducts.map((product) => (
+                {displayProducts.map((product, idx) => (
                   <div
-                    key={product.id}
+                    key={`${product.id}-${idx}`}  // key uses idx to allow repeats
                     className="product-card"
                     onClick={() => navigate(`/product/${product.id}`)}
                   >
-                    <img src={product.image} alt={product.title} />
+                    <div className="image-wrapper">
+                      <img src={product.image} alt={product.title} />
+                    </div>
                     <h3>{product.title}</h3>
                     <p>{product.brand}</p>
                     <p>₹{product.price}</p>

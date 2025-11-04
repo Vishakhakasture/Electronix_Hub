@@ -10,7 +10,7 @@ const NavbarItems = () => {
 
   const handleSubCategoryClick = (subCategory) => {
     navigate(`/products/${subCategory.toLowerCase().replace(/\s+/g, "-")}`);
-    setMenuOpen(false); // close menu on click (for mobile)
+    setMenuOpen(false); 
   };
 
   const toggleMenu = () => {
@@ -20,14 +20,12 @@ const NavbarItems = () => {
   return (
     <nav className="nav-items-bar">
       <div className="nav-container">
-        {/* Hamburger Icon */}
         <div className="hamburger" onClick={toggleMenu}>
           <span className={menuOpen ? "bar open" : "bar"}></span>
           <span className={menuOpen ? "bar open" : "bar"}></span>
           <span className={menuOpen ? "bar open" : "bar"}></span>
         </div>
 
-        {/* Navigation List */}
         <ul className={`nav-items-list ${menuOpen ? "active" : ""}`}>
           {navData.map((navItem, index) => (
             <li
@@ -49,7 +47,6 @@ const NavbarItems = () => {
               {navItem.title}
               <span className="nav-arrow">▾</span>
 
-              {/* Dropdown */}
               <ul
                 className={`dropdown-menu ${
                   activeCategory === navItem.title ? "show" : ""

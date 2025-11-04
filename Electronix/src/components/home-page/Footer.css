@@ -37,17 +37,18 @@
   padding: 0;
 }
 
-.footer-section li {
+.footer-section li a{
+  text-decoration: none;
   margin-bottom: 10px;
   cursor: pointer;
   transition: color 0.3s ease;
+  color: #f1f1f1;
 }
 
-.footer-section li:hover {
+.footer-section li a:hover {
   color: #f9a825;
 }
 
-/* 🔹 SOCIAL ICONS FIXED STYLE */
 .social-icons {
   display: flex;
   gap: 18px;

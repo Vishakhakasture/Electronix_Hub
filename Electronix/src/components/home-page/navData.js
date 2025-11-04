@@ -30,6 +30,7 @@ const navData = [
       "Earbuds",
       "Gaming Headsets",
       "Wired Headphones",
+      "Bluetooth",
     ],
   },
   {
@@ -37,6 +38,7 @@ const navData = [
     subCategories: [
       "DSLR Cameras",
       "Action Cameras",
+      "Mirrorless Cameras",
       "Security Cameras",
     ],
   },
