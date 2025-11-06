@@ -12,11 +12,11 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/auth" element={<Auth />} />
-      <Route path="/productlist" element={<ProductList />} />
-      <Route path="/products/:category" element={<ProductList />} />
+      <Route path="/products" element={<ProductList />} />               
+      <Route path="/products/:category" element={<ProductList />} />    
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/cart" element={<CartPage />} />
-      <Route path='/checkout' element={<CheckoutPage />} />
+      <Route path="/checkout" element={<CheckoutPage />} />
     </Routes>
   );
 }

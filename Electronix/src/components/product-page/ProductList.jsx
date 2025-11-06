@@ -1,11 +1,9 @@
-// src/components/product-page/ProductList.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import productData from "./ProductData";
 import "./ProductList.css";
-import Navbar from "../home-page/Navbar";
-import NavbarItems from "../home-page/NavbarItems";
 import { useBreadcrumb } from "../../context/BreadcrumbContext";
+import Header from "../home-page/Header";
 
 const ProductList = () => {
   const { category } = useParams(); 
@@ -143,8 +141,7 @@ const ProductList = () => {
 
   return (
     <>
-      <Navbar />
-      <NavbarItems />
+      <Header />
 
       <div className="breadcrumb">
         <Link to="/">Home</Link>
@@ -207,7 +204,7 @@ const ProductList = () => {
           <div className="product-list-section">
             <div className="sort-section">
               <label>Sort By:&nbsp;</label>
-              <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+              <select className="select" value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
                 <option value="Select">Select</option>
                 <option value="low-high">Price: Low → High</option>
                 <option value="high-low">Price: High → Low</option>
@@ -242,4 +239,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default ProductList; 

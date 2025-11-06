@@ -2,12 +2,14 @@ import React, { createContext, useState, useContext } from "react";
 
 const CartContext = createContext();
 
+// here i have exported the cart context
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (product) => {
+    alert("Added to cart..");
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {

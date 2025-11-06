@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import productData from "./ProductData";
-import Navbar from "../home-page/Navbar";
-import NavbarItems from "../home-page/NavbarItems";
 import "./ProductDetails.css";
 import { useCart } from "../../context/CartContext";
+import Header from "../home-page/Header";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -31,9 +31,7 @@ const ProductDetails = () => {
 
   return (
     <>
-      <Navbar />
-      <NavbarItems />
-
+      <Header />
       <div className="product-details-container">
         <div className="breadcrumb">
           <Link to="/">Home</Link>
@@ -141,3 +139,4 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
+ 

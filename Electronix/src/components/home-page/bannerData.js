@@ -12,7 +12,7 @@ const bannerData = [
   {
     id: 3,
     image:
-      "https://img.freepik.com/premium-psd/headphone-sale-facebook-cover-web-banner-template_179771-243.jpg",
+      "https://www.boat-lifestyle.com/cdn/shop/articles/Earphone_cf76a9b7-42c7-4e2b-83cc-996042e6fd3c.jpg?v=1616771185",
   },
    {
     id: 4,
@@ -22,7 +22,7 @@ const bannerData = [
    {
     id: 5,
     image:
-      "https://img.freepik.com/premium-psd/camera-sale-facebook-cover-web-banner-template_179771-231.jpg",
+      "https://cdn4.singleinterface.com/files/enterprise/coverphoto/93890/cannon-banner-07-08-24-12-35-34.jpg",
   }
 ];
 
