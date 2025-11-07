@@ -31,14 +31,12 @@ const Auth = () => {
 
     try {
       if (isLogin) {
-        // 🔹 Login user
         await signInWithEmailAndPassword(auth, email, password);
-        alert("✅ Login successful!");
+        alert("Login successful!");
         navigate("/");
       } else {
-        // 🔹 Register new user
         await createUserWithEmailAndPassword(auth, email, password);
-        alert("🎉 Registration successful!");
+        alert("Registration successful!");
         setIsLogin(true);
         setEmail("");
         setPassword("");

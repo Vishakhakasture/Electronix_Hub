@@ -1,0 +1,31 @@
+/* src/components/profile-page/ProfilePage.css */
+.profile-page {
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: "Poppins", sans-serif;
+}
+
+.profile-page h2 {
+  color: #0d1137;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.profile-section {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.back-btn {
+  background: #ffd700;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
