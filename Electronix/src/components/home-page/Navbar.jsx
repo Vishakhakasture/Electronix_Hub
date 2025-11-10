@@ -54,10 +54,10 @@ const Navbar = () => {
     navigate("/profile");
   };
 
-  const handleOrders = () => {
-    setShowDropdown(false);
-    navigate("/orders");
-  };
+  // const handleOrders = () => {
+  //   setShowDropdown(false);
+  //   navigate("/orders");
+  // };
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -154,7 +154,7 @@ const Navbar = () => {
               ) : (
                 <>
                   <p onClick={handleProfile}>Profile</p>
-                  <p onClick={handleOrders}>Orders</p>
+                  
                   <p onClick={handleLogout}>Logout</p>
                 </>
               )}

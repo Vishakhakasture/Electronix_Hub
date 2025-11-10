@@ -6,6 +6,7 @@ import {
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import "./Auth.css";
+import { FaArrowLeft } from "react-icons/fa"; 
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -57,10 +58,29 @@ const Auth = () => {
     }
   };
 
+  // 🔙 Back button logic
+  const handleBack = () => {
+    if (!isLogin) {
+      setIsLogin(true);
+    } else {
+      if (window.history.length > 1) {
+        navigate(-1);
+      } else {
+        navigate("/");
+      }
+    }
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>{isLogin ? "Login to Your Account" : "Create New Account"}</h2>
+        <div className="auth-header">
+          <button className="back-circle-btn" onClick={handleBack}>
+            <FaArrowLeft className="back-icon" />
+          </button>
+          <h2>{isLogin ? "Login to Account" : "Create Account"}</h2>
+        </div>
+
         {error && <p className="auth-error">{error}</p>}
 
         <form onSubmit={handleAuth}>

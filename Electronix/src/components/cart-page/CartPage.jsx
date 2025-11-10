@@ -26,6 +26,7 @@ const CartPage = () => {
           <Link to="/">Home</Link>
           <span> / </span>
           <span>Shopping Cart</span>
+          
         </div>
 
         <div className="cart-container">

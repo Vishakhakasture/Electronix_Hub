@@ -5,8 +5,8 @@ import { collection, addDoc, serverTimestamp, doc, setDoc, getDoc } from "fireba
 import { db, auth } from "../../firebase"; 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./CheckoutPage.css";
+import ProfileMenu from "../profile-page/ProfileMenu";
 
-// Sample country & state data (can replace with more comprehensive lists)
 const countries = [
   { name: "India", states: ["Delhi", "Maharashtra", "Karnataka", "Tamil Nadu", "Other"] },
   { name: "United States", states: ["California", "Texas", "Florida", "New York", "Other"] },
@@ -127,6 +127,9 @@ const CheckoutPage = () => {
     <div className="checkout-page">
       <div className="breadcrumb">
         <Link to="/">Home</Link> <span>/</span> <Link to="/cart">Cart</Link> <span>/</span> <span>Checkout</span>
+        <div>
+            <ProfileMenu />
+        </div>
       </div>
 
       <div className="checkout-container container">
