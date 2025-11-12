@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import productData from "./ProductData";
+import Footer from "../home-page/Footer"
 import "./ProductDetails.css";
 import { useCart } from "../../context/CartContext";
 import Header from "../home-page/Header";
@@ -134,6 +135,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

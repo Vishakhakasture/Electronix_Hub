@@ -5,7 +5,7 @@ import { collection, addDoc, serverTimestamp, doc, setDoc, getDoc } from "fireba
 import { db, auth } from "../../firebase"; 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./CheckoutPage.css";
-import ProfileMenu from "../profile-page/ProfileMenu";
+import Navbar from "../home-page/Navbar";
 
 const countries = [
   { name: "India", states: ["Delhi", "Maharashtra", "Karnataka", "Tamil Nadu", "Other"] },
@@ -45,7 +45,7 @@ const CheckoutPage = () => {
     if (name === "country") {
       const countryData = countries.find(c => c.name === value);
       setAvailableStates(countryData ? countryData.states : []);
-      setAddress(prev => ({ ...prev, state: "" })); // reset state selection
+      setAddress(prev => ({ ...prev, state: "" })); 
     }
   };
 
@@ -124,17 +124,16 @@ const CheckoutPage = () => {
   }
 
   return (
+    <>
+    <Navbar />
     <div className="checkout-page">
       <div className="breadcrumb">
         <Link to="/">Home</Link> <span>/</span> <Link to="/cart">Cart</Link> <span>/</span> <span>Checkout</span>
-        <div>
-            <ProfileMenu />
-        </div>
+        
       </div>
 
       <div className="checkout-container container">
         <div className="row">
-          {/* Address Section */}
           <div className="col-lg-7 mb-4">
             <div className="address-section p-4 shadow-sm rounded bg-white">
               <h3>Shipping Address</h3>
@@ -247,6 +246,7 @@ const CheckoutPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

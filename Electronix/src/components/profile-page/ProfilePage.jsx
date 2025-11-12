@@ -28,7 +28,6 @@ const ProfilePage = () => {
           ...doc.data(),
         }));
 
-        // ✅ Combine same products & fallback names
         const grouped = cartData.reduce((acc, item) => {
           const key = item.productId || item.id;
           const existing = acc.find((p) => p.productId === key);
@@ -161,7 +160,6 @@ const ProfilePage = () => {
                 </p>
               </div>
 
-              {/* ✅ Order products */}
               <div className="order-items">
                 {order.items?.map((item, index) => (
                   <div key={index} className="item-card small">

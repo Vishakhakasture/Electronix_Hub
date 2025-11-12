@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import productData from "./ProductData";
+import Footer from "../home-page/Footer.jsx"
 import "./ProductList.css";
 import { useBreadcrumb } from "../../context/BreadcrumbContext";
 import Header from "../home-page/Header";
@@ -235,6 +236,7 @@ const ProductList = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };
