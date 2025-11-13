@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import productData from "./ProductData";
-import Footer from "../home-page/Footer.jsx"
+import axios from "axios";
+import Footer from "../home-page/Footer.jsx";
 import "./ProductList.css";
 import { useBreadcrumb } from "../../context/BreadcrumbContext";
 import Header from "../home-page/Header";
 
 const ProductList = () => {
-  const { category } = useParams(); 
+  const { category } = useParams();
   const navigate = useNavigate();
 
+  const [allProducts, setAllProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [displayProducts, setDisplayProducts] = useState([]);  
+  const [displayProducts, setDisplayProducts] = useState([]);
   const [batchSize] = useState(20);
   const [hasMore, setHasMore] = useState(true);
 
@@ -24,6 +25,16 @@ const ProductList = () => {
 
   useEffect(() => {
     updateBreadcrumb(["Products"]);
+  }, []);
+
+  // ✅ Fetch data from JSON Server API
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/products")
+      .then((res) => {
+        setAllProducts(res.data);
+      })
+      .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
   const formatLabel = (raw) => {
@@ -45,16 +56,18 @@ const ProductList = () => {
   };
 
   useEffect(() => {
-    let filtered = [...productData];
+    if (allProducts.length === 0) return;
+
+    let filtered = [...allProducts];
     const normalizedCategory = category?.toLowerCase();
 
     if (normalizedCategory) {
       if (categoryMapping[normalizedCategory]) {
-        filtered = productData.filter((p) =>
+        filtered = allProducts.filter((p) =>
           categoryMapping[normalizedCategory].includes(p.category)
         );
       } else {
-        filtered = productData.filter((p) => {
+        filtered = allProducts.filter((p) => {
           const productCat = (p.category || "").toString().toLowerCase();
           const urlifiedProductCat = productCat.replace(/\s+/g, "-");
           return (
@@ -87,22 +100,26 @@ const ProductList = () => {
 
     setFilteredProducts(filtered);
     setDisplayProducts(filtered.slice(0, batchSize));
-    setHasMore(filtered.length > 0);
-  }, [category, selectedCategories, selectedBrands, selectedPrice, sortOption, batchSize]);
+    setHasMore(filtered.length > batchSize);
+  }, [
+    category,
+    selectedCategories,
+    selectedBrands,
+    selectedPrice,
+    sortOption,
+    batchSize,
+    allProducts,
+  ]);
 
   const loadMore = useCallback(() => {
     if (!hasMore) return;
     setDisplayProducts((prev) => {
       const currentLength = prev.length;
-      const additionalItems = [];
-
-      if (filteredProducts.length === 0) return prev;
-
-      for (let i = 0; i < batchSize; i++) {
-        const index = (currentLength + i) % filteredProducts.length;
-        additionalItems.push(filteredProducts[index]);
+      const additionalItems = filteredProducts.slice(currentLength, currentLength + batchSize);
+      if (additionalItems.length === 0) {
+        setHasMore(false);
+        return prev;
       }
-
       return [...prev, ...additionalItems];
     });
   }, [filteredProducts, hasMore, batchSize]);
@@ -138,8 +155,6 @@ const ProductList = () => {
     setSelectedPrice(selectedPrice === range ? null : range);
   };
 
-  const categoryLinkPath = category ? `/products/${category}` : "/products";
-
   return (
     <>
       <Header />
@@ -159,32 +174,21 @@ const ProductList = () => {
         <div className="product-page-content">
           <aside className="filter-sidebar">
             <h4>Filters</h4>
+
             <div className="filter-section">
               <h5>Price Range</h5>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedPrice === "low"}
-                  onChange={() => handlePriceChange("low")}
-                />{" "}
-                ₹0 - ₹999
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedPrice === "medium"}
-                  onChange={() => handlePriceChange("medium")}
-                />{" "}
-                ₹1000 - ₹1999
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedPrice === "high"}
-                  onChange={() => handlePriceChange("high")}
-                />{" "}
-                ₹2000+
-              </label>
+              {["low", "medium", "high"].map((range) => (
+                <label key={range}>
+                  <input
+                    type="checkbox"
+                    checked={selectedPrice === range}
+                    onChange={() => handlePriceChange(range)}
+                  />
+                  {range === "low" && " ₹0 - ₹999"}
+                  {range === "medium" && " ₹1000 - ₹1999"}
+                  {range === "high" && " ₹2000+"}
+                </label>
+              ))}
             </div>
 
             <div className="filter-section">
@@ -205,19 +209,22 @@ const ProductList = () => {
           <div className="product-list-section">
             <div className="sort-section">
               <label>Sort By:&nbsp;</label>
-              <select className="select" value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+              <select
+                className="select"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+              >
                 <option value="Select">Select</option>
                 <option value="low-high">Price: Low → High</option>
                 <option value="high-low">Price: High → Low</option>
-                <option value="popularity">Popularity</option>
               </select>
             </div>
 
             {displayProducts.length > 0 ? (
               <div className="product-grid">
-                {displayProducts.map((product, idx) => (
+                {displayProducts.map((product) => (
                   <div
-                    key={`${product.id}-${idx}`}  // key uses idx to allow repeats
+                    key={product.id}
                     className="product-card"
                     onClick={() => navigate(`/product/${product.id}`)}
                   >
@@ -241,4 +248,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList; 
+export default ProductList;

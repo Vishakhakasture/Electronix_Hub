@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import "./ProfilePage.css";
+import { FaPhoneSquareAlt } from "react-icons/fa";
+import { IoMdMail  } from "react-icons/io";
 
 const ProfilePage = () => {
   const user = auth.currentUser;
@@ -10,19 +12,39 @@ const ProfilePage = () => {
 
   const [orders, setOrders] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [userAddress, setUserAddress] = useState(null);
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [loadingCart, setLoadingCart] = useState(true);
+  const [loadingAddress, setLoadingAddress] = useState(true);
 
   useEffect(() => {
     if (!user) return;
 
+    // ✅ Fetch User Address
+    const fetchUserAddress = async () => {
+      setLoadingAddress(true);
+      try {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists() && userSnap.data().address) {
+          setUserAddress(userSnap.data().address);
+        } else {
+          setUserAddress(null);
+        }
+      } catch (error) {
+        console.error("Error fetching user address:", error);
+      } finally {
+        setLoadingAddress(false);
+      }
+    };
+
+    // ✅ Fetch Cart Items
     const fetchCartItems = async () => {
       setLoadingCart(true);
       try {
         const cartRef = collection(db, "cart");
         const q = query(cartRef, where("userId", "==", user.uid));
         const snapshot = await getDocs(q);
-
         const cartData = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -37,11 +59,7 @@ const ProfilePage = () => {
             acc.push({
               ...item,
               productId: key,
-              productName:
-                item.productName ||
-                item.name ||
-                item.title ||
-                "Unnamed Product",
+              productName: item.productName || item.name || item.title || "Unnamed Product",
               quantity: item.quantity || 1,
             });
           }
@@ -56,28 +74,20 @@ const ProfilePage = () => {
       }
     };
 
+    // ✅ Fetch Orders
     const fetchOrders = async () => {
       setLoadingOrders(true);
       try {
         const ordersRef = collection(db, "orders");
         const q = query(ordersRef, where("userId", "==", user.uid));
         const snapshot = await getDocs(q);
-
         const ordersData = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        // ✅ Remove duplicates by ID
-        const uniqueOrders = Array.from(
-          new Map(ordersData.map((o) => [o.id, o])).values()
-        );
-
-        // ✅ Filter out invalid/empty orders (total 0 and no items)
-        const validOrders = uniqueOrders.filter(
-          (order) => order.items && order.items.length > 0
-        );
-
+        const uniqueOrders = Array.from(new Map(ordersData.map((o) => [o.id, o])).values());
+        const validOrders = uniqueOrders.filter((order) => order.items && order.items.length > 0);
         setOrders(validOrders);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -86,6 +96,7 @@ const ProfilePage = () => {
       }
     };
 
+    fetchUserAddress();
     fetchCartItems();
     fetchOrders();
   }, [user]);
@@ -111,6 +122,29 @@ const ProfilePage = () => {
       <p className="profile-email">
         <strong>Email:</strong> {user.email}
       </p>
+
+      {/* 🏠 USER ADDRESS SECTION */}
+      <div className="profile-section">
+        <h3>Details</h3>
+        {loadingAddress ? (
+          <p>Loading address...</p>
+        ) : userAddress ? (
+          <div className="address-card">
+            <p>
+              <strong>{userAddress.fullName}</strong>
+              <br />
+              {userAddress.addressLine}, {userAddress.city}, {userAddress.state},{" "}
+              {userAddress.country} - {userAddress.zip}
+              <br />
+              <FaPhoneSquareAlt /> {userAddress.phone}
+              <br />
+              <IoMdMail /> {userAddress.email}
+            </p>
+          </div>
+        ) : (
+          <p className="empty-message">No address found. Please add your address during checkout.</p>
+        )}
+      </div>
 
       {/* 🛒 CART SECTION */}
       <div className="profile-section">
@@ -148,18 +182,15 @@ const ProfilePage = () => {
         ) : (
           orders.map((order) => (
             <div key={order.id} className="order-card">
-              {/* ✅ Single order summary */}
               <div className="order-info">
                 <h4>Order Summary</h4>
                 <p>
-                  Status:{" "}
-                  <span className="status">{order.status || "Pending"}</span>
+                  Status: <span className="status">{order.status || "Pending"}</span>
                 </p>
                 <p>
                   Total: <strong>₹{order.total || 0}</strong>
                 </p>
               </div>
-
               <div className="order-items">
                 {order.items?.map((item, index) => (
                   <div key={index} className="item-card small">
@@ -168,12 +199,7 @@ const ProfilePage = () => {
                       alt={item.productName || "Product"}
                       className="item-img"
                     />
-                    <h4>
-                      {item.productName ||
-                        item.name ||
-                        item.title ||
-                        "Unnamed Product"}
-                    </h4>
+                    <h4>{item.productName || item.name || item.title || "Unnamed Product"}</h4>
                     <p>Qty: {item.quantity}</p>
                     <p>₹{item.price}</p>
                   </div>

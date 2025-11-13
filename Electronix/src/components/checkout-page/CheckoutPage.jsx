@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { collection, addDoc, serverTimestamp, doc, setDoc, getDoc } from "firebase/firestore";
-import { db, auth } from "../../firebase"; 
+import { db, auth } from "../../firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./CheckoutPage.css";
 import Navbar from "../home-page/Navbar";
@@ -28,6 +28,7 @@ const CheckoutPage = () => {
     country: "",
   });
 
+  const [errors, setErrors] = useState({});
   const [validated, setValidated] = useState(false);
   const [editMode, setEditMode] = useState(true);
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -37,27 +38,73 @@ const CheckoutPage = () => {
   const shipping = cartItems.length > 0 ? 20 : 0;
   const total = subtotal + shipping;
 
+  // ✅ Validation rules
+  const validateField = (name, value) => {
+    let error = "";
+    switch (name) {
+      case "fullName":
+        if (!value.trim()) error = "Full name is required";
+        break;
+      case "phone":
+        if (!/^[0-9]{10}$/.test(value)) error = "Phone number must be 10 digits";
+        break;
+      case "email":
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = "Enter a valid email address";
+        break;
+      case "addressLine":
+        if (!value.trim()) error = "Address is required";
+        break;
+      case "city":
+        if (!value.trim()) error = "City is required";
+        break;
+      case "zip":
+        if (!/^\d{5,6}$/.test(value)) error = "Enter a valid 5 or 6 digit ZIP code";
+        break;
+      case "country":
+        if (!value) error = "Please select a country";
+        break;
+      case "state":
+        if (!value) error = "Please select a state";
+        break;
+      default:
+        break;
+    }
+    return error;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAddress({ ...address, [name]: value });
 
-    // Update available states if country changes
+    const error = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: error }));
+
+    // Country-state logic
     if (name === "country") {
-      const countryData = countries.find(c => c.name === value);
+      const countryData = countries.find((c) => c.name === value);
       setAvailableStates(countryData ? countryData.states : []);
-      setAddress(prev => ({ ...prev, state: "" })); 
+      setAddress((prev) => ({ ...prev, state: "" }));
     }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const allFilled = Object.values(address).every((val) => val.trim() !== "");
-    if (!allFilled) {
-      alert("Please fill out all required fields.");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const newErrors = {};
+    Object.keys(address).forEach((field) => {
+      const error = validateField(field, address[field]);
+      if (error) newErrors[field] = error;
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setValidated(false);
       return;
     }
-    setEditMode(false);
+
+    setErrors({});
     setValidated(true);
+    setEditMode(false);
   };
 
   useEffect(() => {
@@ -68,7 +115,9 @@ const CheckoutPage = () => {
       if (userSnap.exists() && userSnap.data().address) {
         setAddress(userSnap.data().address);
         setEditMode(false);
-        const countryData = countries.find(c => c.name === userSnap.data().address.country);
+        const countryData = countries.find(
+          (c) => c.name === userSnap.data().address.country
+        );
         setAvailableStates(countryData ? countryData.states : []);
       }
     };
@@ -81,9 +130,15 @@ const CheckoutPage = () => {
       return;
     }
 
-    const allFilled = Object.values(address).every((val) => val.trim() !== "");
-    if (!allFilled) {
-      alert("Please fill out all required fields before placing the order.");
+    // Validate before placing
+    const newErrors = {};
+    Object.keys(address).forEach((field) => {
+      const error = validateField(field, address[field]);
+      if (error) newErrors[field] = error;
+    });
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      alert("Please correct the highlighted fields before placing the order.");
       return;
     }
 
@@ -125,127 +180,198 @@ const CheckoutPage = () => {
 
   return (
     <>
-    <Navbar />
-    <div className="checkout-page">
-      <div className="breadcrumb">
-        <Link to="/">Home</Link> <span>/</span> <Link to="/cart">Cart</Link> <span>/</span> <span>Checkout</span>
-        
-      </div>
+      <Navbar />
+      <div className="checkout-page">
+        <div className="breadcrumb">
+          <Link to="/">Home</Link> <span>/</span>{" "}
+          <Link to="/cart">Cart</Link> <span>/</span> <span>Checkout</span>
+        </div>
 
-      <div className="checkout-container container">
-        <div className="row">
-          <div className="col-lg-7 mb-4">
-            <div className="address-section p-4 shadow-sm rounded bg-white">
-              <h3>Shipping Address</h3>
-              {editMode ? (
-                <form noValidate validated={validated ? "true" : undefined} onSubmit={handleSubmit} className="needs-validation">
-                  <div className="mb-3">
-                    <label className="form-label">Full Name</label>
-                    <input type="text" name="fullName" className="form-control" placeholder="Enter full name" value={address.fullName} onChange={handleChange} required />
-                  </div>
+        <div className="checkout-container container">
+          <div className="row">
+            <div className="col-lg-7 mb-4">
+              <div className="address-section p-4 shadow-sm rounded bg-white">
+                <h3>Shipping Address</h3>
+                {editMode ? (
+                  <form noValidate onSubmit={handleSubmit}>
+                    {[
+                      { name: "fullName", label: "Full Name", type: "text" },
+                      { name: "phone", label: "Phone Number", type: "tel" },
+                      { name: "email", label: "Email", type: "email" },
+                      { name: "addressLine", label: "Address", type: "text" },
+                    ].map((field) => (
+                      <div className="mb-3" key={field.name}>
+                        <label className="form-label">{field.label}</label>
+                        <input
+                          type={field.type}
+                          name={field.name}
+                          className={`form-control ${
+                            errors[field.name] ? "is-invalid" : ""
+                          }`}
+                          placeholder={`Enter ${field.label.toLowerCase()}`}
+                          value={address[field.name]}
+                          onChange={handleChange}
+                          required
+                        />
+                        {errors[field.name] && (
+                          <div className="invalid-feedback">
+                            {errors[field.name]}
+                          </div>
+                        )}
+                      </div>
+                    ))}
 
-                  <div className="mb-3">
-                    <label className="form-label">Phone Number</label>
-                    <input type="tel" name="phone" className="form-control" placeholder="Enter phone number" value={address.phone} onChange={handleChange} required />
-                  </div>
+                    <div className="row">
+                      <div className="col-md-3 mb-3">
+                        <label className="form-label">Country</label>
+                        <select
+                          name="country"
+                          className={`form-select ${
+                            errors.country ? "is-invalid" : ""
+                          }`}
+                          value={address.country}
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="">Select Country</option>
+                          {countries.map((c) => (
+                            <option key={c.name} value={c.name}>
+                              {c.name}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.country && (
+                          <div className="invalid-feedback">{errors.country}</div>
+                        )}
+                      </div>
 
-                  <div className="mb-3">
-                    <label className="form-label">Email</label>
-                    <input type="email" name="email" className="form-control" placeholder="Enter email" value={address.email} onChange={handleChange} required />
-                  </div>
+                      <div className="col-md-3 mb-3">
+                        <label className="form-label">State</label>
+                        <select
+                          name="state"
+                          className={`form-select ${
+                            errors.state ? "is-invalid" : ""
+                          }`}
+                          value={address.state}
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="">Select State</option>
+                          {availableStates.map((state) => (
+                            <option key={state} value={state}>
+                              {state}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.state && (
+                          <div className="invalid-feedback">{errors.state}</div>
+                        )}
+                      </div>
 
-                  <div className="mb-3">
-                    <label className="form-label">Address</label>
-                    <input type="text" name="addressLine" className="form-control" placeholder="Enter address" value={address.addressLine} onChange={handleChange} required />
-                  </div>
+                      <div className="col-md-3 mb-3">
+                        <label className="form-label">City</label>
+                        <input
+                          type="text"
+                          name="city"
+                          className={`form-control ${
+                            errors.city ? "is-invalid" : ""
+                          }`}
+                          placeholder="Enter city"
+                          value={address.city}
+                          onChange={handleChange}
+                          required
+                        />
+                        {errors.city && (
+                          <div className="invalid-feedback">{errors.city}</div>
+                        )}
+                      </div>
 
-                  <div className="row">
-                    {/* Country Dropdown */}
-                    <div className="col-md-3 mb-3">
-                      <label className="form-label">Country</label>
-                      <select name="country" className="form-select" value={address.country} onChange={handleChange} required>
-                        <option value="">Select Country</option>
-                        {countries.map(c => (
-                          <option key={c.name} value={c.name}>{c.name}</option>
-                        ))}
-                      </select>
+                      <div className="col-md-3 mb-3">
+                        <label className="form-label">Zip</label>
+                        <input
+                          type="text"
+                          name="zip"
+                          className={`form-control ${
+                            errors.zip ? "is-invalid" : ""
+                          }`}
+                          placeholder="Enter zip"
+                          value={address.zip}
+                          onChange={handleChange}
+                          required
+                        />
+                        {errors.zip && (
+                          <div className="invalid-feedback">{errors.zip}</div>
+                        )}
+                      </div>
                     </div>
 
-                    {/* State Dropdown */}
-                    <div className="col-md-3 mb-3">
-                      <label className="form-label">State</label>
-                      <select name="state" className="form-select" value={address.state} onChange={handleChange} required>
-                        <option value="">Select State</option>
-                        {availableStates.map(state => (
-                          <option key={state} value={state}>{state}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="col-md-3 mb-3">
-                      <label className="form-label">City</label>
-                      <input type="text" name="city" className="form-control" placeholder="Enter city" value={address.city} onChange={handleChange} required />
-                    </div>
-
-                    <div className="col-md-3 mb-3">
-                      <label className="form-label">Zip</label>
-                      <input type="text" name="zip" className="form-control" placeholder="Enter zip" value={address.zip} onChange={handleChange} required />
-                    </div>
+                    <button type="submit" className="btn btn-dark w-100 mt-3">
+                      Save Address
+                    </button>
+                  </form>
+                ) : (
+                  <div className="saved-address">
+                    <p>
+                      <strong>{address.fullName}</strong>
+                      <br />
+                      {address.addressLine}, {address.city}, {address.state},{" "}
+                      {address.country} - {address.zip}
+                      <br />
+                      {address.phone} | {address.email}
+                    </p>
+                    <button
+                      className="btn btn-outline-dark mt-2"
+                      onClick={() => setEditMode(true)}
+                    >
+                      Edit Address
+                    </button>
                   </div>
-
-                  <button type="submit" className="btn btn-dark w-100 mt-3">Save Address</button>
-                </form>
-              ) : (
-                <div className="saved-address">
-                  <p>
-                    <strong>{address.fullName}</strong>
-                    <br />
-                    {address.addressLine}, {address.city}, {address.state}, {address.country} - {address.zip}
-                    <br />
-                    {address.phone} | {address.email}
-                  </p>
-                  <button className="btn btn-outline-dark mt-2" onClick={() => setEditMode(true)}>Edit Address</button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Order Summary Section */}
-          <div className="col-lg-5">
-            <div className="order-summary p-4 shadow-sm rounded bg-white">
-              <h3>Order Summary</h3>
-              {cartItems.map((item) => (
-                <div className="d-flex justify-content-between align-items-center mb-3" key={item.id}>
-                  <div className="d-flex align-items-center">
+            {/* Order Summary */}
+            <div className="col-lg-5">
+              <div className="order-summary p-4 shadow-sm rounded bg-white">
+                <h3>Order Summary</h3>
+                {cartItems.map((item) => (
+                  <div
+                    className="d-flex justify-content-between align-items-center mb-3"
+                    key={item.id}
+                  >
                     <div>
                       <p className="mb-0 fw-semibold">{item.title}</p>
                       <small>Qty: {item.quantity}</small>
                     </div>
+                    <span>₹{(item.price * item.quantity).toLocaleString()}</span>
                   </div>
-                  <span>₹{(item.price * item.quantity).toLocaleString()}</span>
+                ))}
+
+                <hr />
+                <div className="d-flex justify-content-between">
+                  <span>Subtotal</span>
+                  <span>₹{subtotal.toLocaleString()}</span>
                 </div>
-              ))}
+                <div className="d-flex justify-content-between">
+                  <span>Shipping</span>
+                  <span>₹{shipping}</span>
+                </div>
+                <div className="d-flex justify-content-between fw-bold border-top pt-2 mt-2">
+                  <span>Total</span>
+                  <span>₹{total.toLocaleString()}</span>
+                </div>
 
-              <hr />
-              <div className="d-flex justify-content-between">
-                <span>Subtotal</span>
-                <span>₹{subtotal.toLocaleString()}</span>
+                <button
+                  className="btn btn-dark w-100 mt-4"
+                  onClick={handlePlaceOrder}
+                >
+                  Place Order
+                </button>
               </div>
-              <div className="d-flex justify-content-between">
-                <span>Shipping</span>
-                <span>₹{shipping}</span>
-              </div>
-              <div className="d-flex justify-content-between fw-bold border-top pt-2 mt-2">
-                <span>Total</span>
-                <span>₹{total.toLocaleString()}</span>
-              </div>
-
-              <button className="btn btn-dark w-100 mt-4" onClick={handlePlaceOrder}>Place Order</button>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

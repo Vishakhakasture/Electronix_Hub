@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
-import productData from "./ProductData";
-import Footer from "../home-page/Footer"
+import axios from "axios";
+import Footer from "../home-page/Footer";
 import "./ProductDetails.css";
 import { useCart } from "../../context/CartContext";
 import Header from "../home-page/Header";
@@ -13,13 +12,16 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState("");
-
   const { addToCart } = useCart();
 
   useEffect(() => {
-    const found = productData.find((p) => p.id === parseInt(id));
-    setProduct(found);
-    setSelectedImage(found?.image || found?.images?.[0]);
+    axios
+      .get(`http://localhost:5000/products/${id}`)
+      .then((res) => {
+        setProduct(res.data);
+        setSelectedImage(res.data.image || res.data.images?.[0]);
+      })
+      .catch((err) => console.error("Error fetching product:", err));
   }, [id]);
 
   if (!product) {
@@ -59,11 +61,7 @@ const ProductDetails = () => {
 
         <div className="product-details-content">
           <div className="product-gallery">
-            <img
-              src={selectedImage}
-              alt={product.title}
-              className="main-image"
-            />
+            <img src={selectedImage} alt={product.title} className="main-image" />
             {product.images && product.images.length > 1 && (
               <div className="thumbnail-row">
                 {product.images.map((img, index) => (
@@ -71,9 +69,7 @@ const ProductDetails = () => {
                     key={index}
                     src={img}
                     alt={`thumb-${index}`}
-                    className={`thumb ${
-                      selectedImage === img ? "active" : ""
-                    }`}
+                    className={`thumb ${selectedImage === img ? "active" : ""}`}
                     onClick={() => setSelectedImage(img)}
                   />
                 ))}
@@ -89,22 +85,17 @@ const ProductDetails = () => {
 
             <div className="quantity-section">
               <div className="quantity-controls">
-                <button
-                  onClick={() =>
-                    setQuantity((prev) => (prev > 1 ? prev - 1 : 1))
-                  }
-                >
-                  −
-                </button>
+                <button onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}>−</button>
                 <span>{quantity}</span>
-                <button onClick={() => setQuantity((prev) => prev + 1)}>
-                  +
-                </button>
+                <button onClick={() => setQuantity((prev) => prev + 1)}>+</button>
               </div>
             </div>
 
             <div className="action-buttons">
-              <button className="add-to-cart" onClick={() => addToCart(product, quantity)}>
+              <button
+                className="add-to-cart"
+                onClick={() => addToCart(product, quantity)}
+              >
                 Add to Cart
               </button>
             </div>
@@ -141,4 +132,3 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
- 
