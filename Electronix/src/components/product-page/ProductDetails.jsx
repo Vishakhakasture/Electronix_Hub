@@ -16,7 +16,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/products/${id}`)
+      .get(`https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product/${id}`)
       .then((res) => {
         setProduct(res.data);
         setSelectedImage(res.data.image || res.data.images?.[0]);

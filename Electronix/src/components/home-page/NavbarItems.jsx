@@ -63,6 +63,7 @@ const NavbarItems = () => {
         </ul>
       </div>
     </nav>
+    
   );
 };
 

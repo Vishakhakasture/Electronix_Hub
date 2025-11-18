@@ -7,6 +7,8 @@ import ProductDetails from './components/product-page/ProductDetails.jsx';
 import CartPage from './components/cart-page/CartPage.jsx';
 import CheckoutPage from './components/checkout-page/CheckoutPage.jsx';
 import ProfilePage from './components/profile-page/ProfilePage.jsx';
+import PaymentPage from './components/payment-page/PaymentPage.jsx';
+import SuccessPage from './components/payment-page/SuccessPage.jsx';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/order-success" element={<SuccessPage />} />
       </Routes>
     </>
   );

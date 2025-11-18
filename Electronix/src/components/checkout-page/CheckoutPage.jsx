@@ -38,7 +38,6 @@ const CheckoutPage = () => {
   const shipping = cartItems.length > 0 ? 20 : 0;
   const total = subtotal + shipping;
 
-  // ✅ Validation rules
   const validateField = (name, value) => {
     let error = "";
     switch (name) {
@@ -79,7 +78,6 @@ const CheckoutPage = () => {
     const error = validateField(name, value);
     setErrors((prev) => ({ ...prev, [name]: error }));
 
-    // Country-state logic
     if (name === "country") {
       const countryData = countries.find((c) => c.name === value);
       setAvailableStates(countryData ? countryData.states : []);
@@ -124,59 +122,29 @@ const CheckoutPage = () => {
     fetchUserAddress();
   }, []);
 
-  const handlePlaceOrder = async () => {
-    if (!auth.currentUser) {
-      alert("Please login to place an order.");
-      return;
-    }
+  const handlePlaceOrder = () => {
+  const newErrors = {};
+  Object.keys(address).forEach((field) => {
+    const error = validateField(field, address[field]);
+    if (error) newErrors[field] = error;
+  });
 
-    // Validate before placing
-    const newErrors = {};
-    Object.keys(address).forEach((field) => {
-      const error = validateField(field, address[field]);
-      if (error) newErrors[field] = error;
-    });
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      alert("Please correct the highlighted fields before placing the order.");
-      return;
-    }
-
-    try {
-      const userRef = doc(db, "users", auth.currentUser.uid);
-      await setDoc(userRef, { address }, { merge: true });
-
-      const order = {
-        userId: auth.currentUser.uid,
-        items: cartItems,
-        address,
-        subtotal,
-        shipping,
-        total,
-        status: "Pending",
-        createdAt: serverTimestamp(),
-      };
-
-      await addDoc(collection(db, "orders"), order);
-
-      clearCart();
-      setOrderPlaced(true);
-      setTimeout(() => navigate("/"), 3000);
-    } catch (error) {
-      console.error("Error placing order:", error);
-      alert("Something went wrong. Please try again.");
-    }
-  };
-
-  if (orderPlaced) {
-    return (
-      <div className="order-success text-center mt-5">
-        <h2>Your Order Placed Successfully!</h2>
-        <p>Thank you for shopping with ElectroNix.</p>
-        <p>Redirecting to home...</p>
-      </div>
-    );
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    alert("Please correct the highlighted fields before continuing.");
+    return;
   }
+
+  navigate("/payment", {
+    state: {
+      cartItems,
+      address,
+      subtotal,
+      shipping,
+      total,
+    },
+  });
+};
 
   return (
     <>

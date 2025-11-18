@@ -27,16 +27,16 @@ const ProductList = () => {
     updateBreadcrumb(["Products"]);
   }, []);
 
-  // ✅ Fetch data from JSON Server API
   useEffect(() => {
     axios
-      .get("http://localhost:5000/products")
+      .get("https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product")
       .then((res) => {
         setAllProducts(res.data);
       })
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
+  console.log("All Product => ",allProducts)
   const formatLabel = (raw) => {
     if (!raw) return "";
     return raw

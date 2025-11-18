@@ -3,15 +3,16 @@ import "./Navbar.css";
 import { FaUser, FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import productData from "../product-page/ProductData";
+import axios from "axios";
 import { useCart } from "../../context/CartContext";
-
+    
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [user, setUser] = useState(null); // 👤 Track current user
+  const [user, setUser] = useState(null);
+  const [allProducts, setAllProducts] = useState([]);
 
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -21,7 +22,19 @@ const Navbar = () => {
   const { cartItems } = useCart();
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-  // ✅ Listen for Firebase user changes
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+
+        const res = await axios.get("https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product");
+        setAllProducts(res.data);
+      } catch (error) {
+        console.error("Error loading products:", error);
+      }
+    };
+    fetchProducts();
+  }, []);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -54,11 +67,6 @@ const Navbar = () => {
     navigate("/profile");
   };
 
-  // const handleOrders = () => {
-  //   setShowDropdown(false);
-  //   navigate("/orders");
-  // };
-
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -81,7 +89,7 @@ const Navbar = () => {
       return;
     }
 
-    const filtered = productData.filter((item) =>
+    const filtered = allProducts.filter((item) =>
       item.title.toLowerCase().includes(value.toLowerCase())
     );
     setSuggestions(filtered.slice(0, 5));
@@ -154,7 +162,6 @@ const Navbar = () => {
               ) : (
                 <>
                   <p onClick={handleProfile}>Profile</p>
-                  
                   <p onClick={handleLogout}>Logout</p>
                 </>
               )}

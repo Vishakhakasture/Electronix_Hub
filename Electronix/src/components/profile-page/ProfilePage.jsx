@@ -20,7 +20,6 @@ const ProfilePage = () => {
   useEffect(() => {
     if (!user) return;
 
-    // ✅ Fetch User Address
     const fetchUserAddress = async () => {
       setLoadingAddress(true);
       try {
@@ -38,7 +37,6 @@ const ProfilePage = () => {
       }
     };
 
-    // ✅ Fetch Cart Items
     const fetchCartItems = async () => {
       setLoadingCart(true);
       try {
@@ -74,7 +72,6 @@ const ProfilePage = () => {
       }
     };
 
-    // ✅ Fetch Orders
     const fetchOrders = async () => {
       setLoadingOrders(true);
       try {
@@ -119,11 +116,6 @@ const ProfilePage = () => {
       </button>
 
       <h2 className="profile-heading">Your Profile</h2>
-      <p className="profile-email">
-        <strong>Email:</strong> {user.email}
-      </p>
-
-      {/* 🏠 USER ADDRESS SECTION */}
       <div className="profile-section">
         <h3>Details</h3>
         {loadingAddress ? (
@@ -146,7 +138,6 @@ const ProfilePage = () => {
         )}
       </div>
 
-      {/* 🛒 CART SECTION */}
       <div className="profile-section">
         <h3>Your Cart</h3>
         {loadingCart ? (
@@ -156,7 +147,7 @@ const ProfilePage = () => {
         ) : (
           <div className="card-grid">
             {cartItems.map((item) => (
-              <div key={item.id} className="item-card">
+              <div key={item.id} className="item-card" onClick={() => navigate(`/product/${item.productId}`)} style={{cursor: "pointerS"}}>
                 <img
                   src={item.image || item.images?.[0]}
                   alt={item.productName}
@@ -172,7 +163,6 @@ const ProfilePage = () => {
         )}
       </div>
 
-      {/* 📦 ORDERS SECTION */}
       <div className="profile-section">
         <h3>Your Orders</h3>
         {loadingOrders ? (
@@ -214,6 +204,9 @@ const ProfilePage = () => {
         <h3>Need Help?</h3>
         <p>
           Contact us at <span>support@electronix.com</span>
+        </p>
+        <p>
+          <span>+91 9867878878</span> 
         </p>
       </div>
     </div>

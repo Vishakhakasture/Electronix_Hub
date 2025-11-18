@@ -86,7 +86,6 @@ const CartPage = () => {
             )}
           </div>
 
-          {/* Right side - Summary */}
           {cartItems.length > 0 && (
             <div className="cart-summary">
               <h3>Summary</h3>

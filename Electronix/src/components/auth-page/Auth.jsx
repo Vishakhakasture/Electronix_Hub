@@ -58,7 +58,6 @@ const Auth = () => {
     }
   };
 
-  // 🔙 Back button logic
   const handleBack = () => {
     if (!isLogin) {
       setIsLogin(true);
