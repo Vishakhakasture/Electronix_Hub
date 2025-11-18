@@ -26,7 +26,6 @@ const CartPage = () => {
           <Link to="/">Home</Link>
           <span> / </span>
           <span>Shopping Cart</span>
-          
         </div>
 
         <div className="cart-container">
@@ -35,30 +34,48 @@ const CartPage = () => {
               <p className="empty-cart">Your cart is empty.</p>
             ) : (
               cartItems.map((item) => (
-                <div className="cart-item" key={item.id}>
+                <div
+                  className="cart-item"
+                  key={item.id}
+                  onClick={(e) => {
+                    // Prevent navigation when clicking buttons
+                    if (
+                      e.target.tagName !== "BUTTON" &&
+                      !e.target.classList.contains("remove-btn")
+                    ) {
+                      navigate(`/product/${item.id}`);
+                    }
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
                   <img
                     src={item.image}
                     alt={item.title}
                     className="cart-item-image"
                   />
+
                   <div className="cart-item-info">
                     <h3>{item.title}</h3>
                     <p className="item-price">₹{item.price.toLocaleString()}</p>
 
                     <div className="quantity-section">
                       <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
-                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateQuantity(item.id, item.quantity - 1);
+                        }}
                         disabled={item.quantity <= 1}
                       >
                         -
                       </button>
+
                       <span>{item.quantity}</span>
+
                       <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
-                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateQuantity(item.id, item.quantity + 1);
+                        }}
                       >
                         +
                       </button>
@@ -70,7 +87,10 @@ const CartPage = () => {
 
                     <button
                       className="remove-btn"
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeFromCart(item.id);
+                      }}
                     >
                       Remove
                     </button>

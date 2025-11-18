@@ -9,6 +9,7 @@ import CheckoutPage from './components/checkout-page/CheckoutPage.jsx';
 import ProfilePage from './components/profile-page/ProfilePage.jsx';
 import PaymentPage from './components/payment-page/PaymentPage.jsx';
 import SuccessPage from './components/payment-page/SuccessPage.jsx';
+import Contact from './components/auth-page/Contact.jsx';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/order-success" element={<SuccessPage />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </>
   );
