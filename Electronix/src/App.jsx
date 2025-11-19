@@ -10,10 +10,27 @@ import ProfilePage from './components/profile-page/ProfilePage.jsx';
 import PaymentPage from './components/payment-page/PaymentPage.jsx';
 import SuccessPage from './components/payment-page/SuccessPage.jsx';
 import Contact from './components/auth-page/Contact.jsx';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        closeOnClick={true}
+        pauseOnHover={true}
+        toastStyle={{
+        backgroundColor: "#ffffff",       
+        color: "#0b1a3c",                 
+        fontWeight: "bold",               
+        fontSize: "15px",
+        borderRadius: "8px",
+        border: "1px solid #0b1a3c",      
+      }}
+      />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />

@@ -147,7 +147,7 @@ const ProfilePage = () => {
         ) : (
           <div className="card-grid">
             {cartItems.map((item) => (
-              <div key={item.id} className="item-card" onClick={() => navigate(`/product/${item.productId}`)} style={{cursor: "pointerS"}}>
+              <div key={item.id} className="item-card" onClick={() => navigate(`/product/${item.productId}`)} style={{cursor: "pointer"}}>
                 <img
                   src={item.image || item.images?.[0]}
                   alt={item.productName}

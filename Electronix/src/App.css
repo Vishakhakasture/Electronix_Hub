@@ -9,3 +9,16 @@ body, html {
   height: 100%;
   overflow-x: hidden;
 }
+
+.custom-toastify-container .Toastify__toast {
+  background: #0a1a3a !important;   
+  color: #fff !important;
+  border-left: 5px solid #ffd700 !important; 
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.custom-toastify-container .Toastify__progress-bar {
+  background: #ffd700 !important; 
+}
