@@ -1,106 +1,71 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { addDoc, collection, doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { auth, db } from "../../firebase";
-import { useCart } from "../../context/CartContext";
-import Navbar from "../home-page/Navbar";
-import "./PaymentPage.css";
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const PaymentPage = () => {
-  const { state } = useLocation();
   const navigate = useNavigate();
-  const { clearCart } = useCart();
+  const location = useLocation();
 
-  const [paymentMethod, setPaymentMethod] = useState("UPI");
-  const [processing, setProcessing] = useState(false);
+  const total = location.state?.total || 0;
 
-  if (!state) {
-    return <h2 className="text-center mt-5">Invalid Access</h2>;
-  }
+  const handleCOD = () => {
+    navigate("/order-success", {
+      state: { total, method: "COD" },
+    });
+  };
 
-  const { cartItems, address, subtotal, shipping, total } = state;
+  const handleRazorpay = () => {
+    const options = {
+      key: "rzp_test_1DP5mmOlF5G5ag",
+      amount: total * 100, // ₹ → paise
+      currency: "INR",
+      name: "ElectroNix",
+      description: "Order Payment",
+      image: "https://dummyimage.com/100x100/000/fff&text=E",
 
-  const handlePayment = async () => {
-    if (processing) return;
+      handler: function (response) {
+        navigate("/order-success", {
+          state: {
+            total,
+            method: "Razorpay",
+            paymentId: response.razorpay_payment_id,
+          },
+        });
+      },
 
-    setProcessing(true);
+      prefill: {
+        name: "ElectroNix User",
+        email: "test@example.com",
+        contact: "9999999999",
+      },
 
-    try {
-      const user = auth.currentUser;
+      theme: { color: "#121212" },
+    };
 
-      if (!user) {
-        alert("Please login to continue");
-        navigate("/login");
-        return;
-      }
-
-      // Save Address for next times
-      const userRef = doc(db, "users", user.uid);
-      await setDoc(
-        userRef,
-        { address },
-        { merge: true }
-      );
-
-      // Create Order
-      const order = {
-        userId: user.uid,
-        items: cartItems,
-        address,
-        subtotal,
-        shipping,
-        total,
-        paymentMethod,
-        paymentStatus: "Paid",
-        status: "Processing",
-        createdAt: serverTimestamp(),
-      };
-
-      await addDoc(collection(db, "orders"), order);
-
-      clearCart();
-
-      navigate("/order-success", { state: { total } });
-
-    } catch (error) {
-      console.error(error);
-      alert("Payment failed. Please try again.");
-      setProcessing(false);
-    }
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
 
   return (
-    <>
-      <Navbar />
+    <div className="container p-5 text-center">
+      <h2 className="mb-4 fw-bold">Choose Payment Method</h2>
 
-      <div className="payment-page container mt-4">
-        <h2 className="mb-4 text-center fw-bold">Choose Payment Method</h2>
+      {/* ✅ Real total displayed */}
+      <h4 className="mb-4">Total Amount: ₹{total}</h4>
 
-        <div className="payment-container shadow rounded p-4 bg-white">
-          <h4 className="mb-3">Order Total: ₹{total.toLocaleString()}</h4>
+      <button
+        className="btn btn-outline-dark px-4 py-2 me-3"
+        onClick={handleCOD}
+      >
+        Cash on Delivery
+      </button>
 
-          <div className="payment-options">
-            {["UPI", "Card", "Cash on Delivery"].map((method) => (
-              <div
-                key={method}
-                className={`payment-option ${paymentMethod === method ? "active" : ""}`}
-                onClick={() => setPaymentMethod(method)}
-              >
-                {method}
-              </div>
-            ))}
-          </div>
-
-          <button
-            className="btn btn-dark w-100 mt-4"
-            disabled={processing}
-            onClick={handlePayment}
-          >
-            {processing ? "Processing Payment..." : "Pay Now"}
-          </button>
-        </div>
-      </div>
-    </>
+      <button
+        className="btn btn-dark px-4 py-2"
+        onClick={handleRazorpay}
+      >
+        Pay with Razorpay
+      </button>
+    </div>
   );
 };
 
