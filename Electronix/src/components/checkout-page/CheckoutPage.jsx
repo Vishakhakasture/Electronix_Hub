@@ -66,7 +66,7 @@ const CheckoutPage = () => {
     if (name === "country") {
       const countryData = countries.find((c) => c.name === value);
       setAvailableStates(countryData ? countryData.states : []);
-      setAddress((prev) => ({ ...prev, state: "" })); // reset state if country changes
+      setAddress((prev) => ({ ...prev, state: "" })); 
     }
   };
 
@@ -117,25 +117,55 @@ const CheckoutPage = () => {
   }, []);
 
   const handlePlaceOrder = () => {
-    if (!isFormValid()) {
-      toast.error("All fields are required!");
-      setTouched({
-        fullName: true,
-        phone: true,
-        email: true,
-        addressLine: true,
-        city: true,
-        state: true,
-        zip: true,
-        country: true,
-      });
-      return;
-    }
-
-    navigate("/payment", {
-      state: { cartItems, address, subtotal, shipping, total },
+  if (!isFormValid()) {
+    toast.error("All fields are required!");
+    setTouched({
+      fullName: true,
+      phone: true,
+      email: true,
+      addressLine: true,
+      city: true,
+      state: true,
+      zip: true,
+      country: true,
     });
+    return;
+  }
+
+  const options = {
+    key: "rzp_test_1DP5mmOlF5G5ag", // your public key
+    amount: total * 100, // amount in paise
+    currency: "INR",
+    name: "My E-Commerce Store",
+    description: "Order Payment",
+    prefill: {
+      name: address.fullName,
+      email: address.email,
+      contact: address.phone,
+    },
+    theme: { color: "#000000" },
+
+    handler: function (response) {
+      toast.success("Payment Successful!");
+
+      // Redirect or save order
+      navigate("/payment", {
+        state: {
+          cartItems,
+          address,
+          subtotal,
+          shipping,
+          total,
+          paymentId: response.razorpay_payment_id,
+        },
+      });
+    },
   };
+
+  const rzp = new window.Razorpay(options);
+  rzp.open();
+};
+
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const shipping = cartItems.length > 0 ? 20 : 0;

@@ -1,4 +1,14 @@
-/* 🌐 Base Navbar */
+.promo-bar {
+  width: 100%;
+  background: white;
+  color: #001f54; /* Navy blue */
+  font-weight: bold;
+  padding: 6px 0;
+  font-size: 15px;
+  border-bottom: 1px solid #ddd;
+  height: 30px;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;

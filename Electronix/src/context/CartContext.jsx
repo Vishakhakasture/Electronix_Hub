@@ -99,13 +99,11 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // ❌ Remove Item
   const removeFromCart = async (id) => {
     await deleteDoc(doc(db, "cart", id));
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // 🧹 Clear Entire Cart For User
   const clearCart = async () => {
     if (!user) return;
 
