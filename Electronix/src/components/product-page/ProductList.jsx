@@ -36,7 +36,6 @@ const ProductList = () => {
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
-  console.log("All Product => ",allProducts)
   const formatLabel = (raw) => {
     if (!raw) return "";
     return raw
@@ -170,7 +169,7 @@ const ProductList = () => {
         <span> / Products</span>
       </div>
 
-      <div className="product-page-container">
+      <div className="page-wrapper">
         <div className="product-page-content">
           <aside className="filter-sidebar">
             <h4>Filters</h4>
@@ -199,7 +198,7 @@ const ProductList = () => {
                     type="checkbox"
                     checked={selectedBrands.includes(brand)}
                     onChange={() => handleBrandChange(brand)}
-                  />{" "}
+                  />
                   {brand}
                 </label>
               ))}
@@ -243,6 +242,7 @@ const ProductList = () => {
           </div>
         </div>
       </div>
+
       <Footer />
     </>
   );

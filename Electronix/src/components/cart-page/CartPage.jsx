@@ -38,7 +38,6 @@ const CartPage = () => {
                   className="cart-item"
                   key={item.id}
                   onClick={(e) => {
-                    // Prevent navigation when clicking buttons
                     if (
                       e.target.tagName !== "BUTTON" &&
                       !e.target.classList.contains("remove-btn")

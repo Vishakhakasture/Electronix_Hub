@@ -5,13 +5,14 @@ import Footer from "../home-page/Footer";
 import "./ProductDetails.css";
 import { useCart } from "../../context/CartContext";
 import Header from "../home-page/Header";
+import { Carousel } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const location = useLocation();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState("");
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -19,9 +20,8 @@ const ProductDetails = () => {
       .get(`https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product/${id}`)
       .then((res) => {
         setProduct(res.data);
-        setSelectedImage(res.data.image || res.data.images?.[0]);
       })
-      .catch((err) => console.error("Error fetching product:", err));
+      .catch(() => {});
   }, [id]);
 
   if (!product) {
@@ -35,43 +35,53 @@ const ProductDetails = () => {
   return (
     <>
       <Header />
-      <div className="product-details-container">
+
+      <div className="product-page-wrapper">
         <div className="breadcrumb">
           <Link to="/">Home</Link>
 
           {category && !fromSearch && (
             <>
-              <span> / </span>
+              <span>/</span>
               <Link to={`/products/${category.toLowerCase()}`}>{category}</Link>
-              <span> / </span>
+              <span>/</span>
               <span>Products</span>
             </>
           )}
 
           {fromSearch && (
             <>
-              <span> / </span>
+              <span>/</span>
               <Link to="/products">Products</Link>
             </>
           )}
 
-          <span> / </span>
+          <span>/</span>
           <span>{product.title}</span>
         </div>
 
-        <div className="product-details-content">
+        <div className="product-details-container">
           <div className="product-gallery">
-            <img src={selectedImage} alt={product.title} className="main-image" />
+            <Carousel
+              interval={null}
+              controls={true}
+              indicators={false}
+              className="details-carousel"
+            >
+              {(product.images && product.images.length > 0
+                ? product.images
+                : [product.image]
+              ).map((img, index) => (
+                <Carousel.Item key={index}>
+                  <img className="carousel-main-img" src={img} alt={product.title} />
+                </Carousel.Item>
+              ))}
+            </Carousel>
+
             {product.images && product.images.length > 1 && (
               <div className="thumbnail-row">
                 {product.images.map((img, index) => (
-                  <img
-                    key={index}
-                    src={img}
-                    alt={`thumb-${index}`}
-                    className={`thumb ${selectedImage === img ? "active" : ""}`}
-                    onClick={() => setSelectedImage(img)}
-                  />
+                  <img key={index} src={img} className="thumb-img" alt="thumb" />
                 ))}
               </div>
             )}
@@ -85,40 +95,40 @@ const ProductDetails = () => {
 
             <div className="quantity-section">
               <div className="quantity-controls">
-                <button onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}>−</button>
+                <button onClick={() => setQuantity((p) => (p > 1 ? p - 1 : 1))}>−</button>
                 <span>{quantity}</span>
-                <button onClick={() => setQuantity((prev) => prev + 1)}>+</button>
+                <button onClick={() => setQuantity((p) => p + 1)}>+</button>
               </div>
             </div>
 
             <div className="action-buttons">
-              <button
-                className="add-to-cart"
-                onClick={() => addToCart(product, quantity)}
-              >
+              <button className="add-to-cart" onClick={() => addToCart(product, quantity)}>
                 Add to Cart
               </button>
             </div>
 
             {product.specs && (
-              <div className="product-specs">
-                <h4>Specifications:</h4>
-                <ul>
-                  {Object.entries(product.specs).map(([key, value], index) => (
-                    <li key={index}>
-                      <strong>{key}:</strong> {value}
-                    </li>
-                  ))}
-                </ul>
+              <div className="spec-section">
+                <h3>Specifications</h3>
+                <table className="spec-table">
+                  <tbody>
+                    {Object.entries(product.specs).map(([k, v], i) => (
+                      <tr key={i}>
+                        <td>{k}</td>
+                        <td>{v}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
 
             {product.reviews && (
-              <div className="reviews">
-                <h4>Customer Reviews:</h4>
-                {product.reviews.map((review, index) => (
-                  <div key={index} className="review">
-                    <strong>{review.user}:</strong> {review.comment}
+              <div className="reviews-section">
+                <h3>Customer Reviews</h3>
+                {product.reviews.map((r, i) => (
+                  <div className="review-box" key={i}>
+                    <strong>{r.user}</strong>: {r.comment}
                   </div>
                 ))}
               </div>
@@ -126,6 +136,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+
       <Footer />
     </>
   );

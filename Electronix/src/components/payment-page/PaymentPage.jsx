@@ -15,7 +15,7 @@ const PaymentPage = () => {
 
   const handleRazorpay = () => {
     const options = {
-      key: "rzp_test_1DP5mmOlF5G5ag",
+      key: "rzp_test_RhsXbpdc3eWEeN",
       amount: total * 100, // ₹ → paise
       currency: "INR",
       name: "ElectroNix",

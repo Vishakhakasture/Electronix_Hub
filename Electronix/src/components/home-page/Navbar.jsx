@@ -77,6 +77,7 @@ const Navbar = () => {
         setSuggestions([]);
       }
     };
+
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
@@ -120,62 +121,71 @@ const Navbar = () => {
     <>
       <div className="promo-bar">
         <marquee behavior="scroll" direction="left">
-          🎉 Big Sale Today ! Flat 30% OFF on Smartphones | Extra 10% OFF on prepaid orders ! 🎉 Big Sale Today BLACK FRIDAY ! Flat 50% OFF on Laptops | Extra 10% OFF on prepaid orders !
+          🎉 Big Sale Today ! Flat 30% OFF on Smartphones | Extra 10% OFF on prepaid orders !
+          🎉 Big Sale Today BLACK FRIDAY ! Flat 50% OFF on Laptops | Extra 10% OFF on prepaid orders !
         </marquee>
       </div>
+
       <nav className="navbar">
-        <div className="nav-left">
-          <h1 className="logo-text" onClick={() => navigate("/")}>
-            ElectroNix
-          </h1>
-        </div>
+        {/* Wrapper centers all content */}
+        <div className="nav-wrapper">
 
-        <div className="nav-center" ref={suggestionRef}>
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search for electronics..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            onKeyDown={handleKeyDown}
-          />
-          {suggestions.length > 0 && (
-            <ul className="suggestions-list">
-              {suggestions.map((item, index) => (
-                <li
-                  key={item.id}
-                  className={`suggestion-item ${
-                    index === activeIndex ? "active" : ""
-                  }`}
-                  onClick={() => handleSuggestionClick(item)}
-                >
-                  {item.title}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="nav-right">
-          <div className="icon-container cart-icon" onClick={() => navigate("/cart")}>
-            <FaShoppingCart className="nav-icon" />
-            {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+          {/* LEFT - LOGO */}
+          <div className="nav-left">
+            <h1 className="logo-text" onClick={() => navigate("/")}>
+              ElectroNix
+            </h1>
           </div>
 
-          <div className="icon-container user-menu" ref={dropdownRef}>
-            <FaUser className="nav-icon" onClick={handleUserClick} />
-            {showDropdown && (
-              <div className="user-dropdown">
-                {!user ? (
-                  <p onClick={handleLoginClick}>Login / Register</p>
-                ) : (
-                  <>
-                    <p onClick={handleProfile}>Profile</p>
-                    <p onClick={handleLogout}>Logout</p>
-                  </>
-                )}
-              </div>
+          {/* CENTER - SEARCH */}
+          <div className="nav-center" ref={suggestionRef}>
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search for electronics..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+            />
+
+            {suggestions.length > 0 && (
+              <ul className="suggestions-list">
+                {suggestions.map((item, index) => (
+                  <li
+                    key={item.id}
+                    className={`suggestion-item ${index === activeIndex ? "active" : ""}`}
+                    onClick={() => handleSuggestionClick(item)}
+                  >
+                    {item.title}
+                  </li>
+                ))}
+              </ul>
             )}
+          </div>
+
+          {/* RIGHT - CART + USER */}
+          <div className="nav-right">
+            <div className="icon-container cart-icon" onClick={() => navigate("/cart")}>
+              <FaShoppingCart className="nav-icon" />
+              {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+            </div>
+
+            <div className="icon-container user-menu" ref={dropdownRef}>
+              <FaUser className="nav-icon" onClick={handleUserClick} />
+
+              {showDropdown && (
+                <div className="user-dropdown">
+                  {!user ? (
+                    <p onClick={handleLoginClick}>Login / Register</p>
+                  ) : (
+                    <>
+                      <p onClick={handleProfile}>Profile</p>
+                      <p onClick={handleLogout}>Logout</p>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </nav>
