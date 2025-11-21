@@ -7,25 +7,51 @@ import { useCart } from "../../context/CartContext";
 import Header from "../home-page/Header";
 import { Carousel } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Loader from "./Loader"; 
 
 const ProductDetails = () => {
   const { id } = useParams();
   const location = useLocation();
+
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(true); 
+
   const { addToCart } = useCart();
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product/${id}`)
       .then((res) => {
         setProduct(res.data);
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error("Error fetching product:", err);
+      })
+      .finally(() => setLoading(false));
   }, [id]);
 
+  // ------------ SHOW LOADER WHILE FETCHING ------------
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <Loader />
+        <Footer />
+      </>
+    );
+  }
+
+  // If API returns nothing after loading
   if (!product) {
-    return <div className="no-products">No products found</div>;
+    return (
+      <>
+        <Header />
+        <div className="no-products">No products found</div>
+        <Footer />
+      </>
+    );
   }
 
   const path = location.pathname;
@@ -37,6 +63,7 @@ const ProductDetails = () => {
       <Header />
 
       <div className="product-page-wrapper">
+        {/* Breadcrumb Section */}
         <div className="breadcrumb">
           <Link to="/">Home</Link>
 
@@ -60,7 +87,9 @@ const ProductDetails = () => {
           <span>{product.title}</span>
         </div>
 
+        {/* Main Product Details Content */}
         <div className="product-details-container">
+          {/* LEFT: Image Gallery */}
           <div className="product-gallery">
             <Carousel
               interval={null}
@@ -87,12 +116,14 @@ const ProductDetails = () => {
             )}
           </div>
 
+          {/* RIGHT: Product Information */}
           <div className="product-info">
             <h2>{product.title}</h2>
             <p className="brand">{product.brand}</p>
             <p className="price">₹{product.price}</p>
             <p className="description">{product.description}</p>
 
+            {/* Quantity Selector */}
             <div className="quantity-section">
               <div className="quantity-controls">
                 <button onClick={() => setQuantity((p) => (p > 1 ? p - 1 : 1))}>−</button>
@@ -101,12 +132,14 @@ const ProductDetails = () => {
               </div>
             </div>
 
+            {/* Add to Cart */}
             <div className="action-buttons">
               <button className="add-to-cart" onClick={() => addToCart(product, quantity)}>
                 Add to Cart
               </button>
             </div>
 
+            {/* Specifications */}
             {product.specs && (
               <div className="spec-section">
                 <h3>Specifications</h3>
@@ -123,6 +156,7 @@ const ProductDetails = () => {
               </div>
             )}
 
+            {/* Customer Reviews */}
             {product.reviews && (
               <div className="reviews-section">
                 <h3>Customer Reviews</h3>

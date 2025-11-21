@@ -5,6 +5,7 @@ import Footer from "../home-page/Footer.jsx";
 import "./ProductList.css";
 import { useBreadcrumb } from "../../context/BreadcrumbContext";
 import Header from "../home-page/Header";
+import Loader from "./Loader";
 
 const ProductList = () => {
   const { category } = useParams();
@@ -21,6 +22,8 @@ const ProductList = () => {
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [sortOption, setSortOption] = useState("Select");
 
+  const [loading, setLoading] = useState(true); // <-- LOADING STATE
+
   const { updateBreadcrumb } = useBreadcrumb();
 
   useEffect(() => {
@@ -28,12 +31,14 @@ const ProductList = () => {
   }, []);
 
   useEffect(() => {
+    setLoading(true); 
     axios
       .get("https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product")
       .then((res) => {
         setAllProducts(res.data);
       })
-      .catch((err) => console.error("Error fetching products:", err));
+      .catch((err) => console.error("Error fetching products:", err))
+      .finally(() => setLoading(false)); // Stop loading
   }, []);
 
   const formatLabel = (raw) => {
@@ -54,6 +59,7 @@ const ProductList = () => {
     cameras: ["DSLR Cameras", "Action Cameras", "Security Cameras"],
   };
 
+  // ------------ FILTERING LOGIC ------------
   useEffect(() => {
     if (allProducts.length === 0) return;
 
@@ -110,6 +116,7 @@ const ProductList = () => {
     allProducts,
   ]);
 
+  // ------------ INFINITE SCROLL ------------
   const loadMore = useCallback(() => {
     if (!hasMore) return;
     setDisplayProducts((prev) => {
@@ -138,6 +145,7 @@ const ProductList = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loadMore]);
 
+  // ------------ HANDLERS ------------
   const handleCategoryChange = (cat) => {
     setSelectedCategories((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
@@ -153,6 +161,17 @@ const ProductList = () => {
   const handlePriceChange = (range) => {
     setSelectedPrice(selectedPrice === range ? null : range);
   };
+
+  // ------------ SHOW LOADER BEFORE DATA FETCH ------------
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <Loader />
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
