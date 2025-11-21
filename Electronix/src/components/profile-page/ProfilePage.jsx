@@ -6,7 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import "./ProfilePage.css";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
-import Loader from "../product-page/Loader"
+import Loader from "../product-page/Loader";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -169,8 +169,12 @@ const ProfilePage = () => {
 
             <div className="profile-section help-section">
               <h3>Need Help?</h3>
-              <p>Contact us at <span>support@electronix.com</span></p>
-              <p><span>+91 9867878878</span></p>
+              <p>
+                Contact us at <span>support@electronix.com</span>
+              </p>
+              <p>
+                <span>+91 9867878878</span>
+              </p>
             </div>
           </div>
 
@@ -182,11 +186,11 @@ const ProfilePage = () => {
               {cartItems.length === 0 ? (
                 <p className="empty-message">You have no products in your cart.</p>
               ) : (
-                <div className="cart-items">
+                <div className="card-grid">
                   {cartItems.map((item) => (
                     <div
                       key={item.id}
-                      className="cart-item-row"
+                      className="item-card"
                       onClick={() => navigate(`/product/${item.productId}`)}
                     >
                       <img
@@ -194,12 +198,10 @@ const ProfilePage = () => {
                         alt={item.productName}
                         className="cart-item-img"
                       />
-                      <div className="cart-item-info">
-                        <h4>{item.productName}</h4>
-                        <p className="brand">{item.brand}</p>
-                        <p className="price">₹{item.price}</p>
-                        <p className="quantity">Qty: {item.quantity}</p>
-                      </div>
+                      <h4>{item.productName}</h4>
+                      <p className="brand">{item.brand}</p>
+                      <p className="price">₹{item.price}</p>
+                      <p className="quantity">Qty: {item.quantity}</p>
                     </div>
                   ))}
                 </div>
@@ -217,14 +219,18 @@ const ProfilePage = () => {
                     <div key={order.id} className="order-card">
                       <div className="order-info">
                         <h4>Order Summary</h4>
-                        <p>Status: <span className="status">{order.status || "Pending"}</span></p>
-                        <p>Total: <strong>₹{order.total || 0}</strong></p>
+                        <p>
+                          Status: <span className="status">{order.status || "Pending"}</span>
+                        </p>
+                        <p>
+                          Total: <strong>₹{order.total || 0}</strong>
+                        </p>
                       </div>
                       <div className="order-items">
                         {order.items.map((item, index) => (
                           <div
                             key={index}
-                            className="cart-item-row"
+                            className="item-card small"
                             onClick={() => navigate(`/product/${item.productId}`)}
                           >
                             <img
@@ -232,12 +238,10 @@ const ProfilePage = () => {
                               alt={item.productName}
                               className="cart-item-img"
                             />
-                            <div className="cart-item-info">
-                              <h4>{item.productName}</h4>
-                              <p className="brand">{item.brand}</p>
-                              <p className="price">₹{item.price}</p>
-                              <p className="quantity">Qty: {item.quantity}</p>
-                            </div>
+                            <h4>{item.productName}</h4>
+                            <p className="brand">{item.brand}</p>
+                            <p className="price">₹{item.price}</p>
+                            <p className="quantity">Qty: {item.quantity}</p>
                           </div>
                         ))}
                       </div>
@@ -246,7 +250,6 @@ const ProfilePage = () => {
                 </div>
               )}
             </div>
-
           </div>
         </div>
       </div>
