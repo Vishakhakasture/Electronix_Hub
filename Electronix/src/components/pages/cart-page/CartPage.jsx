@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../home-page/Navbar";
-import NavbarItems from "../home-page/NavbarItems";
+import Navbar from "../../layout/Header/Navbar";
+import NavbarItems from "../../layout/Header/NavbarItems";
 import "./CartPage.css";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../../context/CartContext";
+import ConfirmModal from "./ConfirmModal";
 
 const CartPage = () => {
   const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
   const navigate = useNavigate();
+
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const subtotal = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -15,6 +19,16 @@ const CartPage = () => {
   );
   const shipping = cartItems.length > 0 ? 20 : 0;
   const total = subtotal + shipping;
+
+  const handleRemoveClick = (item) => {
+    setSelectedItem(item);
+    setShowConfirm(true);
+  };
+
+  const confirmRemove = () => {
+    removeFromCart(selectedItem.id);
+    setShowConfirm(false);
+  };
 
   return (
     <>
@@ -30,12 +44,25 @@ const CartPage = () => {
 
         <div className="cart-container">
           <div className="cart-items-section">
+
+            {/* Header Row */}
+            {cartItems.length > 0 && (
+              <div className="cart-header">
+                <span>Product</span>
+                <span>Name</span>
+                <span>Price Each</span>
+                <span>Quantity</span>
+                <span>Subtotal</span>
+                <span></span>
+              </div>
+            )}
+
             {cartItems.length === 0 ? (
               <p className="empty-cart">Your cart is empty.</p>
             ) : (
               cartItems.map((item) => (
                 <div
-                  className="cart-item"
+                  className="cart-row"
                   key={item.id}
                   onClick={(e) => {
                     if (
@@ -45,55 +72,51 @@ const CartPage = () => {
                       navigate(`/product/${item.id}`);
                     }
                   }}
-                  style={{ cursor: "pointer" }}
                 >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="cart-item-image"
-                  />
+                  <img src={item.image} alt={item.title} className="cart-row-img" />
 
-                  <div className="cart-item-info">
-                    <h3>{item.title}</h3>
-                    <p className="item-price">₹{item.price.toLocaleString()}</p>
+                  <span className="cart-row-name">{item.title}</span>
 
-                    <div className="quantity-section">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          updateQuantity(item.id, item.quantity - 1);
-                        }}
-                        disabled={item.quantity <= 1}
-                      >
-                        -
-                      </button>
+                  <span className="cart-row-price">
+                    ₹{item.price.toLocaleString()}
+                  </span>
 
-                      <span>{item.quantity}</span>
-
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          updateQuantity(item.id, item.quantity + 1);
-                        }}
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    <p className="subtotal">
-                      Subtotal: ₹{(item.price * item.quantity).toLocaleString()}
-                    </p>
-
+                  <div className="cart-row-qty">
                     <button
-                      className="remove-btn"
                       onClick={(e) => {
                         e.stopPropagation();
-                        removeFromCart(item.id);
+                        updateQuantity(item.id, item.quantity - 1);
+                      }}
+                      disabled={item.quantity <= 1}
+                    >
+                      -
+                    </button>
+
+                    <span>{item.quantity}</span>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        updateQuantity(item.id, item.quantity + 1);
                       }}
                     >
-                      Remove
+                      +
                     </button>
                   </div>
+
+                  <span className="cart-row-subtotal">
+                    ₹{(item.price * item.quantity).toLocaleString()}
+                  </span>
+
+                  <button
+                    className="remove-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveClick(item);
+                    }}
+                  >
+                    Remove
+                  </button>
                 </div>
               ))
             )}
@@ -108,19 +131,24 @@ const CartPage = () => {
           {cartItems.length > 0 && (
             <div className="cart-summary">
               <h3>Summary</h3>
+
               <div className="summary-row">
                 <span>Subtotal</span>
                 <span>₹{subtotal.toLocaleString()}</span>
               </div>
+
               <div className="summary-row">
                 <span>Shipping</span>
                 <span>₹{shipping.toLocaleString()}</span>
               </div>
+
               <hr />
+
               <div className="summary-row total">
                 <span>Total</span>
                 <span>₹{total.toLocaleString()}</span>
               </div>
+
               <button
                 className="checkout-btn"
                 onClick={() => navigate("/checkout")}
@@ -131,6 +159,13 @@ const CartPage = () => {
           )}
         </div>
       </div>
+
+      {/* Confirmation Popup */}
+      <ConfirmModal
+        show={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={confirmRemove}
+      />
     </>
   );
 };

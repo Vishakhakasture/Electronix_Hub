@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import Footer from "../home-page/Footer.jsx";
+import Footer from "../../layout/Footer/Footer.jsx";
 import "./ProductList.css";
-import { useBreadcrumb } from "../../context/BreadcrumbContext";
-import Header from "../home-page/Header";
-import Loader from "./Loader";
+import { useBreadcrumb } from "../../../context/BreadcrumbContext.jsx";
+import Header from "../../layout/Header/Header.jsx";
+import Loader from "../../constants/Loader.jsx";
 
 const ProductList = () => {
   const { category } = useParams();

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
-import axios from "axios";
-import Footer from "../home-page/Footer";
-import "./ProductDetails.css";
-import { useCart } from "../../context/CartContext";
-import Header from "../home-page/Header";
-import { Carousel } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Loader from "./Loader"; 
+import axios from "axios";
+import Footer from "../../layout/Footer/Footer";
+import { useCart } from "../../../context/CartContext";
+import Header from "../../layout/Header/Header";
+import { Carousel } from "react-bootstrap";
+import Loader from "../../constants/Loader";
+import "./ProductDetails.css";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -32,7 +32,6 @@ const ProductDetails = () => {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // ------------ SHOW LOADER WHILE FETCHING ------------
   if (loading) {
     return (
       <>
@@ -43,7 +42,6 @@ const ProductDetails = () => {
     );
   }
 
-  // If API returns nothing after loading
   if (!product) {
     return (
       <>
@@ -63,7 +61,6 @@ const ProductDetails = () => {
       <Header />
 
       <div className="product-page-wrapper">
-        {/* Breadcrumb Section */}
         <div className="breadcrumb">
           <Link to="/">Home</Link>
 
@@ -87,9 +84,7 @@ const ProductDetails = () => {
           <span>{product.title}</span>
         </div>
 
-        {/* Main Product Details Content */}
         <div className="product-details-container">
-          {/* LEFT: Image Gallery */}
           <div className="product-gallery">
             <Carousel
               interval={null}
@@ -123,7 +118,6 @@ const ProductDetails = () => {
             <p className="price">₹{product.price}</p>
             <p className="description">{product.description}</p>
 
-            {/* Quantity Selector */}
             <div className="quantity-section">
               <div className="quantity-controls">
                 <button onClick={() => setQuantity((p) => (p > 1 ? p - 1 : 1))}>−</button>
@@ -132,14 +126,12 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* Add to Cart */}
             <div className="action-buttons">
               <button className="add-to-cart" onClick={() => addToCart(product, quantity)}>
                 Add to Cart
               </button>
             </div>
 
-            {/* Specifications */}
             {product.specs && (
               <div className="spec-section">
                 <h3>Specifications</h3>
@@ -156,7 +148,6 @@ const ProductDetails = () => {
               </div>
             )}
 
-            {/* Customer Reviews */}
             {product.reviews && (
               <div className="reviews-section">
                 <h3>Customer Reviews</h3>

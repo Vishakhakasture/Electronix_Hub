@@ -4,7 +4,7 @@ import { FaUser, FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import axios from "axios";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../../context/CartContext";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);

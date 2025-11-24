@@ -6,7 +6,7 @@ import {
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import "./Auth.css";
-import { FaArrowLeft } from "react-icons/fa"; 
+import { FaArrowLeft } from "react-icons/fa";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -38,7 +38,11 @@ const Auth = () => {
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
         alert("Registration successful!");
-        setIsLogin(true);
+
+        // ✅ Automatically redirect to homepage after registration
+        navigate("/");
+
+        // Clear inputs
         setEmail("");
         setPassword("");
         setConfirmPassword("");

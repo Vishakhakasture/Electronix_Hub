@@ -11,6 +11,7 @@ import {
   where,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import toast from "react-hot-toast"
 
 const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
@@ -19,13 +20,11 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [user, setUser] = useState(null);
 
-  // 🔥 Listen for login / logout (fixes refresh issue)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
       if (currentUser) {
-        // Load cart again when user logs in or refresh happens
         const q = query(
           collection(db, "cart"),
           where("userId", "==", currentUser.uid)
@@ -37,20 +36,20 @@ export const CartProvider = ({ children }) => {
         }));
         setCartItems(items);
       } else {
-        setCartItems([]); // When user logs out, clear cart locally
+        setCartItems([]); 
       }
     });
 
     return () => unsubscribe();
   }, []);
 
-  // ➕ Add Item To Cart
   const addToCart = async (product, qty = 1) => {
+    
     if (!user) {
-      alert("Please login to add items to cart");
+      toast.success("Please login to add items to cart");
       return;
     }
-
+    toast.success("Product added to cart")
     const existing = cartItems.find((item) => item.productId === product.id);
 
     if (existing) {
@@ -82,7 +81,7 @@ export const CartProvider = ({ children }) => {
       setCartItems((prev) => [...prev, { ...newItem, id: docRef.id }]);
     }
 
-    alert("Added to cart!");
+    // alert("Added to cart!");
   };
 
   // 🔄 Update Quantity

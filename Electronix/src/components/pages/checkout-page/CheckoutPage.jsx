@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../../context/CartContext";
 import { doc, getDoc } from "firebase/firestore";
-import { db, auth } from "../../firebase";
+import { db, auth } from "../../../firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./checkoutPage.css";
-import Navbar from "../home-page/Navbar";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Navbar from "../../layout/Header/Navbar";
+import toast from "react-hot-toast"
 
 const countries = [
   { name: "India", states: ["Delhi", "Maharashtra", "Karnataka", "Tamil Nadu", "Other"] },

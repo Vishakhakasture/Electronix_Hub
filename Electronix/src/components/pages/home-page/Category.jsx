@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Category.css";
-import smartphoneImg from "../../assets/smartphone.jpeg";
-import laptopImg from "../../assets/laptop.jpeg";
-import watchImg from "../../assets/watch.jpeg";
-import headphoneImg from "../../assets/headphone.jpeg";
-import cameraImg from "../../assets/camera.jpeg";
+import smartphoneImg from "../../../assets/Smartphone.jpeg";
+import laptopImg from "../../../assets/laptop.jpeg";
+import watchImg from "../../../assets/watch.jpeg";
+import headphoneImg from "../../../assets/headphone.jpeg";
+import cameraImg from "../../../assets/camera.jpeg";
 
 const categories = [
   { name: "Smartphones", image: smartphoneImg, path: "/products/smartphones" },

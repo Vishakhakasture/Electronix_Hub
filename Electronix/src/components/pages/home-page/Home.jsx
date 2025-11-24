@@ -1,8 +1,8 @@
 import React from 'react'
-import Header from './Header.jsx'
+import Header from '../../layout/Header/Header.jsx'
 import Banner from './Banner.jsx'
 import Category from './Category.jsx'
-import Footer from './Footer.jsx'
+import Footer from '../../layout/Footer/Footer.jsx'
 
 const Home = () => {
   return (
