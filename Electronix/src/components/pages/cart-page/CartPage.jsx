@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../layout/Header/Navbar";
-import NavbarItems from "../../layout/Header/NavbarItems";
 import "./CartPage.css";
 import { useCart } from "../../../context/CartContext";
 import ConfirmModal from "./ConfirmModal";
@@ -33,7 +32,6 @@ const CartPage = () => {
   return (
     <>
       <Navbar />
-      <NavbarItems />
 
       <div className="cart-page">
         <div className="breadcrumb">

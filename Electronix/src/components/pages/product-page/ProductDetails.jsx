@@ -4,10 +4,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import Footer from "../../layout/Footer/Footer";
 import { useCart } from "../../../context/CartContext";
-import Header from "../../layout/Header/Header";
 import { Carousel } from "react-bootstrap";
 import Loader from "../../constants/Loader";
 import "./ProductDetails.css";
+import Navbar from "../../layout/Header/Navbar";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -15,7 +17,8 @@ const ProductDetails = () => {
 
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0); 
 
   const { addToCart } = useCart();
 
@@ -35,7 +38,7 @@ const ProductDetails = () => {
   if (loading) {
     return (
       <>
-        <Header />
+        <Navbar />
         <Loader />
         <Footer />
       </>
@@ -45,7 +48,7 @@ const ProductDetails = () => {
   if (!product) {
     return (
       <>
-        <Header />
+        <Navbar />
         <div className="no-products">No products found</div>
         <Footer />
       </>
@@ -56,9 +59,14 @@ const ProductDetails = () => {
   const fromSearch = path.includes("search");
   const category = product.category;
 
+  const allImages =
+    product.images && product.images.length > 0
+      ? product.images
+      : [product.image];
+
   return (
     <>
-      <Header />
+      <Navbar />
 
       <div className="product-page-wrapper">
         <div className="breadcrumb">
@@ -84,34 +92,45 @@ const ProductDetails = () => {
           <span>{product.title}</span>
         </div>
 
+
         <div className="product-details-container">
           <div className="product-gallery">
             <Carousel
               interval={null}
               controls={true}
               indicators={false}
+              activeIndex={activeIndex} 
+              onSelect={(selectedIndex) => setActiveIndex(selectedIndex)}
               className="details-carousel"
             >
-              {(product.images && product.images.length > 0
-                ? product.images
-                : [product.image]
-              ).map((img, index) => (
+              {allImages.map((img, index) => (
                 <Carousel.Item key={index}>
-                  <img className="carousel-main-img" src={img} alt={product.title} />
+                  <Zoom>
+                    <img
+                      className="carousel-main-img"
+                      src={img}
+                      alt={product.title}
+                    />
+                  </Zoom>
                 </Carousel.Item>
               ))}
             </Carousel>
 
-            {product.images && product.images.length > 1 && (
+            {allImages.length > 1 && (
               <div className="thumbnail-row">
-                {product.images.map((img, index) => (
-                  <img key={index} src={img} className="thumb-img" alt="thumb" />
+                {allImages.map((img, index) => (
+                  <img
+                    key={index}
+                    src={img}
+                    className={`thumb-img ${activeIndex === index ? "active-thumb" : ""}`}
+                    alt="thumb"
+                    onClick={() => setActiveIndex(index)} 
+                  />
                 ))}
               </div>
             )}
           </div>
 
-          {/* RIGHT: Product Information */}
           <div className="product-info">
             <h2>{product.title}</h2>
             <p className="brand">{product.brand}</p>
@@ -120,14 +139,19 @@ const ProductDetails = () => {
 
             <div className="quantity-section">
               <div className="quantity-controls">
-                <button onClick={() => setQuantity((p) => (p > 1 ? p - 1 : 1))}>−</button>
+                <button onClick={() => setQuantity((p) => (p > 1 ? p - 1 : 1))}>
+                  −
+                </button>
                 <span>{quantity}</span>
                 <button onClick={() => setQuantity((p) => p + 1)}>+</button>
               </div>
             </div>
 
             <div className="action-buttons">
-              <button className="add-to-cart" onClick={() => addToCart(product, quantity)}>
+              <button
+                className="add-to-cart"
+                onClick={() => addToCart(product, quantity)}
+              >
                 Add to Cart
               </button>
             </div>
@@ -148,16 +172,40 @@ const ProductDetails = () => {
               </div>
             )}
 
-            {product.reviews && (
-              <div className="reviews-section">
-                <h3>Customer Reviews</h3>
-                {product.reviews.map((r, i) => (
-                  <div className="review-box" key={i}>
-                    <strong>{r.user}</strong>: {r.comment}
-                  </div>
-                ))}
+         
+
+        {product.reviews && product.reviews.length > 0 && (
+        <div className="reviews-section compact-review">
+          <h5 className="review-title">Customer Reviews</h5>
+
+          <div className="all-reviews-box">
+            {product.reviews.map((r, i) => (
+              <div className="single-review" key={i}>
+                <div className="review-row">
+                  <span className="review-username">{r.user}</span>
+                  <span className="review-stars">
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <span
+                        key={idx}
+                        className={idx < (r.rating || 4) ? "star filled" : "star"}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </span>
+                </div>
+
+                <p className="review-comment">{r.comment}</p>
+
+                {i !== product.reviews.length - 1 && <hr className="review-line" />}
               </div>
-            )}
+            ))}
+    </div>
+  </div>
+)}
+
+  
+
           </div>
         </div>
       </div>

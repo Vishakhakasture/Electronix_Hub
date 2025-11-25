@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import axios from "axios";
 import { useCart } from "../../../context/CartContext";
+import navData from "../../pages/home-page/navData";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -13,6 +14,8 @@ const Navbar = () => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [user, setUser] = useState(null);
   const [allProducts, setAllProducts] = useState([]);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -117,6 +120,15 @@ const Navbar = () => {
     }
   };
 
+  const handleSubCategoryClick = (subCategory) => {
+    navigate(`/products/${subCategory.toLowerCase().replace(/\s+/g, "-")}`);
+    setMenuOpen(false); 
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
     <>
       <div className="promo-bar">
@@ -189,6 +201,51 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+      <nav className="nav-items-bar">
+      <div className="nav-container">
+        <div className="hamburger" onClick={toggleMenu}>
+          <span className={menuOpen ? "bar open" : "bar"}></span>
+          <span className={menuOpen ? "bar open" : "bar"}></span>
+          <span className={menuOpen ? "bar open" : "bar"}></span>
+        </div>
+
+        <ul className={`nav-items-list ${menuOpen ? "active" : ""}`}>
+          {navData.map((navItem, index) => (
+            <li
+              key={index}
+              className="nav-item"
+              onMouseEnter={() =>
+                window.innerWidth > 768 && setActiveCategory(navItem.title)
+              }
+              onMouseLeave={() =>
+                window.innerWidth > 768 && setActiveCategory(null)
+              }
+              onClick={() =>
+                window.innerWidth <= 768 &&
+                setActiveCategory(
+                  activeCategory === navItem.title ? null : navItem.title
+                )
+              }
+            >
+              {navItem.title}
+              <span className="nav-arrow">▾</span>
+
+              <ul
+                className={`dropdown-menu ${
+                  activeCategory === navItem.title ? "show" : ""
+                }`}
+              >
+                {navItem.subCategories.map((sub, subIndex) => (
+                  <li key={subIndex} onClick={() => handleSubCategoryClick(sub)}>
+                    {sub}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
     </>
   );
 };

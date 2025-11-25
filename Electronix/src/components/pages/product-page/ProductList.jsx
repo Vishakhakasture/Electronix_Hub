@@ -4,8 +4,8 @@ import axios from "axios";
 import Footer from "../../layout/Footer/Footer.jsx";
 import "./ProductList.css";
 import { useBreadcrumb } from "../../../context/BreadcrumbContext.jsx";
-import Header from "../../layout/Header/Header.jsx";
 import Loader from "../../constants/Loader.jsx";
+import Navbar from "../../layout/Header/Navbar.jsx";
 
 const ProductList = () => {
   const { category } = useParams();
@@ -22,7 +22,7 @@ const ProductList = () => {
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [sortOption, setSortOption] = useState("Select");
 
-  const [loading, setLoading] = useState(true); // <-- LOADING STATE
+  const [loading, setLoading] = useState(true); 
 
   const { updateBreadcrumb } = useBreadcrumb();
 
@@ -38,7 +38,7 @@ const ProductList = () => {
         setAllProducts(res.data);
       })
       .catch((err) => console.error("Error fetching products:", err))
-      .finally(() => setLoading(false)); // Stop loading
+      .finally(() => setLoading(false)); 
   }, []);
 
   const formatLabel = (raw) => {
@@ -59,7 +59,6 @@ const ProductList = () => {
     cameras: ["DSLR Cameras", "Action Cameras", "Security Cameras"],
   };
 
-  // ------------ FILTERING LOGIC ------------
   useEffect(() => {
     if (allProducts.length === 0) return;
 
@@ -116,7 +115,6 @@ const ProductList = () => {
     allProducts,
   ]);
 
-  // ------------ INFINITE SCROLL ------------
   const loadMore = useCallback(() => {
     if (!hasMore) return;
     setDisplayProducts((prev) => {
@@ -145,7 +143,6 @@ const ProductList = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loadMore]);
 
-  // ------------ HANDLERS ------------
   const handleCategoryChange = (cat) => {
     setSelectedCategories((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
@@ -162,11 +159,10 @@ const ProductList = () => {
     setSelectedPrice(selectedPrice === range ? null : range);
   };
 
-  // ------------ SHOW LOADER BEFORE DATA FETCH ------------
   if (loading) {
     return (
       <>
-        <Header />
+        <Navbar />
         <Loader />
         <Footer />
       </>
@@ -175,7 +171,7 @@ const ProductList = () => {
 
   return (
     <>
-      <Header />
+      <Navbar />
 
       <div className="breadcrumb">
         <Link to="/">Home</Link>
@@ -241,22 +237,31 @@ const ProductList = () => {
             {displayProducts.length > 0 ? (
               <div className="product-grid">
                 {displayProducts.map((product) => (
-                  <div
-                    key={product.id}
-                    className="product-card"
-                    onClick={() => navigate(`/product/${product.id}`)}
-                  >
-                    <div className="image-wrapper">
+                  <div key={product.id} className="product-card compact-card">
+
+                    <div className="image-wrapper small-image">
                       <img src={product.image} alt={product.title} />
                     </div>
-                    <h3>{product.title}</h3>
-                    <p>{product.brand}</p>
-                    <p>₹{product.price}</p>
+
+                    <h3 className="product-title small-title">{product.title}</h3>
+                    <p className="product-brand small-brand">{product.brand}</p>
+                    <p className="product-price small-price">₹{product.price}</p>
+
+                    <button
+                      className="view-details-btn small-btn"
+                      onClick={() => navigate(`/product/${product.id}`)}
+                    >
+                      View Details
+                    </button>
+
                   </div>
                 ))}
               </div>
+
+              
+
             ) : (
-              <div className="no-products">No products found.</div>
+              <div className="no-products">No products found</div>
             )}
           </div>
         </div>

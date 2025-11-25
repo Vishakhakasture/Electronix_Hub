@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./Contact.css";
 import Navbar from "../layout/Header/Navbar";
-import NavbarItems from "../layout/Header/NavbarItems";
 import Footer from "../layout/Footer/Footer";
 
 const Contact = () => {
@@ -24,7 +23,6 @@ const Contact = () => {
   return (
     <>
       <Navbar />
-      <NavbarItems />
 
       <div className="contact-wrapper">
         <h1 className="contact-main-title">Contact Us</h1>

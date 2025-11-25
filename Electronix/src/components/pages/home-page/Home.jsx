@@ -1,18 +1,18 @@
-import React from 'react'
-import Header from '../../layout/Header/Header.jsx'
-import Banner from './Banner.jsx'
-import Category from './Category.jsx'
-import Footer from '../../layout/Footer/Footer.jsx'
+import React from 'react';
+import Banner from './Banner.jsx';
+import Category from './Category.jsx';
+import Footer from '../../layout/Footer/Footer.jsx';
+import Navbar from '../../layout/Header/Navbar.jsx';
 
-const Home = () => {
+function Home() {
   return (
     <>
-      <Header />
+      <Navbar />
       <Banner />
       <Category />
-      <Footer/>
+      <Footer />
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;
