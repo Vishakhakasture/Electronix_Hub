@@ -1,3 +1,7 @@
+body {
+  padding-top: 160px; /* 30 + 80 + 50 approx space */
+}
+
 .promo-bar {
   width: 100%;
   background: white;
@@ -7,6 +11,10 @@
   font-size: 13px;
   border-bottom: 1px solid #ddd;
   height: 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
 }
 
 .navbar {
@@ -17,9 +25,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  position: fixed;
+  top: 30px; /* below Promo Bar */
+  left: 0;
+  z-index: 1999;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
 }
 
@@ -188,12 +197,13 @@
   }
 }
 
-/* Main Bar */
 .nav-items-bar {
   background-color: #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  position: relative;
-  z-index: 100;
+  position: fixed;
+  top: 110px; /* below navbar */
+  width: 100%;
+  z-index: 1998;
 }
 
 .nav-container {

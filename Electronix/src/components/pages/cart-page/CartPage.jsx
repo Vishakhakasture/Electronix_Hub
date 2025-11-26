@@ -6,6 +6,7 @@ import { useCart } from "../../../context/CartContext";
 import ConfirmModal from "./ConfirmModal";
 import { AiFillDelete } from "react-icons/ai";
 import empty_cart from '../../../assets/empty_cart.png';
+import Footer from "../../layout/Footer/Footer";
 
 const CartPage = () => {
   const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
@@ -47,9 +48,10 @@ const CartPage = () => {
               <div className="cart-header">
                 <span className="col-product">Product</span>
                 <span className="col-name">Name</span>
-                <span className="col-price">Price Each</span>
                 <span className="col-qty">Quantity</span>
+                <span className="col-price">Price Each</span>
                 <span className="col-subtotal">Subtotal</span>
+                <span className="col-subtotal">Remove</span>
                 <span className="col-remove"></span>
               </div>
             )}
@@ -77,9 +79,7 @@ const CartPage = () => {
 
                   <span className="cart-row-name">{item.title}</span>
 
-                  <span className="cart-row-price">
-                    ₹{item.price.toLocaleString()}
-                  </span>
+                  
 
                   <div className="cart-row-qty">
                     <button
@@ -103,6 +103,10 @@ const CartPage = () => {
                       +
                     </button>
                   </div>
+
+                  <span className="cart-row-price">
+                    ₹{item.price.toLocaleString()}
+                  </span>
 
                   <span className="cart-row-subtotal">
                     ₹{(item.price * item.quantity).toLocaleString()}
@@ -165,6 +169,7 @@ const CartPage = () => {
         onClose={() => setShowConfirm(false)}
         onConfirm={confirmRemove}
       />
+      <Footer/>
     </>
   );
 };

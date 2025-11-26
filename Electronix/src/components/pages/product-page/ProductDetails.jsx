@@ -10,6 +10,7 @@ import "./ProductDetails.css";
 import Navbar from "../../layout/Header/Navbar";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
+import no_products from '../../../assets/no_products.png'
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -49,7 +50,10 @@ const ProductDetails = () => {
     return (
       <>
         <Navbar />
-        <div className="no-products">No products found</div>
+        <div className="no-products-wrapper">
+          <img src={no_products} alt="no_products" className="no-products-img" />
+          <p className="no-products-text">No products found</p>
+        </div>
         <Footer />
       </>
     );
