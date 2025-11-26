@@ -11,7 +11,7 @@ import {
   where,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
 
 const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
@@ -19,6 +19,7 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);   // 🔥 NEW
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -36,20 +37,22 @@ export const CartProvider = ({ children }) => {
         }));
         setCartItems(items);
       } else {
-        setCartItems([]); 
+        setCartItems([]);
       }
+
+      setLoading(false);   // 🔥 Firebase fetching finished
     });
 
     return () => unsubscribe();
   }, []);
 
   const addToCart = async (product, qty = 1) => {
-    
     if (!user) {
       toast.success("Please login to add items to cart");
       return;
     }
-    toast.success("Product added to cart")
+    toast.success("Product added to cart");
+
     const existing = cartItems.find((item) => item.productId === product.id);
 
     if (existing) {
@@ -80,8 +83,6 @@ export const CartProvider = ({ children }) => {
 
       setCartItems((prev) => [...prev, { ...newItem, id: docRef.id }]);
     }
-
-    // alert("Added to cart!");
   };
 
   const updateQuantity = async (id, qty) => {
@@ -95,13 +96,13 @@ export const CartProvider = ({ children }) => {
         item.id === id ? { ...item, quantity: newQty } : item
       )
     );
-    toast.success("Quantity updated succesfully")
+    toast.success("Quantity updated successfully");
   };
 
   const removeFromCart = async (id) => {
     await deleteDoc(doc(db, "cart", id));
     setCartItems((prev) => prev.filter((item) => item.id !== id));
-    toast.success("Product removed from cart succesfully")
+    toast.success("Product removed from cart successfully");
   };
 
   const clearCart = async () => {
@@ -110,13 +111,9 @@ export const CartProvider = ({ children }) => {
     const q = query(collection(db, "cart"), where("userId", "==", user.uid));
     const snapshot = await getDocs(q);
 
-    const deletePromises = snapshot.docs.map((d) =>
-      deleteDoc(doc(db, "cart", d.id))
-    );
-
-    await Promise.all(deletePromises);
+    await Promise.all(snapshot.docs.map((d) => deleteDoc(doc(db, "cart", d.id))));
     setCartItems([]);
-    toast.success("All products from cart are removed")
+    toast.success("All products from cart are removed");
   };
 
   return (
@@ -127,6 +124,7 @@ export const CartProvider = ({ children }) => {
         updateQuantity,
         removeFromCart,
         clearCart,
+        loading,    // 🔥 exposing loading state
       }}
     >
       {children}

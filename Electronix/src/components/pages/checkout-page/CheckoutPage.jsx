@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../../context/CartContext";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../../../firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import Loader from "../../constants/Loader";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./checkoutPage.css";
 import Navbar from "../../layout/Header/Navbar";
@@ -29,9 +31,11 @@ const CheckoutPage = () => {
     country: "",
   });
 
+  const [originalAddress, setOriginalAddress] = useState(null);
   const [touched, setTouched] = useState({});
   const [editMode, setEditMode] = useState(true);
   const [availableStates, setAvailableStates] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const validateField = (name, value) => {
     switch (name) {
@@ -65,7 +69,7 @@ const CheckoutPage = () => {
     if (name === "country") {
       const countryData = countries.find((c) => c.name === value);
       setAvailableStates(countryData ? countryData.states : []);
-      setAddress((prev) => ({ ...prev, state: "" })); 
+      setAddress((prev) => ({ ...prev, state: "" }));
     }
   };
 
@@ -73,7 +77,7 @@ const CheckoutPage = () => {
     setTouched({ ...touched, [e.target.name]: true });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isFormValid()) {
@@ -91,19 +95,46 @@ const CheckoutPage = () => {
       return;
     }
 
-    setEditMode(false);
-    toast.success("Address saved successfully!");
+    if (originalAddress && JSON.stringify(originalAddress) === JSON.stringify(address)) {
+      setEditMode(false);
+      return;
+    }
+
+    const isUpdating = Boolean(originalAddress);
+
+    try {
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      await updateDoc(userRef, { address });
+
+      setOriginalAddress(address);
+      setEditMode(false);
+
+      if (isUpdating) {
+        toast.success("Address updated successfully!");
+      } else {
+        toast.success("Address saved successfully!");
+      }
+
+    } catch (error) {
+      toast.error("Failed to save address!");
+      console.error("Error saving address:", error);
+    }
   };
 
-  useEffect(() => {
-    const fetchUserAddress = async () => {
-      if (!auth.currentUser) return;
 
-      const userRef = doc(db, "users", auth.currentUser.uid);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      const userRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userRef);
 
       if (userSnap.exists() && userSnap.data().address) {
         setAddress(userSnap.data().address);
+        setOriginalAddress(userSnap.data().address);
         setEditMode(false);
 
         const countryData = countries.find(
@@ -111,9 +142,12 @@ const CheckoutPage = () => {
         );
         setAvailableStates(countryData ? countryData.states : []);
       }
-    };
-    fetchUserAddress();
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
+
 
   const handlePlaceOrder = () => {
     if (!isFormValid()) {
@@ -143,7 +177,9 @@ const CheckoutPage = () => {
   return (
     <>
       <Navbar />
-
+      {loading ? (
+        <Loader />
+      ) : ( 
       <div className="checkout-page">
         <div className="breadcrumb">
           <Link to="/">Home</Link> <span>/</span>{" "}
@@ -375,6 +411,7 @@ const CheckoutPage = () => {
           </div>
         </div>
       </div>
+      )}
     </>
   );
 };
