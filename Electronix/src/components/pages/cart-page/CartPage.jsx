@@ -4,6 +4,8 @@ import Navbar from "../../layout/Header/Navbar";
 import "./CartPage.css";
 import { useCart } from "../../../context/CartContext";
 import ConfirmModal from "./ConfirmModal";
+import { AiFillDelete } from "react-icons/ai";
+import empty_cart from '../../../assets/empty_cart.png';
 
 const CartPage = () => {
   const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
@@ -35,28 +37,28 @@ const CartPage = () => {
 
       <div className="cart-page">
         <div className="breadcrumb">
-          <Link to="/">Home</Link>
-          <span> / </span>
-          <span>Shopping Cart</span>
+          <Link to="/">Home</Link> <span>/</span> <span>Shopping Cart</span>
         </div>
 
         <div className="cart-container">
           <div className="cart-items-section">
-
-            {/* Header Row */}
+            {/* Header */}
             {cartItems.length > 0 && (
               <div className="cart-header">
-                <span>Product</span>
-                <span>Name</span>
-                <span>Price Each</span>
-                <span>Quantity</span>
-                <span>Subtotal</span>
-                <span></span>
+                <span className="col-product">Product</span>
+                <span className="col-name">Name</span>
+                <span className="col-price">Price Each</span>
+                <span className="col-qty">Quantity</span>
+                <span className="col-subtotal">Subtotal</span>
+                <span className="col-remove"></span>
               </div>
             )}
 
             {cartItems.length === 0 ? (
-              <p className="empty-cart">Your cart is empty.</p>
+              <div className="empty-cart-wrapper">
+                <img src={empty_cart} alt="empty cart" className="empty-cart-img" />
+                <p className="empty-cart-text">Your cart is empty</p>
+              </div>
             ) : (
               cartItems.map((item) => (
                 <div
@@ -81,6 +83,7 @@ const CartPage = () => {
 
                   <div className="cart-row-qty">
                     <button
+                      className="qty-btn"
                       onClick={(e) => {
                         e.stopPropagation();
                         updateQuantity(item.id, item.quantity - 1);
@@ -89,10 +92,9 @@ const CartPage = () => {
                     >
                       -
                     </button>
-
-                    <span>{item.quantity}</span>
-
+                    <span className="qty-count">{item.quantity}</span>
                     <button
+                      className="qty-btn"
                       onClick={(e) => {
                         e.stopPropagation();
                         updateQuantity(item.id, item.quantity + 1);
@@ -113,7 +115,7 @@ const CartPage = () => {
                       handleRemoveClick(item);
                     }}
                   >
-                    Remove
+                    <AiFillDelete size={22} />
                   </button>
                 </div>
               ))
@@ -158,7 +160,6 @@ const CartPage = () => {
         </div>
       </div>
 
-      {/* Confirmation Popup */}
       <ConfirmModal
         show={showConfirm}
         onClose={() => setShowConfirm(false)}
