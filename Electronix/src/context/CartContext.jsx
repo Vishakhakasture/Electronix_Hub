@@ -84,7 +84,6 @@ export const CartProvider = ({ children }) => {
     // alert("Added to cart!");
   };
 
-  // 🔄 Update Quantity
   const updateQuantity = async (id, qty) => {
     const newQty = Math.max(qty, 1);
     const docRef = doc(db, "cart", id);
@@ -96,11 +95,13 @@ export const CartProvider = ({ children }) => {
         item.id === id ? { ...item, quantity: newQty } : item
       )
     );
+    toast.success("Quantity updated succesfully")
   };
 
   const removeFromCart = async (id) => {
     await deleteDoc(doc(db, "cart", id));
     setCartItems((prev) => prev.filter((item) => item.id !== id));
+    toast.success("Product removed from cart succesfully")
   };
 
   const clearCart = async () => {
@@ -115,6 +116,7 @@ export const CartProvider = ({ children }) => {
 
     await Promise.all(deletePromises);
     setCartItems([]);
+    toast.success("All products from cart are removed")
   };
 
   return (
