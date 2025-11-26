@@ -149,7 +149,7 @@ const CartPage = () => {
               <hr />
 
               <div className="summary-row total">
-                <span>Total</span>
+                <span>Total Amount</span>
                 <span>₹{total.toLocaleString()}</span>
               </div>
 
