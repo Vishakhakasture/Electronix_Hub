@@ -177,6 +177,19 @@ body {
   color: #ffd700;
 }
 
+.username-text {
+  margin-left: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.username-text:hover {
+  color: #ffd700;
+}
+
 @media (max-width: 768px) {
   .nav-wrapper {
     flex-direction: column;
@@ -254,7 +267,6 @@ body {
   color: #003366;
 }
 
-/* Dropdown */
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -296,7 +308,6 @@ body {
   border-bottom: 1px solid #f2f2f2;
 }
 
-/* Hamburger Icon */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -323,7 +334,6 @@ body {
   transform: rotate(-45deg) translateY(-8px);
 }
 
-/* Responsive Design */
 @media (max-width: 992px) {
   .nav-items-list {
     gap: 1.2rem;
@@ -388,5 +398,11 @@ body {
 
   .dropdown-menu li:hover {
     background-color: #f5f7ff;
+  }
+}
+
+@media (max-width: 768px) {
+  .username-text {
+    display: none;
   }
 }

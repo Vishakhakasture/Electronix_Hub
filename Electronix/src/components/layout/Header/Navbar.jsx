@@ -110,7 +110,9 @@ const Navbar = () => {
     if (e.key === "ArrowDown") {
       setActiveIndex((prev) => (prev + 1) % suggestions.length);
     } else if (e.key === "ArrowUp") {
-      setActiveIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
+      setActiveIndex(
+        (prev) => (prev - 1 + suggestions.length) % suggestions.length
+      );
     } else if (e.key === "Enter") {
       if (activeIndex >= 0 && suggestions[activeIndex]) {
         handleSuggestionClick(suggestions[activeIndex]);
@@ -122,7 +124,7 @@ const Navbar = () => {
 
   const handleSubCategoryClick = (subCategory) => {
     navigate(`/products/${subCategory.toLowerCase().replace(/\s+/g, "-")}`);
-    setMenuOpen(false); 
+    setMenuOpen(false);
   };
 
   const toggleMenu = () => {
@@ -133,15 +135,15 @@ const Navbar = () => {
     <>
       <div className="promo-bar">
         <marquee behavior="scroll" direction="left">
-          🎉 Big Sale Today ! Flat 30% OFF on Smartphones | Extra 10% OFF on prepaid orders !
-          🎉 Big Sale Today BLACK FRIDAY ! Flat 50% OFF on Laptops | Extra 10% OFF on prepaid orders !
+          🎉 Big Sale Today ! Flat 30% OFF on Smartphones | Extra 10% OFF on
+          prepaid orders ! 🎉 Big Sale Today BLACK FRIDAY ! Flat 50% OFF on
+          Laptops | Extra 10% OFF on prepaid orders !
         </marquee>
       </div>
 
       <nav className="navbar">
         {/* Wrapper centers all content */}
         <div className="nav-wrapper">
-
           {/* LEFT - LOGO */}
           <div className="nav-left">
             <h1 className="logo-text" onClick={() => navigate("/")}>
@@ -165,7 +167,9 @@ const Navbar = () => {
                 {suggestions.map((item, index) => (
                   <li
                     key={item.id}
-                    className={`suggestion-item ${index === activeIndex ? "active" : ""}`}
+                    className={`suggestion-item ${
+                      index === activeIndex ? "active" : ""
+                    }`}
                     onClick={() => handleSuggestionClick(item)}
                   >
                     {item.title}
@@ -177,13 +181,27 @@ const Navbar = () => {
 
           {/* RIGHT - CART + USER */}
           <div className="nav-right">
-            <div className="icon-container cart-icon" onClick={() => navigate("/cart")}>
+            <div
+              className="icon-container cart-icon"
+              onClick={() => navigate("/cart")}
+            >
               <FaShoppingCart className="nav-icon" />
-              {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+              {totalItems > 0 && (
+                <span className="cart-badge">{totalItems}</span>
+              )}
             </div>
 
             <div className="icon-container user-menu" ref={dropdownRef}>
               <FaUser className="nav-icon" onClick={handleUserClick} />
+
+              {user && (
+                <span className="username-text" onClick={handleUserClick}>
+                  Hi,{" "}
+                  {user.displayName
+                    ? user.displayName.split(" ")[0]
+                    : user.email.split("@")[0]}
+                </span>
+              )}
 
               {showDropdown && (
                 <div className="user-dropdown">
@@ -202,50 +220,53 @@ const Navbar = () => {
         </div>
       </nav>
       <nav className="nav-items-bar">
-      <div className="nav-container">
-        <div className="hamburger" onClick={toggleMenu}>
-          <span className={menuOpen ? "bar open" : "bar"}></span>
-          <span className={menuOpen ? "bar open" : "bar"}></span>
-          <span className={menuOpen ? "bar open" : "bar"}></span>
-        </div>
+        <div className="nav-container">
+          <div className="hamburger" onClick={toggleMenu}>
+            <span className={menuOpen ? "bar open" : "bar"}></span>
+            <span className={menuOpen ? "bar open" : "bar"}></span>
+            <span className={menuOpen ? "bar open" : "bar"}></span>
+          </div>
 
-        <ul className={`nav-items-list ${menuOpen ? "active" : ""}`}>
-          {navData.map((navItem, index) => (
-            <li
-              key={index}
-              className="nav-item"
-              onMouseEnter={() =>
-                window.innerWidth > 768 && setActiveCategory(navItem.title)
-              }
-              onMouseLeave={() =>
-                window.innerWidth > 768 && setActiveCategory(null)
-              }
-              onClick={() =>
-                window.innerWidth <= 768 &&
-                setActiveCategory(
-                  activeCategory === navItem.title ? null : navItem.title
-                )
-              }
-            >
-              {navItem.title}
-              <span className="nav-arrow">▾</span>
-
-              <ul
-                className={`dropdown-menu ${
-                  activeCategory === navItem.title ? "show" : ""
-                }`}
+          <ul className={`nav-items-list ${menuOpen ? "active" : ""}`}>
+            {navData.map((navItem, index) => (
+              <li
+                key={index}
+                className="nav-item"
+                onMouseEnter={() =>
+                  window.innerWidth > 768 && setActiveCategory(navItem.title)
+                }
+                onMouseLeave={() =>
+                  window.innerWidth > 768 && setActiveCategory(null)
+                }
+                onClick={() =>
+                  window.innerWidth <= 768 &&
+                  setActiveCategory(
+                    activeCategory === navItem.title ? null : navItem.title
+                  )
+                }
               >
-                {navItem.subCategories.map((sub, subIndex) => (
-                  <li key={subIndex} onClick={() => handleSubCategoryClick(sub)}>
-                    {sub}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </nav>
+                {navItem.title}
+                <span className="nav-arrow">▾</span>
+
+                <ul
+                  className={`dropdown-menu ${
+                    activeCategory === navItem.title ? "show" : ""
+                  }`}
+                >
+                  {navItem.subCategories.map((sub, subIndex) => (
+                    <li
+                      key={subIndex}
+                      onClick={() => handleSubCategoryClick(sub)}
+                    >
+                      {sub}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
     </>
   );
 };

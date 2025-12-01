@@ -7,6 +7,7 @@ import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import "./Auth.css";
 import { FaArrowLeft } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -33,30 +34,28 @@ const Auth = () => {
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
-        alert("Login successful!");
+        toast.success("Login successful!");
         navigate("/");
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
-        alert("Registration successful!");
+        toast.success("Registration successful!");
 
-        // ✅ Automatically redirect to homepage after registration
         navigate("/");
 
-        // Clear inputs
         setEmail("");
         setPassword("");
         setConfirmPassword("");
       }
     } catch (err) {
       if (isLogin) {
-        setError("Invalid email or password");
+        toast.error("Invalid email or password");
       } else {
         if (err.code === "auth/email-already-in-use") {
-          setError("Email already registered");
+          toast.error("Email already registered");
         } else if (err.code === "auth/weak-password") {
-          setError("Password should be at least 6 characters");
+          toast.error("Password should be at least 6 characters");
         } else {
-          setError("Registration failed. Try again.");
+          toast.error("Registration failed. Try again.");
         }
       }
     }

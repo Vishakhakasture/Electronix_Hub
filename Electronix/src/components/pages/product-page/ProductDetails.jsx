@@ -10,7 +10,8 @@ import "./ProductDetails.css";
 import Navbar from "../../layout/Header/Navbar";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
-import no_products from '../../../assets/no_products.png'
+import no_products from "../../../assets/no_products.png";
+import { useNavigate } from "react-router-dom";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -19,9 +20,19 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(0); 
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const { addToCart } = useCart();
+  const [allProducts, setAllProducts] = useState([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get("https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product")
+      .then((res) => setAllProducts(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -46,12 +57,21 @@ const ProductDetails = () => {
     );
   }
 
+  const relatedProducts = allProducts
+    .filter((p) => p.category === product.category && p.id !== product.id)
+    .slice(0, 4);
+  console.log(relatedProducts);
+
   if (!product) {
     return (
       <>
         <Navbar />
         <div className="no-products-wrapper">
-          <img src={no_products} alt="no_products" className="no-products-img" />
+          <img
+            src={no_products}
+            alt="no_products"
+            className="no-products-img"
+          />
           <p className="no-products-text">No products found</p>
         </div>
         <Footer />
@@ -96,14 +116,13 @@ const ProductDetails = () => {
           <span>{product.title}</span>
         </div>
 
-
         <div className="product-details-container">
           <div className="product-gallery">
             <Carousel
               interval={null}
               controls={true}
               indicators={false}
-              activeIndex={activeIndex} 
+              activeIndex={activeIndex}
               onSelect={(selectedIndex) => setActiveIndex(selectedIndex)}
               className="details-carousel"
             >
@@ -126,9 +145,11 @@ const ProductDetails = () => {
                   <img
                     key={index}
                     src={img}
-                    className={`thumb-img ${activeIndex === index ? "active-thumb" : ""}`}
+                    className={`thumb-img ${
+                      activeIndex === index ? "active-thumb" : ""
+                    }`}
                     alt="thumb"
-                    onClick={() => setActiveIndex(index)} 
+                    onClick={() => setActiveIndex(index)}
                   />
                 ))}
               </div>
@@ -176,42 +197,78 @@ const ProductDetails = () => {
               </div>
             )}
 
-         
+            {product.reviews && product.reviews.length > 0 && (
+              <div className="reviews-section compact-review">
+                <h5 className="review-title">Customer Reviews</h5>
 
-        {product.reviews && product.reviews.length > 0 && (
-        <div className="reviews-section compact-review">
-          <h5 className="review-title">Customer Reviews</h5>
+                <div className="all-reviews-box">
+                  {product.reviews.map((r, i) => (
+                    <div className="single-review" key={i}>
+                      <div className="review-row">
+                        <span className="review-username">{r.user}</span>
+                        <span className="review-stars">
+                          {Array.from({ length: 5 }).map((_, idx) => (
+                            <span
+                              key={idx}
+                              className={
+                                idx < (r.rating || 4) ? "star filled" : "star"
+                              }
+                            >
+                              ★
+                            </span>
+                          ))}
+                        </span>
+                      </div>
 
-          <div className="all-reviews-box">
-            {product.reviews.map((r, i) => (
-              <div className="single-review" key={i}>
-                <div className="review-row">
-                  <span className="review-username">{r.user}</span>
-                  <span className="review-stars">
-                    {Array.from({ length: 5 }).map((_, idx) => (
-                      <span
-                        key={idx}
-                        className={idx < (r.rating || 4) ? "star filled" : "star"}
-                      >
-                        ★
-                      </span>
-                    ))}
-                  </span>
+                      <p className="review-comment">{r.comment}</p>
+
+                      {i !== product.reviews.length - 1 && (
+                        <hr className="review-line" />
+                      )}
+                    </div>
+                  ))}
                 </div>
-
-                <p className="review-comment">{r.comment}</p>
-
-                {i !== product.reviews.length - 1 && <hr className="review-line" />}
               </div>
-            ))}
-    </div>
-  </div>
-)}
-
-  
-
+            )}
           </div>
         </div>
+        {product && (
+          <div className="related-section">
+            <h3 className="related-heading">Related Products</h3>
+
+            {relatedProducts.length > 0 ? (
+              <div className="related-grid">
+                {relatedProducts.map((r) => (
+                  <div
+                    className="related-card"
+                    key={r.id}
+                    onClick={() => navigate(`/product/${r.id}`)}
+                  >
+                    <div className="related-img-wrapper">
+                      <img src={r.image} alt={r.title} />
+                    </div>
+
+                    <div className="related-info">
+                      <p className="related-title">{r.title}</p>
+                      <p className="related-price">₹{r.price}</p>
+                      <button
+                        className="related-view-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/product/${r.id}`);
+                        }}
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No similar products found.</p>
+            )}
+          </div>
+        )}
       </div>
 
       <Footer />
