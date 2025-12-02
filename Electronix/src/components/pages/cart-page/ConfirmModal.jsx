@@ -6,6 +6,10 @@ const ConfirmModal = ({ show, onClose, onConfirm }) => {
   return (
     <div className="confirm-overlay">
       <div className="confirm-box shadow-lg">
+        <button className="close-icon" onClick={onClose}>
+          ×
+        </button>
+
         <h5 className="text-center mb-3">Remove Product</h5>
         <p className="text-center">
           Are you sure you want to remove this product from your cart?

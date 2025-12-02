@@ -142,16 +142,13 @@ const Navbar = () => {
       </div>
 
       <nav className="navbar">
-        {/* Wrapper centers all content */}
         <div className="nav-wrapper">
-          {/* LEFT - LOGO */}
           <div className="nav-left">
             <h1 className="logo-text" onClick={() => navigate("/")}>
               ElectroNix
             </h1>
           </div>
 
-          {/* CENTER - SEARCH */}
           <div className="nav-center" ref={suggestionRef}>
             <input
               type="text"
@@ -179,7 +176,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* RIGHT - CART + USER */}
           <div className="nav-right">
             <div
               className="icon-container cart-icon"
@@ -236,13 +232,12 @@ const Navbar = () => {
                   window.innerWidth > 768 && setActiveCategory(navItem.title)
                 }
                 onMouseLeave={() =>
-                  window.innerWidth > 768 && setActiveCategory(null)
-                }
-                onClick={() =>
-                  window.innerWidth <= 768 &&
-                  setActiveCategory(
-                    activeCategory === navItem.title ? null : navItem.title
-                  )
+                  window.innerWidth > 768 &&
+                  setTimeout(() => {
+                    setActiveCategory((prev) =>
+                      prev === navItem.title ? null : prev
+                    );
+                  }, 120)
                 }
               >
                 {navItem.title}

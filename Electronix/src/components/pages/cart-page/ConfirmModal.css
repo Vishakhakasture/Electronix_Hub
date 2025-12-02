@@ -18,6 +18,23 @@
   padding: 25px;
   border-radius: 12px;
   animation: fadeIn 0.25s ease-in-out;
+  position: relative;
+}
+
+.close-icon {
+  position: absolute;
+  top: 4px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #d9534f;
+  transition: 0.2s ease;
+}
+
+.close-icon:hover {
+  transform: scale(1.1);
 }
 
 @keyframes fadeIn {
