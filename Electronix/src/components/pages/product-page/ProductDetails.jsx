@@ -239,11 +239,7 @@ const ProductDetails = () => {
             {relatedProducts.length > 0 ? (
               <div className="related-grid">
                 {relatedProducts.map((r) => (
-                  <div
-                    className="related-card"
-                    key={r.id}
-                    onClick={() => navigate(`/product/${r.id}`)}
-                  >
+                  <div className="related-card" key={r.id}>
                     <div className="related-img-wrapper">
                       <img src={r.image} alt={r.title} />
                     </div>

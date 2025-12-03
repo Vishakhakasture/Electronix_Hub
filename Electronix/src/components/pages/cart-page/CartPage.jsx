@@ -10,7 +10,8 @@ import empty_cart from "../../../assets/empty_cart.png";
 import Footer from "../../layout/Footer/Footer";
 
 const CartPage = () => {
-  const { cartItems, removeFromCart, clearCart, updateQuantity, loading } = useCart();
+  const { cartItems, removeFromCart, clearCart, updateQuantity, loading } =
+    useCart();
   const navigate = useNavigate();
 
   const [showConfirm, setShowConfirm] = useState(false);
@@ -37,7 +38,7 @@ const CartPage = () => {
     <>
       <Navbar />
 
-      {loading ? (   // 🔥 NEW
+      {loading ? (
         <Loader />
       ) : (
         <div className="cart-page">
@@ -61,7 +62,11 @@ const CartPage = () => {
 
               {cartItems.length === 0 ? (
                 <div className="empty-cart-wrapper">
-                  <img src={empty_cart} alt="empty cart" className="empty-cart-img" />
+                  <img
+                    src={empty_cart}
+                    alt="empty cart"
+                    className="empty-cart-img"
+                  />
                   <p className="empty-cart-text">Your cart is empty</p>
                 </div>
               ) : (
@@ -78,7 +83,11 @@ const CartPage = () => {
                       }
                     }}
                   >
-                    <img src={item.image} alt={item.title} className="cart-row-img" />
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="cart-row-img"
+                    />
                     <span className="cart-row-name">{item.title}</span>
 
                     <div className="cart-row-qty">
