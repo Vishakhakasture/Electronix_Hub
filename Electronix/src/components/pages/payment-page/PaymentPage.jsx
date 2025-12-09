@@ -35,7 +35,7 @@ const PaymentPage = () => {
       prefill: {
         name: "ElectroNix User",
         email: "test@example.com",
-        contact: "9999999999",
+        contact: "9561411352",
       },
 
       theme: { color: "#121212" },
@@ -59,10 +59,7 @@ const PaymentPage = () => {
         Cash on Delivery
       </button>
 
-      <button
-        className="btn btn-dark px-4 py-2"
-        onClick={handleRazorpay}
-      >
+      <button className="btn btn-dark px-4 py-2" onClick={handleRazorpay}>
         Pay with Razorpay
       </button>
     </div>

@@ -1,19 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../../context/CartContext";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
 import { db, auth } from "../../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Loader from "../../constants/Loader";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./checkoutPage.css";
 import Navbar from "../../layout/Header/Navbar";
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
 
 const countries = [
-  { name: "India", states: ["Delhi", "Maharashtra", "Karnataka", "Tamil Nadu", "Other"] },
-  { name: "United States", states: ["California", "Texas", "Florida", "New York", "Other"] },
-  { name: "Canada", states: ["Ontario", "Quebec", "British Columbia", "Alberta", "Other"] },
+  {
+    name: "India",
+    states: ["Delhi", "Maharashtra", "Karnataka", "Tamil Nadu", "Other"],
+  },
+  {
+    name: "United States",
+    states: ["California", "Texas", "Florida", "New York", "Other"],
+  },
+  {
+    name: "Canada",
+    states: ["Ontario", "Quebec", "British Columbia", "Alberta", "Other"],
+  },
 ];
 
 const CheckoutPage = () => {
@@ -59,7 +68,9 @@ const CheckoutPage = () => {
   };
 
   const isFormValid = () => {
-    return Object.keys(address).every((key) => validateField(key, address[key]));
+    return Object.keys(address).every((key) =>
+      validateField(key, address[key])
+    );
   };
 
   const handleChange = (e) => {
@@ -95,32 +106,25 @@ const CheckoutPage = () => {
       return;
     }
 
-    if (originalAddress && JSON.stringify(originalAddress) === JSON.stringify(address)) {
-      setEditMode(false);
+    if (!auth.currentUser) {
+      toast.error("User is not logged in!");
       return;
     }
 
-    const isUpdating = Boolean(originalAddress);
-
     try {
       const userRef = doc(db, "users", auth.currentUser.uid);
-      await updateDoc(userRef, { address });
+
+      await setDoc(userRef, { address }, { merge: true });
 
       setOriginalAddress(address);
       setEditMode(false);
 
-      if (isUpdating) {
-        toast.success("Address updated successfully!");
-      } else {
-        toast.success("Address saved successfully!");
-      }
-
+      toast.success("Address saved successfully!");
     } catch (error) {
-      toast.error("Failed to save address!");
       console.error("Error saving address:", error);
+      toast.error("Failed to save address!");
     }
   };
-
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -148,7 +152,6 @@ const CheckoutPage = () => {
     return () => unsubscribe();
   }, []);
 
-
   const handlePlaceOrder = () => {
     if (!isFormValid()) {
       toast.error("All fields are required!");
@@ -170,7 +173,10 @@ const CheckoutPage = () => {
     });
   };
 
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const subtotal = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
   const shipping = cartItems.length > 0 ? 20 : 0;
   const total = subtotal + shipping;
 
@@ -179,238 +185,266 @@ const CheckoutPage = () => {
       <Navbar />
       {loading ? (
         <Loader />
-      ) : ( 
-      <div className="checkout-page">
-        <div className="breadcrumb">
-          <Link to="/">Home</Link> <span>/</span>{" "}
-          <Link to="/cart">Cart</Link> <span>/</span> <span>Checkout</span>
-        </div>
+      ) : (
+        <div className="checkout-page">
+          <div className="breadcrumb">
+            <Link to="/">Home</Link> <span>/</span> <Link to="/cart">Cart</Link>{" "}
+            <span>/</span> <span>Checkout</span>
+          </div>
 
-        <div className="checkout-container container">
-          <div className="row">
-            <div className="col-lg-7 mb-4">
-              <div className="address-section p-4 shadow-sm rounded bg-white">
-                <h3>Shipping Address</h3>
+          <div className="checkout-container container">
+            <div className="row">
+              <div className="col-lg-7 mb-4">
+                <div className="address-section p-4 shadow-sm rounded bg-white">
+                  <h3>Shipping Address</h3>
 
-                {editMode ? (
-                  <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                      <label className="form-label">Full Name</label>
-                      <input
-                        type="text"
-                        name="fullName"
-                        className={`form-control ${
-                          touched.fullName && !validateField("fullName", address.fullName)
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        value={address.fullName}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <div className="invalid-feedback">Please enter full name.</div>
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="form-label">Phone Number</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        className={`form-control ${
-                          touched.phone && !validateField("phone", address.phone)
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        value={address.phone}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <div className="invalid-feedback">
-                        Enter valid 10-digit phone number.
-                      </div>
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="form-label">Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        className={`form-control ${
-                          touched.email && !validateField("email", address.email)
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        value={address.email}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <div className="invalid-feedback">Enter a valid email.</div>
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="form-label">Address</label>
-                      <input
-                        type="text"
-                        name="addressLine"
-                        className={`form-control ${
-                          touched.addressLine &&
-                          !validateField("addressLine", address.addressLine)
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        value={address.addressLine}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <div className="invalid-feedback">Please enter address.</div>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-md-3 mb-3">
-                        <label className="form-label">Country</label>
-                        <select
-                          name="country"
-                          className={`form-select ${
-                            touched.country && !validateField("country", address.country)
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          value={address.country}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        >
-                          <option value="">Select Country</option>
-                          {countries.map((c) => (
-                            <option key={c.name} value={c.name}>
-                              {c.name}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="invalid-feedback">Select a country.</div>
-                      </div>
-
-                      <div className="col-md-3 mb-3">
-                        <label className="form-label">State</label>
-                        <select
-                          name="state"
-                          className={`form-select ${
-                            touched.state && !validateField("state", address.state)
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          value={address.state}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        >
-                          <option value="">Select State</option>
-                          {availableStates.map((s) => (
-                            <option key={s} value={s}>
-                              {s}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="invalid-feedback">Select a state.</div>
-                      </div>
-
-                      <div className="col-md-3 mb-3">
-                        <label className="form-label">City</label>
+                  {editMode ? (
+                    <form onSubmit={handleSubmit}>
+                      <div className="mb-3">
+                        <label className="form-label">Full Name</label>
                         <input
                           type="text"
-                          name="city"
+                          name="fullName"
                           className={`form-control ${
-                            touched.city && !validateField("city", address.city)
+                            touched.fullName &&
+                            !validateField("fullName", address.fullName)
                               ? "is-invalid"
                               : ""
                           }`}
-                          value={address.city}
+                          value={address.fullName}
                           onChange={handleChange}
                           onBlur={handleBlur}
                         />
-                        <div className="invalid-feedback">Enter city name.</div>
+                        <div className="invalid-feedback">
+                          Please enter full name.
+                        </div>
                       </div>
 
-                      <div className="col-md-3 mb-3">
-                        <label className="form-label">Zip</label>
+                      <div className="mb-3">
+                        <label className="form-label">Phone Number</label>
                         <input
-                          type="text"
-                          name="zip"
+                          type="tel"
+                          name="phone"
                           className={`form-control ${
-                            touched.zip && !validateField("zip", address.zip)
+                            touched.phone &&
+                            !validateField("phone", address.phone)
                               ? "is-invalid"
                               : ""
                           }`}
-                          value={address.zip}
+                          value={address.phone}
                           onChange={handleChange}
                           onBlur={handleBlur}
                         />
-                        <div className="invalid-feedback">Enter valid zip code.</div>
+                        <div className="invalid-feedback">
+                          Enter valid 10-digit phone number.
+                        </div>
                       </div>
+
+                      <div className="mb-3">
+                        <label className="form-label">Email</label>
+                        <input
+                          type="email"
+                          name="email"
+                          className={`form-control ${
+                            touched.email &&
+                            !validateField("email", address.email)
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          value={address.email}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                        <div className="invalid-feedback">
+                          Enter a valid email.
+                        </div>
+                      </div>
+
+                      <div className="mb-3">
+                        <label className="form-label">Address</label>
+                        <input
+                          type="text"
+                          name="addressLine"
+                          className={`form-control ${
+                            touched.addressLine &&
+                            !validateField("addressLine", address.addressLine)
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          value={address.addressLine}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                        <div className="invalid-feedback">
+                          Please enter address.
+                        </div>
+                      </div>
+
+                      <div className="row">
+                        <div className="col-md-3 mb-3">
+                          <label className="form-label">Country</label>
+                          <select
+                            name="country"
+                            className={`form-select ${
+                              touched.country &&
+                              !validateField("country", address.country)
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            value={address.country}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          >
+                            <option value="">Select Country</option>
+                            {countries.map((c) => (
+                              <option key={c.name} value={c.name}>
+                                {c.name}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="invalid-feedback">
+                            Select a country.
+                          </div>
+                        </div>
+
+                        <div className="col-md-3 mb-3">
+                          <label className="form-label">State</label>
+                          <select
+                            name="state"
+                            className={`form-select ${
+                              touched.state &&
+                              !validateField("state", address.state)
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            value={address.state}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          >
+                            <option value="">Select State</option>
+                            {availableStates.map((s) => (
+                              <option key={s} value={s}>
+                                {s}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="invalid-feedback">
+                            Select a state.
+                          </div>
+                        </div>
+
+                        <div className="col-md-3 mb-3">
+                          <label className="form-label">City</label>
+                          <input
+                            type="text"
+                            name="city"
+                            className={`form-control ${
+                              touched.city &&
+                              !validateField("city", address.city)
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            value={address.city}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          />
+                          <div className="invalid-feedback">
+                            Enter city name.
+                          </div>
+                        </div>
+
+                        <div className="col-md-3 mb-3">
+                          <label className="form-label">Zip</label>
+                          <input
+                            type="text"
+                            name="zip"
+                            className={`form-control ${
+                              touched.zip && !validateField("zip", address.zip)
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            value={address.zip}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          />
+                          <div className="invalid-feedback">
+                            Enter valid zip code.
+                          </div>
+                        </div>
+                      </div>
+
+                      <button type="submit" className="btn btn-dark w-100 mt-3">
+                        Save Address
+                      </button>
+                    </form>
+                  ) : (
+                    <div className="saved-address">
+                      <p>
+                        <strong>{address.fullName}</strong>
+                        <br />
+                        {address.addressLine}, {address.city}, {address.state},{" "}
+                        {address.country} - {address.zip}
+                        <br />
+                        {address.phone} | {address.email}
+                      </p>
+
+                      <button
+                        className="btn btn-outline-dark mt-2"
+                        onClick={() => setEditMode(true)}
+                      >
+                        Edit Address
+                      </button>
                     </div>
-
-                    <button type="submit" className="btn btn-dark w-100 mt-3">
-                      Save Address
-                    </button>
-                  </form>
-                ) : (
-                  <div className="saved-address">
-                    <p>
-                      <strong>{address.fullName}</strong>
-                      <br />
-                      {address.addressLine}, {address.city}, {address.state},{" "}
-                      {address.country} - {address.zip}
-                      <br />
-                      {address.phone} | {address.email}
-                    </p>
-
-                    <button
-                      className="btn btn-outline-dark mt-2"
-                      onClick={() => setEditMode(true)}
-                    >
-                      Edit Address
-                    </button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
 
-            <div className="col-lg-5">
-              <div className="order-summary p-4 shadow-sm rounded bg-white">
-                <h3>Order Summary</h3>
+              <div className="col-lg-5">
+                <div className="order-summary p-4 shadow-sm rounded bg-white">
+                  <h3>Order Summary</h3>
 
-                {cartItems.map((item) => (
-                  <div key={item.id} className="d-flex justify-content-between mb-3">
-                    <div>
-                      <p className="mb-0 fw-semibold">{item.title}</p>
-                      <small>Qty: {item.quantity}</small>
+                  {cartItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="d-flex justify-content-between mb-3"
+                    >
+                      <div>
+                        <p className="mb-0 fw-semibold">{item.title}</p>
+                        <small>Qty: {item.quantity}</small>
+                      </div>
+                      <span>
+                        ₹{(item.price * item.quantity).toLocaleString()}
+                      </span>
                     </div>
-                    <span>₹{(item.price * item.quantity).toLocaleString()}</span>
+                  ))}
+
+                  <hr />
+                  <div className="d-flex justify-content-between">
+                    <span>Subtotal</span>
+                    <span>₹{subtotal.toLocaleString()}</span>
                   </div>
-                ))}
 
-                <hr />
-                <div className="d-flex justify-content-between">
-                  <span>Subtotal</span>
-                  <span>₹{subtotal.toLocaleString()}</span>
+                  <div className="d-flex justify-content-between">
+                    <span>Shipping</span>
+                    <span>₹{shipping}</span>
+                  </div>
+
+                  <div className="d-flex justify-content-between fw-bold border-top pt-2 mt-2">
+                    <span>Total</span>
+                    <span>₹{total.toLocaleString()}</span>
+                  </div>
+
+                  <button
+                    className="btn btn-dark w-100 mt-4"
+                    onClick={handlePlaceOrder}
+                  >
+                    Place Order
+                  </button>
                 </div>
-
-                <div className="d-flex justify-content-between">
-                  <span>Shipping</span>
-                  <span>₹{shipping}</span>
-                </div>
-
-                <div className="d-flex justify-content-between fw-bold border-top pt-2 mt-2">
-                  <span>Total</span>
-                  <span>₹{total.toLocaleString()}</span>
-                </div>
-
-                <button className="btn btn-dark w-100 mt-4" onClick={handlePlaceOrder}>
-                  Place Order
-                </button>
               </div>
             </div>
           </div>
         </div>
-      </div>
       )}
     </>
   );
