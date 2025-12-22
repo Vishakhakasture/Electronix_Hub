@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../../context/CartContext";
-import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db, auth } from "../../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Loader from "../../constants/Loader";
@@ -13,172 +20,146 @@ import toast from "react-hot-toast";
 const countries = [
   {
     name: "India",
-    states: ["Delhi", "Maharashtra", "Karnataka", "Tamil Nadu", "Other"],
+    states: ["Delhi", "Maharashtra", "Karnataka", "Tamil Nadu"],
   },
-  {
-    name: "United States",
-    states: ["California", "Texas", "Florida", "New York", "Other"],
-  },
-  {
-    name: "Canada",
-    states: ["Ontario", "Quebec", "British Columbia", "Alberta", "Other"],
-  },
+  { name: "United States", states: ["California", "Texas", "Florida"] },
+  { name: "Canada", states: ["Ontario", "Quebec", "British Columbia"] },
 ];
 
+const emptyAddress = {
+  fullName: "",
+  phone: "",
+  email: "",
+  addressLine: "",
+  city: "",
+  state: "",
+  zip: "",
+  country: "",
+};
+
 const CheckoutPage = () => {
-  const { cartItems } = useCart();
+  const { cartItems, clearCart } = useCart();
   const navigate = useNavigate();
 
-  const [address, setAddress] = useState({
-    fullName: "",
-    phone: "",
-    email: "",
-    addressLine: "",
-    city: "",
-    state: "",
-    zip: "",
-    country: "",
-  });
-
-  const [originalAddress, setOriginalAddress] = useState(null);
-  const [touched, setTouched] = useState({});
-  const [editMode, setEditMode] = useState(true);
+  const [addresses, setAddresses] = useState([]);
+  const [address, setAddress] = useState(emptyAddress);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [showForm, setShowForm] = useState(false);
   const [availableStates, setAvailableStates] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [placingOrder, setPlacingOrder] = useState(false);
 
-  const validateField = (name, value) => {
-    switch (name) {
-      case "fullName":
-        return value.trim() !== "";
-      case "phone":
-        return /^[0-9]{10}$/.test(value);
-      case "email":
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-      case "addressLine":
-      case "city":
-        return value.trim() !== "";
-      case "zip":
-        return /^\d{5,6}$/.test(value);
-      case "country":
-      case "state":
-        return value.trim() !== "";
-      default:
-        return true;
-    }
-  };
-
-  const isFormValid = () => {
-    return Object.keys(address).every((key) =>
-      validateField(key, address[key])
-    );
-  };
+  const validate = () => Object.values(address).every((v) => v.trim() !== "");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAddress({ ...address, [name]: value });
 
     if (name === "country") {
-      const countryData = countries.find((c) => c.name === value);
-      setAvailableStates(countryData ? countryData.states : []);
-      setAddress((prev) => ({ ...prev, state: "" }));
+      const c = countries.find((x) => x.name === value);
+      setAvailableStates(c ? c.states : []);
+      setAddress((p) => ({ ...p, state: "" }));
     }
   };
 
-  const handleBlur = (e) => {
-    setTouched({ ...touched, [e.target.name]: true });
-  };
-
-  const handleSubmit = async (e) => {
+  const saveAddress = async (e) => {
     e.preventDefault();
-
-    if (!isFormValid()) {
+    if (!validate()) {
       toast.error("All fields are required!");
-      setTouched({
-        fullName: true,
-        phone: true,
-        email: true,
-        addressLine: true,
-        city: true,
-        state: true,
-        zip: true,
-        country: true,
-      });
       return;
     }
 
-    if (!auth.currentUser) {
-      toast.error("User is not logged in!");
-      return;
-    }
+    const updated = [...addresses, address];
+    await setDoc(
+      doc(db, "users", auth.currentUser.uid),
+      { addresses: updated },
+      { merge: true }
+    );
 
-    try {
-      const userRef = doc(db, "users", auth.currentUser.uid);
-
-      await setDoc(userRef, { address }, { merge: true });
-
-      setOriginalAddress(address);
-      setEditMode(false);
-
-      toast.success("Address saved successfully!");
-    } catch (error) {
-      console.error("Error saving address:", error);
-      toast.error("Failed to save address!");
-    }
+    setAddresses(updated);
+    setSelectedIndex(updated.length - 1);
+    setAddress(emptyAddress);
+    setShowForm(false);
+    toast.success("Address added successfully!");
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return setLoading(false);
 
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (userSnap.exists() && userSnap.data().address) {
-        setAddress(userSnap.data().address);
-        setOriginalAddress(userSnap.data().address);
-        setEditMode(false);
-
-        const countryData = countries.find(
-          (c) => c.name === userSnap.data().address.country
-        );
-        setAvailableStates(countryData ? countryData.states : []);
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (snap.exists() && snap.data().addresses) {
+        setAddresses(snap.data().addresses);
+        setSelectedIndex(0);
       }
       setLoading(false);
     });
-
-    return () => unsubscribe();
   }, []);
 
-  const handlePlaceOrder = () => {
-    if (!isFormValid()) {
-      toast.error("All fields are required!");
-      setTouched({
-        fullName: true,
-        phone: true,
-        email: true,
-        addressLine: true,
-        city: true,
-        state: true,
-        zip: true,
-        country: true,
-      });
+  const selectedAddress =
+    selectedIndex !== null ? addresses[selectedIndex] : null;
+
+  const subtotal = cartItems.reduce((a, i) => a + i.price * i.quantity, 0);
+  const shipping = cartItems.length ? 20 : 0;
+  const total = subtotal + shipping;
+
+  const placeOrder = async () => {
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty!");
+      navigate("/cart");
       return;
     }
 
-    navigate("/payment", {
-      state: { cartItems, address, subtotal, shipping, total },
-    });
-  };
+    if (!selectedAddress) {
+      toast.error("Please select an address!");
+      return;
+    }
 
-  const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
-  const shipping = cartItems.length > 0 ? 20 : 0;
-  const total = subtotal + shipping;
+    if (placingOrder) return;
+
+    try {
+      setPlacingOrder(true);
+
+      const user = auth.currentUser;
+      if (!user) return;
+
+      console.log("Placing order for UID:", user.uid);
+
+      const orderRef = await addDoc(collection(db, "orders"), {
+        userId: user.uid,
+        items: cartItems.map((item) => ({
+          productId: item.productId || item.id,
+          productName: item.title,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image,
+          brand: item.brand || "",
+        })),
+        address: selectedAddress,
+        subtotal,
+        shipping,
+        total,
+        status: "Pending",
+        paymentMethod: null,
+        paymentStatus: "Pending",
+        createdAt: serverTimestamp(),
+      });
+
+      await clearCart();
+
+      navigate("/payment", {
+        state: {
+          orderId: orderRef.id,
+          total,
+        },
+      });
+    } catch (err) {
+      console.error("Order placement failed:", err);
+      toast.error("Failed to place order");
+    } finally {
+      setPlacingOrder(false);
+    }
+  };
 
   return (
     <>
@@ -188,8 +169,8 @@ const CheckoutPage = () => {
       ) : (
         <div className="checkout-page">
           <div className="breadcrumb">
-            <Link to="/">Home</Link> <span>/</span> <Link to="/cart">Cart</Link>{" "}
-            <span>/</span> <span>Checkout</span>
+            <Link to="/">Home</Link> <span>/</span>
+            <Link to="/cart">Cart</Link> <span>/</span> Checkout
           </div>
 
           <div className="checkout-container container">
@@ -198,203 +179,42 @@ const CheckoutPage = () => {
                 <div className="address-section p-4 shadow-sm rounded bg-white">
                   <h3>Shipping Address</h3>
 
-                  {editMode ? (
-                    <form onSubmit={handleSubmit}>
-                      <div className="mb-3">
-                        <label className="form-label">Full Name</label>
-                        <input
-                          type="text"
-                          name="fullName"
-                          className={`form-control ${
-                            touched.fullName &&
-                            !validateField("fullName", address.fullName)
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          value={address.fullName}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        <div className="invalid-feedback">
-                          Please enter full name.
-                        </div>
-                      </div>
+                  {addresses.map((addr, i) => (
+                    <div
+                      key={i}
+                      className="saved-address mb-3"
+                      onClick={() => setSelectedIndex(i)}
+                      style={{
+                        border:
+                          selectedIndex === i
+                            ? "2px solid #000"
+                            : "1px solid #ddd",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <strong>{addr.fullName}</strong>
+                      <p className="mb-0">
+                        {addr.addressLine}, {addr.city}, {addr.state}
+                      </p>
+                      <small>
+                        {addr.phone} | {addr.email}
+                      </small>
+                    </div>
+                  ))}
 
-                      <div className="mb-3">
-                        <label className="form-label">Phone Number</label>
-                        <input
-                          type="tel"
-                          name="phone"
-                          className={`form-control ${
-                            touched.phone &&
-                            !validateField("phone", address.phone)
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          value={address.phone}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        <div className="invalid-feedback">
-                          Enter valid 10-digit phone number.
-                        </div>
-                      </div>
+                  <button
+                    className="btn btn-outline-dark w-100 mt-3"
+                    onClick={() => setShowForm(!showForm)}
+                  >
+                    + Add New Address
+                  </button>
 
-                      <div className="mb-3">
-                        <label className="form-label">Email</label>
-                        <input
-                          type="email"
-                          name="email"
-                          className={`form-control ${
-                            touched.email &&
-                            !validateField("email", address.email)
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          value={address.email}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        <div className="invalid-feedback">
-                          Enter a valid email.
-                        </div>
-                      </div>
-
-                      <div className="mb-3">
-                        <label className="form-label">Address</label>
-                        <input
-                          type="text"
-                          name="addressLine"
-                          className={`form-control ${
-                            touched.addressLine &&
-                            !validateField("addressLine", address.addressLine)
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          value={address.addressLine}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        <div className="invalid-feedback">
-                          Please enter address.
-                        </div>
-                      </div>
-
-                      <div className="row">
-                        <div className="col-md-3 mb-3">
-                          <label className="form-label">Country</label>
-                          <select
-                            name="country"
-                            className={`form-select ${
-                              touched.country &&
-                              !validateField("country", address.country)
-                                ? "is-invalid"
-                                : ""
-                            }`}
-                            value={address.country}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          >
-                            <option value="">Select Country</option>
-                            {countries.map((c) => (
-                              <option key={c.name} value={c.name}>
-                                {c.name}
-                              </option>
-                            ))}
-                          </select>
-                          <div className="invalid-feedback">
-                            Select a country.
-                          </div>
-                        </div>
-
-                        <div className="col-md-3 mb-3">
-                          <label className="form-label">State</label>
-                          <select
-                            name="state"
-                            className={`form-select ${
-                              touched.state &&
-                              !validateField("state", address.state)
-                                ? "is-invalid"
-                                : ""
-                            }`}
-                            value={address.state}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          >
-                            <option value="">Select State</option>
-                            {availableStates.map((s) => (
-                              <option key={s} value={s}>
-                                {s}
-                              </option>
-                            ))}
-                          </select>
-                          <div className="invalid-feedback">
-                            Select a state.
-                          </div>
-                        </div>
-
-                        <div className="col-md-3 mb-3">
-                          <label className="form-label">City</label>
-                          <input
-                            type="text"
-                            name="city"
-                            className={`form-control ${
-                              touched.city &&
-                              !validateField("city", address.city)
-                                ? "is-invalid"
-                                : ""
-                            }`}
-                            value={address.city}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          />
-                          <div className="invalid-feedback">
-                            Enter city name.
-                          </div>
-                        </div>
-
-                        <div className="col-md-3 mb-3">
-                          <label className="form-label">Zip</label>
-                          <input
-                            type="text"
-                            name="zip"
-                            className={`form-control ${
-                              touched.zip && !validateField("zip", address.zip)
-                                ? "is-invalid"
-                                : ""
-                            }`}
-                            value={address.zip}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          />
-                          <div className="invalid-feedback">
-                            Enter valid zip code.
-                          </div>
-                        </div>
-                      </div>
-
+                  {showForm && (
+                    <form onSubmit={saveAddress} className="mt-4">
                       <button type="submit" className="btn btn-dark w-100 mt-3">
                         Save Address
                       </button>
                     </form>
-                  ) : (
-                    <div className="saved-address">
-                      <p>
-                        <strong>{address.fullName}</strong>
-                        <br />
-                        {address.addressLine}, {address.city}, {address.state},{" "}
-                        {address.country} - {address.zip}
-                        <br />
-                        {address.phone} | {address.email}
-                      </p>
-
-                      <button
-                        className="btn btn-outline-dark mt-2"
-                        onClick={() => setEditMode(true)}
-                      >
-                        Edit Address
-                      </button>
-                    </div>
                   )}
                 </div>
               </div>
@@ -406,39 +226,24 @@ const CheckoutPage = () => {
                   {cartItems.map((item) => (
                     <div
                       key={item.id}
-                      className="d-flex justify-content-between mb-3"
+                      className="d-flex justify-content-between mb-2"
                     >
-                      <div>
-                        <p className="mb-0 fw-semibold">{item.title}</p>
-                        <small>Qty: {item.quantity}</small>
-                      </div>
-                      <span>
-                        ₹{(item.price * item.quantity).toLocaleString()}
-                      </span>
+                      <span>{item.title}</span>
+                      <span>₹{item.price * item.quantity}</span>
                     </div>
                   ))}
 
                   <hr />
-                  <div className="d-flex justify-content-between">
-                    <span>Subtotal</span>
-                    <span>₹{subtotal.toLocaleString()}</span>
-                  </div>
-
-                  <div className="d-flex justify-content-between">
-                    <span>Shipping</span>
-                    <span>₹{shipping}</span>
-                  </div>
-
-                  <div className="d-flex justify-content-between fw-bold border-top pt-2 mt-2">
-                    <span>Total</span>
-                    <span>₹{total.toLocaleString()}</span>
-                  </div>
+                  <p>Subtotal: ₹{subtotal}</p>
+                  <p>Shipping: ₹{shipping}</p>
+                  <h5>Total: ₹{total}</h5>
 
                   <button
-                    className="btn btn-dark w-100 mt-4"
-                    onClick={handlePlaceOrder}
+                    className="btn btn-dark w-100 mt-3"
+                    onClick={placeOrder}
+                    disabled={placingOrder}
                   >
-                    Place Order
+                    {placingOrder ? "Processing..." : "Place Order"}
                   </button>
                 </div>
               </div>

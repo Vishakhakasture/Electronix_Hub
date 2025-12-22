@@ -1,16 +1,54 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import {
+  doc,
+  updateDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+} from "firebase/firestore";
+import { auth, db } from "../../../firebase";
+import toast from "react-hot-toast";
 
 const PaymentPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const total = location.state?.total || 0;
+  const { orderId, total } = location.state || {};
 
-  const handleCOD = () => {
-    navigate("/order-success", {
-      state: { total, method: "COD" },
-    });
+  if (!orderId || !total) {
+    navigate("/cart");
+    return null;
+  }
+
+  const clearCart = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const q = query(collection(db, "cart"), where("userId", "==", user.uid));
+    const snapshot = await getDocs(q);
+
+    for (let snap of snapshot.docs) {
+      await deleteDoc(snap.ref);
+    }
+  };
+
+  const handleCOD = async () => {
+    try {
+      await updateDoc(doc(db, "orders", orderId), {
+        paymentMethod: "Cash on Delivery",
+        paymentStatus: "SUCCESS",
+        status: "PLACED",
+      });
+
+      toast.success("Order placed successfully!");
+      navigate("/profile");
+    } catch (err) {
+      console.error(err);
+      toast.error("Payment failed");
+    }
   };
 
   const handleRazorpay = () => {
@@ -20,24 +58,22 @@ const PaymentPage = () => {
       currency: "INR",
       name: "ElectroNix",
       description: "Order Payment",
-      image: "https://dummyimage.com/100x100/000/fff&text=E",
-
-      handler: function (response) {
-        navigate("/order-success", {
-          state: {
-            total,
-            method: "Razorpay",
+      handler: async function (response) {
+        try {
+          await updateDoc(doc(db, "orders", orderId), {
+            paymentMethod: "Razorpay",
+            paymentStatus: "Success",
             paymentId: response.razorpay_payment_id,
-          },
-        });
-      },
+            status: "Placed",
+          });
 
-      prefill: {
-        name: "ElectroNix User",
-        email: "test@example.com",
-        contact: "9561411352",
+          toast.success("Payment successful!");
+          navigate("/profile");
+        } catch (err) {
+          console.error(err);
+          toast.error("Payment update failed");
+        }
       },
-
       theme: { color: "#121212" },
     };
 
@@ -48,8 +84,6 @@ const PaymentPage = () => {
   return (
     <div className="container p-5 text-center">
       <h2 className="mb-4 fw-bold">Choose Payment Method</h2>
-
-      {/* ✅ Real total displayed */}
       <h4 className="mb-4">Total Amount: ₹{total}</h4>
 
       <button
