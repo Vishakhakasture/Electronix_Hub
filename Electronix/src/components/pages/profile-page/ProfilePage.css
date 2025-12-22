@@ -132,6 +132,16 @@
   margin-top: 10px;
 }
 
+.text-success {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.text-warning {
+  color: #f0ad4e;
+  font-weight: 600;
+}
+
 .item-card.small {
   width: 100%;
   padding: 15px;

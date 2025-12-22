@@ -19,21 +19,15 @@ import Navbar from "../../layout/Header/Navbar";
 const ProfilePage = () => {
   const navigate = useNavigate();
 
-  // User auth state
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
-
-  // Profile data
   const [orders, setOrders] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [userAddress, setUserAddress] = useState(null);
-
-  // Data loading states
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [loadingCart, setLoadingCart] = useState(true);
   const [loadingAddress, setLoadingAddress] = useState(true);
 
-  // Listen to auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -190,9 +184,7 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            {/* RIGHT SIDE */}
             <div className="profile-right">
-              {/* CART */}
               <div className="profile-section">
                 <h3>Your Cart</h3>
                 {cartItems.length === 0 ? (
@@ -222,7 +214,6 @@ const ProfilePage = () => {
                 )}
               </div>
 
-              {/* ORDERS */}
               <div className="profile-section">
                 <h3>Your Orders</h3>
                 {orders.length === 0 ? (
@@ -233,16 +224,39 @@ const ProfilePage = () => {
                       <div key={order.id} className="order-card">
                         <div className="order-info">
                           <h4>Order Summary</h4>
+
                           <p>
                             Status:{" "}
                             <span className="status">
                               {order.status || "Pending"}
                             </span>
                           </p>
+
+                          <p>
+                            Payment Method:{" "}
+                            <strong>
+                              {order.paymentMethod || "Not Selected"}
+                            </strong>
+                          </p>
+
+                          <p>
+                            Payment Status:{" "}
+                            <strong
+                              className={
+                                order.paymentStatus === "SUCCESS"
+                                  ? "text-success"
+                                  : "text-warning"
+                              }
+                            >
+                              {order.paymentStatus || "Pending"}
+                            </strong>
+                          </p>
+
                           <p>
                             Total: <strong>₹{order.total || 0}</strong>
                           </p>
                         </div>
+
                         <div className="order-items">
                           {order.items.map((item, index) => (
                             <div

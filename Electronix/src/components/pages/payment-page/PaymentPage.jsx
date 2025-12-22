@@ -1,14 +1,6 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  doc,
-  updateDoc,
-  collection,
-  getDocs,
-  query,
-  where,
-  deleteDoc,
-} from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 import toast from "react-hot-toast";
 
@@ -23,48 +15,59 @@ const PaymentPage = () => {
     return null;
   }
 
-  const clearCart = async () => {
-    const user = auth.currentUser;
-    if (!user) return;
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
 
-    const q = query(collection(db, "cart"), where("userId", "==", user.uid));
-    const snapshot = await getDocs(q);
-
-    for (let snap of snapshot.docs) {
-      await deleteDoc(snap.ref);
-    }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
   };
 
   const handleCOD = async () => {
     try {
       await updateDoc(doc(db, "orders", orderId), {
         paymentMethod: "Cash on Delivery",
-        paymentStatus: "SUCCESS",
-        status: "PLACED",
+        paymentStatus: "Success",
+        status: "Placed",
       });
 
       toast.success("Order placed successfully!");
       navigate("/profile");
     } catch (err) {
       console.error(err);
-      toast.error("Payment failed");
+      toast.error("COD failed");
     }
   };
 
-  const handleRazorpay = () => {
+  const handleRazorpay = async () => {
+    const isLoaded = await loadRazorpay();
+
+    if (!isLoaded) {
+      toast.error("Razorpay SDK failed to load");
+      return;
+    }
+
     const options = {
       key: "rzp_test_RhsXbpdc3eWEeN",
       amount: total * 100,
       currency: "INR",
       name: "ElectroNix",
       description: "Order Payment",
+
       handler: async function (response) {
         try {
           await updateDoc(doc(db, "orders", orderId), {
             paymentMethod: "Razorpay",
-            paymentStatus: "Success",
+            paymentStatus: "SUCCESS",
             paymentId: response.razorpay_payment_id,
-            status: "Placed",
+            status: "PLACED",
           });
 
           toast.success("Payment successful!");
@@ -74,10 +77,28 @@ const PaymentPage = () => {
           toast.error("Payment update failed");
         }
       },
+
+      modal: {
+        ondismiss: function () {
+          toast.error("Payment cancelled");
+        },
+      },
+
+      prefill: {
+        name: auth.currentUser?.displayName || "User",
+        email: auth.currentUser?.email || "test@example.com",
+        contact: "9999999999",
+      },
+
       theme: { color: "#121212" },
     };
 
     const rzp = new window.Razorpay(options);
+
+    rzp.on("payment.failed", function (response) {
+      toast.error(response.error.description || "Payment failed");
+    });
+
     rzp.open();
   };
 
