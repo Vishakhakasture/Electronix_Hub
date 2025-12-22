@@ -132,8 +132,13 @@
   margin-top: 10px;
 }
 
+.text-method {
+  color: #1b1f52;
+  font-weight: 600;
+}
+
 .text-success {
-  color: #28a745;
+  color: #1b1f52;
   font-weight: 600;
 }
 

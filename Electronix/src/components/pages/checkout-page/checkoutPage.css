@@ -45,3 +45,21 @@
   }
 }
 
+.address-icon {
+  position: absolute;
+  top: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.edit-icon {
+  right: 42px;
+  color: #1b1f52;
+}
+
+.delete-icon {
+  right: 12px;
+  color: #dc3545;
+}
+
+
