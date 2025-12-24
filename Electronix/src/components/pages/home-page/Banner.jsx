@@ -7,12 +7,11 @@ import "./Banner.css";
 const Banner = () => {
   return (
     <Carousel
-      fade
       interval={4000}
       controls={true}
       indicators={true}
       pause={false}
-      className="banner-carousel"
+      className="banner-carousel slide-style"
     >
       {bannerData.map((item) => (
         <Carousel.Item key={item.id}>
@@ -21,10 +20,7 @@ const Banner = () => {
             src={item.image}
             alt={item.title}
           />
-          <Carousel.Caption className="banner-caption">
-            
-
-          </Carousel.Caption>
+          <Carousel.Caption className="banner-caption"></Carousel.Caption>
         </Carousel.Item>
       ))}
     </Carousel>

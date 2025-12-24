@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Contact.css";
 import Navbar from "../layout/Header/Navbar";
 import Footer from "../layout/Footer/Footer";
+import toast from "react-hot-toast";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Message sent successfully!");
+    toast.success("Message sent successfully!");
     setFormData({ name: "", email: "", message: "" });
   };
 
@@ -39,9 +40,15 @@ const Contact = () => {
             </p>
 
             <div className="left-info">
-              <p><strong>Email:</strong> support@electronix.com</p>
-              <p><strong>Phone:</strong> +91 98765 43210</p>
-              <p><strong>Address:</strong> Pune, India</p>
+              <p>
+                <strong>Email:</strong> support@electronix.com
+              </p>
+              <p>
+                <strong>Phone:</strong> +91 98765 43210
+              </p>
+              <p>
+                <strong>Address:</strong> Pune, India
+              </p>
             </div>
 
             <div className="contact-socials">
@@ -83,7 +90,9 @@ const Contact = () => {
               required
             ></textarea>
 
-            <button type="submit" className="send-btn">Send Message</button>
+            <button type="submit" className="send-btn">
+              Send Message
+            </button>
           </form>
         </div>
       </div>

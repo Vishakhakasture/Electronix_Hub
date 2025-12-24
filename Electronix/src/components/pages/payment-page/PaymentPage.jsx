@@ -65,9 +65,9 @@ const PaymentPage = () => {
         try {
           await updateDoc(doc(db, "orders", orderId), {
             paymentMethod: "Razorpay",
-            paymentStatus: "SUCCESS",
+            paymentStatus: "Success",
             paymentId: response.razorpay_payment_id,
-            status: "PLACED",
+            status: "Placed",
           });
 
           toast.success("Payment successful!");

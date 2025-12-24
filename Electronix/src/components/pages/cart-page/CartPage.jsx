@@ -93,14 +93,17 @@ const CartPage = () => {
                     <div className="cart-row-qty">
                       <button
                         className="qty-btn"
+                        disabled={item.quantity === 1}
                         onClick={(e) => {
                           e.stopPropagation();
-                          updateQuantity(item.id, item.quantity - 1);
+                          if (item.quantity > 1) {
+                            updateQuantity(item.id, item.quantity - 1);
+                          }
                         }}
-                        disabled={item.quantity <= 1}
                       >
                         -
                       </button>
+
                       <span className="qty-count">{item.quantity}</span>
                       <button
                         className="qty-btn"

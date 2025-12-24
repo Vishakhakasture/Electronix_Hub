@@ -67,3 +67,14 @@
   transform: translateY(-2px);
   color: #fff;
 }
+
+.slide-style .carousel-item {
+  transition: transform 0.8s ease-in-out;
+}
+
+.slide-style .carousel-item-next,
+.slide-style .carousel-item-prev,
+.slide-style .carousel-item.active {
+  display: block;
+}
+

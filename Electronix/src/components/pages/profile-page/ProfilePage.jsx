@@ -15,6 +15,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import Loader from "../../constants/Loader";
 import Navbar from "../../layout/Header/Navbar";
+import Footer from "../../layout/Footer/Footer";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -234,7 +235,7 @@ const ProfilePage = () => {
 
                           <p>
                             Payment Method:{" "}
-                            <strong>
+                            <strong className="text-method">
                               {order.paymentMethod || "Not Selected"}
                             </strong>
                           </p>
@@ -243,7 +244,7 @@ const ProfilePage = () => {
                             Payment Status:{" "}
                             <strong
                               className={
-                                order.paymentStatus === "SUCCESS"
+                                order.paymentStatus === "Success"
                                   ? "text-success"
                                   : "text-warning"
                               }
@@ -287,6 +288,7 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

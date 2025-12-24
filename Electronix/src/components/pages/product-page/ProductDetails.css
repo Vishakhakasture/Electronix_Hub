@@ -80,24 +80,35 @@
 
 .thumbnail-row {
   display: flex;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 22px;
+  margin-top: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .thumb-img {
   width: 70px;
   height: 70px;
-  object-fit: contain;
-  background: #eee;
-  border-radius: 8px;
-  padding: 6px;
+  object-fit:contain;
   cursor: pointer;
+  border-radius: 6px;
   border: 2px solid transparent;
+  opacity: 0.6;
+  transition: all 0.3s ease;
 }
 
 .thumb-img:hover {
-  border-color: #0d1137;
+  opacity: 1;
+  transform: scale(1.05);
 }
+
+.active-thumb {
+  border: 2px solid navy; 
+  opacity: 1;
+  transform: scale(1.08);
+  box-shadow: 0 0 8px rgba(45, 59, 78, 0.5);
+}
+
 
 .product-info {
   flex: 1;
@@ -145,6 +156,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.quantity-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background-color: #1b1f52;
 }
 
 .quantity-controls button:hover {

@@ -6,7 +6,7 @@ import "./ProductList.css";
 import { useBreadcrumb } from "../../../context/BreadcrumbContext.jsx";
 import Loader from "../../constants/Loader.jsx";
 import Navbar from "../../layout/Header/Navbar.jsx";
-import no_products from '../../../assets/no_products.png'
+import no_products from "../../../assets/no_products.png";
 
 const ProductList = () => {
   const { category } = useParams();
@@ -23,7 +23,7 @@ const ProductList = () => {
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [sortOption, setSortOption] = useState("Select");
 
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   const { updateBreadcrumb } = useBreadcrumb();
 
@@ -32,14 +32,14 @@ const ProductList = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true); 
+    setLoading(true);
     axios
       .get("https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product")
       .then((res) => {
         setAllProducts(res.data);
       })
       .catch((err) => console.error("Error fetching products:", err))
-      .finally(() => setLoading(false)); 
+      .finally(() => setLoading(false));
   }, []);
 
   const formatLabel = (raw) => {
@@ -54,7 +54,12 @@ const ProductList = () => {
 
   const categoryMapping = {
     smartphones: ["Android Phones", "iPhones", "5G Phones", "Tablets"],
-    laptops: ["Gaming Laptops", "Business Laptops", "Student Laptops", "MacBooks"],
+    laptops: [
+      "Gaming Laptops",
+      "Business Laptops",
+      "Student Laptops",
+      "MacBooks",
+    ],
     watches: ["Analogue Watch", "Digital Watch", "Smart Watch"],
     headphones: ["Earbuds", "Gaming Headsets", "Wired Headphones"],
     cameras: ["DSLR Cameras", "Action Cameras", "Security Cameras"],
@@ -86,7 +91,9 @@ const ProductList = () => {
     }
 
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter((p) => selectedCategories.includes(p.category));
+      filtered = filtered.filter((p) =>
+        selectedCategories.includes(p.category)
+      );
     }
 
     if (selectedBrands.length > 0) {
@@ -94,14 +101,17 @@ const ProductList = () => {
     }
 
     if (selectedPrice) {
-      if (selectedPrice === "low") filtered = filtered.filter((p) => p.price < 1000);
+      if (selectedPrice === "low")
+        filtered = filtered.filter((p) => p.price < 1000);
       else if (selectedPrice === "medium")
         filtered = filtered.filter((p) => p.price >= 1000 && p.price < 2000);
-      else if (selectedPrice === "high") filtered = filtered.filter((p) => p.price >= 2000);
+      else if (selectedPrice === "high")
+        filtered = filtered.filter((p) => p.price >= 2000);
     }
 
     if (sortOption === "low-high") filtered.sort((a, b) => a.price - b.price);
-    else if (sortOption === "high-low") filtered.sort((a, b) => b.price - a.price);
+    else if (sortOption === "high-low")
+      filtered.sort((a, b) => b.price - a.price);
 
     setFilteredProducts(filtered);
     setDisplayProducts(filtered.slice(0, batchSize));
@@ -120,7 +130,10 @@ const ProductList = () => {
     if (!hasMore) return;
     setDisplayProducts((prev) => {
       const currentLength = prev.length;
-      const additionalItems = filteredProducts.slice(currentLength, currentLength + batchSize);
+      const additionalItems = filteredProducts.slice(
+        currentLength,
+        currentLength + batchSize
+      );
       if (additionalItems.length === 0) {
         setHasMore(false);
         return prev;
@@ -195,7 +208,7 @@ const ProductList = () => {
               {["low", "medium", "high"].map((range) => (
                 <label key={range}>
                   <input
-                    type="checkbox"
+                    type="radio"
                     checked={selectedPrice === range}
                     onChange={() => handlePriceChange(range)}
                   />
@@ -239,14 +252,17 @@ const ProductList = () => {
               <div className="product-grid">
                 {displayProducts.map((product) => (
                   <div key={product.id} className="product-card compact-card">
-
                     <div className="image-wrapper small-image">
                       <img src={product.image} alt={product.title} />
                     </div>
 
-                    <h3 className="product-title small-title">{product.title}</h3>
+                    <h3 className="product-title small-title">
+                      {product.title}
+                    </h3>
                     <p className="product-brand small-brand">{product.brand}</p>
-                    <p className="product-price small-price">₹{product.price}</p>
+                    <p className="product-price small-price">
+                      ₹{product.price}
+                    </p>
 
                     <button
                       className="view-details-btn small-btn"
@@ -254,16 +270,16 @@ const ProductList = () => {
                     >
                       View Details
                     </button>
-
                   </div>
                 ))}
               </div>
-
-              
-
             ) : (
               <div className="no-products-wrapper">
-                <img src={no_products} alt="no_products" className="no-products-img" />
+                <img
+                  src={no_products}
+                  alt="no_products"
+                  className="no-products-img"
+                />
                 <p className="no-products-text">No products found</p>
               </div>
             )}

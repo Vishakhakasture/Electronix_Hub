@@ -164,10 +164,15 @@ const ProductDetails = () => {
 
             <div className="quantity-section">
               <div className="quantity-controls">
-                <button onClick={() => setQuantity((p) => (p > 1 ? p - 1 : 1))}>
+                <button
+                  disabled={quantity === 1}
+                  onClick={() => setQuantity((p) => (p > 1 ? p - 1 : 1))}
+                >
                   −
                 </button>
+
                 <span>{quantity}</span>
+
                 <button onClick={() => setQuantity((p) => p + 1)}>+</button>
               </div>
             </div>
