@@ -6,6 +6,10 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import axios from "axios";
 import { useCart } from "../../../context/CartContext";
 import navData from "../../pages/home-page/navData";
+import { FaRegCircleUser } from "react-icons/fa6";
+import { BsBagHeart } from "react-icons/bs";
+import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
+import { IoMdLogOut } from "react-icons/io";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -69,6 +73,16 @@ const Navbar = () => {
   const handleProfile = () => {
     setShowDropdown(false);
     navigate("/profile");
+  };
+
+  const handleOrders = () => {
+    setShowDropdown(false);
+    navigate("/orders");
+  };
+
+  const handleInvoiceHistory = () => {
+    setShowDropdown(false);
+    navigate("/invoice-history");
   };
 
   useEffect(() => {
@@ -202,11 +216,46 @@ const Navbar = () => {
               {showDropdown && (
                 <div className="user-dropdown">
                   {!user ? (
-                    <p onClick={handleLoginClick}>Login / Register</p>
+                    <div className="dropdown-item" onClick={handleLoginClick}>
+                      Login / Register
+                    </div>
                   ) : (
                     <>
-                      <p onClick={handleProfile}>Profile</p>
-                      <p onClick={handleLogout}>Logout</p>
+                      <div className="dropdown-item" onClick={handleProfile}>
+                        <span className="dropdown-icon">
+                          <FaRegCircleUser />
+                        </span>
+                        <span className="dropdown-text">Profile</span>
+                      </div>
+
+                      <div className="dropdown-item" onClick={handleOrders}>
+                        <span className="dropdown-icon">
+                          <BsBagHeart />
+                        </span>
+                        <span className="dropdown-text">Orders</span>
+                      </div>
+
+                      <div
+                        className="dropdown-item"
+                        onClick={handleInvoiceHistory}
+                      >
+                        <span className="dropdown-icon">
+                          <LiaFileInvoiceDollarSolid />
+                        </span>
+                        <span className="dropdown-text">Invoice History</span>
+                      </div>
+
+                      <hr className="dropdown-divider" />
+
+                      <div
+                        className="dropdown-item logout"
+                        onClick={handleLogout}
+                      >
+                        <span className="dropdown-icon">
+                          <IoMdLogOut />
+                        </span>
+                        <span className="dropdown-text">Logout</span>
+                      </div>
                     </>
                   )}
                 </div>

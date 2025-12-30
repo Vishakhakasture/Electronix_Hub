@@ -24,7 +24,6 @@ const Contact = () => {
   return (
     <>
       <Navbar />
-
       <div className="contact-wrapper">
         <h1 className="contact-main-title">Contact Us</h1>
         <p className="contact-subtext">

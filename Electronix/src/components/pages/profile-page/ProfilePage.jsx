@@ -16,6 +16,7 @@ import { IoMdMail } from "react-icons/io";
 import Loader from "../../constants/Loader";
 import Navbar from "../../layout/Header/Navbar";
 import Footer from "../../layout/Footer/Footer";
+import { generateInvoice } from "../../../utils/generateInvoice";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
