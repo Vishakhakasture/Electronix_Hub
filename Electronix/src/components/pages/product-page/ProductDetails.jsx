@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import Footer from "../../layout/Footer/Footer";
@@ -11,39 +11,37 @@ import Navbar from "../../layout/Header/Navbar";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import no_products from "../../../assets/no_products.png";
-import { useNavigate } from "react-router-dom";
+import OutOfStockModal from "../../modals/OutOfStockModal";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const { addToCart } = useCart();
 
   const [product, setProduct] = useState(null);
+  const [allProducts, setAllProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const { addToCart } = useCart();
-  const [allProducts, setAllProducts] = useState([]);
-
-  const navigate = useNavigate();
+  const [showOutOfStock, setShowOutOfStock] = useState(false);
 
   useEffect(() => {
     axios
       .get("https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product")
       .then((res) => setAllProducts(res.data))
-      .catch((err) => console.log(err));
+      .catch(console.error);
   }, []);
 
   useEffect(() => {
     setLoading(true);
+    setQuantity(1); // reset qty on product change
+
     axios
       .get(`https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product/${id}`)
-      .then((res) => {
-        setProduct(res.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching product:", err);
-      })
+      .then((res) => setProduct(res.data))
+      .catch(console.error)
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -56,11 +54,6 @@ const ProductDetails = () => {
       </>
     );
   }
-
-  const relatedProducts = allProducts
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .slice(0, 4);
-  console.log(relatedProducts);
 
   if (!product) {
     return (
@@ -79,9 +72,18 @@ const ProductDetails = () => {
     );
   }
 
+  const isAvailable = product.status === "available";
+  const stock = product.stock || 0;
+  const hasReplacement = product.replacementId !== null;
+  const isQuantityValid = quantity <= stock;
+
   const path = location.pathname;
   const fromSearch = path.includes("search");
   const category = product.category;
+
+  const relatedProducts = allProducts
+    .filter((p) => p.category === product.category && p.id !== product.id)
+    .slice(0, 4);
 
   const allImages =
     product.images && product.images.length > 0
@@ -117,13 +119,14 @@ const ProductDetails = () => {
         </div>
 
         <div className="product-details-container">
+          {/* IMAGES */}
           <div className="product-gallery">
             <Carousel
               interval={null}
-              controls={true}
+              controls
               indicators={false}
               activeIndex={activeIndex}
-              onSelect={(selectedIndex) => setActiveIndex(selectedIndex)}
+              onSelect={(i) => setActiveIndex(i)}
               className="details-carousel"
             >
               {allImages.map((img, index) => (
@@ -162,28 +165,74 @@ const ProductDetails = () => {
             <p className="price">₹{product.price}</p>
             <p className="description">{product.description}</p>
 
-            <div className="quantity-section">
-              <div className="quantity-controls">
-                <button
-                  disabled={quantity === 1}
-                  onClick={() => setQuantity((p) => (p > 1 ? p - 1 : 1))}
-                >
-                  −
-                </button>
+            {isAvailable ? (
+              <p className="text-success">In Stock</p>
+            ) : (
+              <p className="text-danger">Currently unavailable</p>
+            )}
 
-                <span>{quantity}</span>
+            {isAvailable && (
+              <div className="quantity-section">
+                <div className="quantity-controls">
+                  <button
+                    disabled={quantity === 1}
+                    onClick={() => setQuantity((q) => q - 1)}
+                  >
+                    −
+                  </button>
 
-                <button onClick={() => setQuantity((p) => p + 1)}>+</button>
+                  <span>{quantity}</span>
+
+                  <button
+                    onClick={() => {
+                      if (quantity + 1 > product.stock) {
+                        setShowOutOfStock(true);
+                      } else {
+                        setQuantity((q) => q + 1);
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="action-buttons">
-              <button
-                className="add-to-cart"
-                onClick={() => addToCart(product, quantity)}
-              >
-                Add to Cart
-              </button>
+              {isAvailable && isQuantityValid && (
+                <button
+                  className="add-to-cart"
+                  onClick={() => addToCart(product, quantity)}
+                >
+                  Add to Cart
+                </button>
+              )}
+
+              {isAvailable && !isQuantityValid && (
+                <p className="text-warning">
+                  Only {stock} items available. Reduce quantity.
+                </p>
+              )}
+
+              {!isAvailable && hasReplacement && (
+                <div className="replacement-box">
+                  <p className="text-danger">
+                    This product is no longer available.
+                  </p>
+                  <button
+                    className="btn btn-link"
+                    onClick={() =>
+                      navigate(`/product/${product.replacementId}`)
+                    }
+                  >
+                    View Replacement Product
+                  </button>
+                </div>
+              )}
+
+              {!isAvailable && !hasReplacement && (
+                <p className="text-danger">This product is discontinued.</p>
+              )}
             </div>
 
             {product.specs && (
@@ -205,7 +254,6 @@ const ProductDetails = () => {
             {product.reviews && product.reviews.length > 0 && (
               <div className="reviews-section compact-review">
                 <h5 className="review-title">Customer Reviews</h5>
-
                 <div className="all-reviews-box">
                   {product.reviews.map((r, i) => (
                     <div className="single-review" key={i}>
@@ -215,21 +263,15 @@ const ProductDetails = () => {
                           {Array.from({ length: 5 }).map((_, idx) => (
                             <span
                               key={idx}
-                              className={
-                                idx < (r.rating || 4) ? "star filled" : "star"
-                              }
+                              className={idx < 4 ? "star filled" : "star"}
                             >
                               ★
                             </span>
                           ))}
                         </span>
                       </div>
-
                       <p className="review-comment">{r.comment}</p>
-
-                      {i !== product.reviews.length - 1 && (
-                        <hr className="review-line" />
-                      )}
+                      {i !== product.reviews.length - 1 && <hr />}
                     </div>
                   ))}
                 </div>
@@ -237,40 +279,39 @@ const ProductDetails = () => {
             )}
           </div>
         </div>
-        {product && (
-          <div className="related-section">
-            <h3 className="related-heading">Related Products</h3>
 
-            {relatedProducts.length > 0 ? (
-              <div className="related-grid">
-                {relatedProducts.map((r) => (
-                  <div className="related-card" key={r.id}>
-                    <div className="related-img-wrapper">
-                      <img src={r.image} alt={r.title} />
-                    </div>
+        <div className="related-section">
+          <h3 className="related-heading">Related Products</h3>
 
-                    <div className="related-info">
-                      <p className="related-title">{r.title}</p>
-                      <p className="related-price">₹{r.price}</p>
-                      <button
-                        className="related-view-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/product/${r.id}`);
-                        }}
-                      >
-                        View Details
-                      </button>
-                    </div>
+          {relatedProducts.length > 0 ? (
+            <div className="related-grid">
+              {relatedProducts.map((r) => (
+                <div className="related-card" key={r.id}>
+                  <div className="related-img-wrapper">
+                    <img src={r.image} alt={r.title} />
                   </div>
-                ))}
-              </div>
-            ) : (
-              <p>No similar products found.</p>
-            )}
-          </div>
-        )}
+                  <div className="related-info">
+                    <p className="related-title">{r.title}</p>
+                    <p className="related-price">₹{r.price}</p>
+                    <button
+                      className="related-view-btn"
+                      onClick={() => navigate(`/product/${r.id}`)}
+                    >
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>No similar products found.</p>
+          )}
+        </div>
       </div>
+      <OutOfStockModal
+        show={showOutOfStock}
+        onClose={() => setShowOutOfStock(false)}
+      />
 
       <Footer />
     </>

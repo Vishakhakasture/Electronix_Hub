@@ -4,7 +4,7 @@ import Navbar from "../../layout/Header/Navbar";
 import "./CartPage.css";
 import { useCart } from "../../../context/CartContext";
 import Loader from "../../constants/Loader";
-import ConfirmModal from "./ConfirmModal";
+import ConfirmModal from "../../modals/ConfirmModal";
 import { AiFillDelete } from "react-icons/ai";
 import empty_cart from "../../../assets/empty_cart.png";
 import Footer from "../../layout/Footer/Footer";
