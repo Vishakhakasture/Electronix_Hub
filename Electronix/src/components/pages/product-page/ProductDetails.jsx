@@ -36,7 +36,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     setLoading(true);
-    setQuantity(1); // reset qty on product change
+    setQuantity(1);
 
     axios
       .get(`https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product/${id}`)
@@ -74,7 +74,11 @@ const ProductDetails = () => {
 
   const isAvailable = product.status === "available";
   const stock = product.stock || 0;
-  const hasReplacement = product.replacementId !== null;
+  const hasReplacement =
+    product.replacementId !== null &&
+    product.replacementId !== undefined &&
+    product.replacementId !== "" &&
+    product.replacementId !== "null";
   const isQuantityValid = quantity <= stock;
 
   const path = location.pathname;
@@ -214,7 +218,7 @@ const ProductDetails = () => {
                 </p>
               )}
 
-              {!isAvailable && hasReplacement && (
+              {!isAvailable && hasReplacement ? (
                 <div className="replacement-box">
                   <p className="text-danger">
                     This product is no longer available.
@@ -228,10 +232,12 @@ const ProductDetails = () => {
                     View Replacement Product
                   </button>
                 </div>
-              )}
-
-              {!isAvailable && !hasReplacement && (
-                <p className="text-danger">This product is discontinued.</p>
+              ) : (
+                !isAvailable && (
+                  <p className="text-danger">
+                    Sorry, no replacement is available.
+                  </p>
+                )
               )}
             </div>
 
