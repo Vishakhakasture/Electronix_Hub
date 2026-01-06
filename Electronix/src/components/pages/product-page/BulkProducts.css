@@ -1,0 +1,146 @@
+.bulk-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.bulk-title {
+  font-size: 26px;
+  color: #0d1137;
+  margin-bottom: 5px;
+}
+
+.bulk-subtitle {
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.bulk-search {
+  position: relative;
+  margin-bottom: 20px;
+  max-width: 420px;
+}
+
+.bulk-search input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.bulk-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  margin-top: 5px;
+}
+
+.bulk-suggestions li {
+  padding: 10px 14px;
+  cursor: pointer;
+  list-style-type: none;
+}
+
+.bulk-suggestions li:hover {
+  background: #f5f7fb;
+}
+
+.bulk-table {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.bulk-header,
+.bulk-row {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 1fr 1fr 0.5fr;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+}
+
+.bulk-product-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0d1137;
+}
+
+.bulk-header {
+  background: #f5f7fb;
+  font-weight: 600;
+  color: #0d1137;
+}
+
+.bulk-row {
+  border-top: 1px solid #eee;
+}
+
+.bulk-row select,
+.bulk-row input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.bulk-price,
+.bulk-total {
+  font-weight: 500;
+}
+
+.remove-btn {
+  background: transparent;
+  border: none;
+  color: #ff4d4f;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.bulk-error {
+  grid-column: 1 / -1;
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.bulk-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.add-row-btn {
+  background: #e6e9f5;
+  color: #0d1137;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.add-cart-btn {
+  background: #0d1137;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.bulk-loader {
+  min-height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}

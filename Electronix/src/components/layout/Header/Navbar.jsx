@@ -9,6 +9,7 @@ import navData from "../../pages/home-page/navData";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { BsBagHeart } from "react-icons/bs";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
+import { MdOutlineBorderInner } from "react-icons/md";
 import { IoMdLogOut } from "react-icons/io";
 
 const Navbar = () => {
@@ -78,6 +79,11 @@ const Navbar = () => {
   const handleOrders = () => {
     setShowDropdown(false);
     navigate("/orders");
+  };
+
+  const handleQuickOrder = () => {
+    setShowDropdown(false);
+    navigate("/bulk-order");
   };
 
   const handleInvoiceHistory = () => {
@@ -234,15 +240,11 @@ const Navbar = () => {
                         </span>
                         <span className="dropdown-text">Orders</span>
                       </div>
-
-                      <div
-                        className="dropdown-item"
-                        onClick={handleInvoiceHistory}
-                      >
+                      <div className="dropdown-item" onClick={handleQuickOrder}>
                         <span className="dropdown-icon">
-                          <LiaFileInvoiceDollarSolid />
+                          <MdOutlineBorderInner />
                         </span>
-                        <span className="dropdown-text">Invoice History</span>
+                        <span className="dropdown-text">Quick Order</span>
                       </div>
 
                       <hr className="dropdown-divider" />

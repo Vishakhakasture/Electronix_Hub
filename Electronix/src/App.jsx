@@ -10,6 +10,7 @@ import ProfilePage from "../src/components/pages/profile-page/ProfilePage.jsx";
 import PaymentPage from "../src/components/pages/payment-page/PaymentPage.jsx";
 import SuccessPage from "../src/components/pages/payment-page/SuccessPage.jsx";
 import OrdersPage from "./components/pages/profile-page/OrdersPage.jsx";
+import BulkProducts from "./components/pages/product-page/BulkProducts.jsx";
 import Contact from "../src/components/auth/Contact.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,7 +20,6 @@ function App() {
   return (
     <>
       <CustomToaster />
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
@@ -32,7 +32,7 @@ function App() {
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/order-success" element={<SuccessPage />} />
         <Route path="/orders" element={<OrdersPage />} />
-
+        <Route path="/bulk-order" element={<BulkProducts />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
     </>

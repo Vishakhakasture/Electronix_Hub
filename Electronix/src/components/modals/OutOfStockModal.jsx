@@ -13,8 +13,7 @@ const OutOfStockModal = ({ show, onClose }) => {
         <h5 className="text-center mb-3 text-danger">Product is Unavailable</h5>
 
         <p className="text-center">
-          The requested quantity is currently not in stock. Please reduce the
-          quantity.
+          The requested quantity is currently not in stock.
         </p>
 
         <div className="d-flex justify-content-center mt-4">
