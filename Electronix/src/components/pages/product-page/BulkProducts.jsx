@@ -23,6 +23,7 @@ const BulkProducts = () => {
 
   const { addToCart } = useCart();
 
+  // Fetch products
   useEffect(() => {
     axios
       .get("https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product")
@@ -39,6 +40,63 @@ const BulkProducts = () => {
     });
   };
 
+  // ✅ CSV Upload Handler
+  const handleCSVUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => parseCSV(event.target.result);
+    reader.readAsText(file);
+
+    e.target.value = ""; // reset input
+  };
+
+  // ✅ CSV Parser (productName, quantity)
+  const parseCSV = (text) => {
+    const lines = text.trim().split("\n");
+
+    if (lines.length <= 1) {
+      setRows([EMPTY_ROW]);
+      return;
+    }
+
+    const dataLines = lines.slice(1);
+
+    const importedRows = dataLines.map((line) => {
+      const [productName, qty] = line.split(",");
+
+      if (!productName) {
+        return {
+          ...EMPTY_ROW,
+          error: "Invalid CSV row",
+        };
+      }
+
+      const matchedProduct = products.find(
+        (p) => p.title.toLowerCase().trim() === productName.toLowerCase().trim()
+      );
+
+      if (!matchedProduct) {
+        return {
+          productId: "",
+          product: null,
+          quantity: Number(qty) || 1,
+          error: "Mentioned product is not available",
+        };
+      }
+
+      return {
+        productId: matchedProduct.id,
+        product: matchedProduct,
+        quantity: Number(qty) || 1,
+        error: "",
+      };
+    });
+
+    setRows(importedRows.length ? importedRows : [EMPTY_ROW]);
+  };
+
   const handleQuantityChange = (index, qty) => {
     if (qty <= 0) return;
     updateRow(index, { quantity: qty });
@@ -52,6 +110,7 @@ const BulkProducts = () => {
     setRows((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // 🔍 Manual search
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -72,37 +131,24 @@ const BulkProducts = () => {
     setRows((prevRows) => {
       const emptyIndex = prevRows.findIndex((r) => !r.product);
 
+      const newRow = {
+        productId: product.id,
+        product,
+        quantity: 1,
+        error: "",
+      };
+
       if (emptyIndex !== -1) {
         const updated = [...prevRows];
-        updated[emptyIndex] = {
-          productId: product.id,
-          product,
-          quantity: 1,
-          error: "",
-        };
+        updated[emptyIndex] = newRow;
         return updated;
       }
 
-      return [
-        ...prevRows,
-        {
-          productId: product.id,
-          product,
-          quantity: 1,
-          error: "",
-        },
-      ];
+      return [...prevRows, newRow];
     });
 
     setSearchTerm("");
     setSuggestions([]);
-  };
-
-  const handleSearchKeyDown = (e) => {
-    if (e.key === "Enter" && suggestions.length > 0) {
-      e.preventDefault();
-      handleSuggestionSelect(suggestions[0]);
-    }
   };
 
   const addAllToCart = async () => {
@@ -141,21 +187,29 @@ const BulkProducts = () => {
       <Navbar />
 
       <div className="bulk-container">
-        <h2 className="bulk-title">Bulk Order</h2>
+        <h2 className="bulk-title">Quick Order</h2>
         <p className="bulk-subtitle">
           Quickly add multiple products to your cart
         </p>
 
-        <div
-          className="bulk-search"
-          style={{ position: "relative", zIndex: 20 }}
-        >
+        {/* ✅ CSV Upload */}
+        <div className="bulk-csv-upload">
+          <label className="csv-label">
+            Import CSV
+            <input type="file" accept=".csv" onChange={handleCSVUpload} />
+          </label>
+          <span className="csv-hint">
+            Upload CSV with <b>productName, quantity</b>
+          </span>
+        </div>
+
+        {/* Search */}
+        <div className="bulk-search">
           <input
             type="text"
             placeholder="Search product to add..."
             value={searchTerm}
             onChange={handleSearchChange}
-            onKeyDown={handleSearchKeyDown}
           />
 
           {suggestions.length > 0 && (
@@ -169,6 +223,7 @@ const BulkProducts = () => {
           )}
         </div>
 
+        {/* Table */}
         <div className="bulk-table">
           <div className="bulk-header">
             <span>Product</span>
@@ -182,11 +237,10 @@ const BulkProducts = () => {
             <div key={index} className="bulk-row">
               <div className="bulk-product-name">
                 {row.product ? row.product.title : "No product selected"}
+                {row.error && <p className="bulk-error">{row.error}</p>}
               </div>
 
-              <span className="bulk-price">
-                {row.product ? `₹${row.product.price}` : "-"}
-              </span>
+              <span>{row.product ? `₹${row.product.price}` : "-"}</span>
 
               <input
                 type="number"
@@ -198,15 +252,11 @@ const BulkProducts = () => {
                 }
               />
 
-              <span className="bulk-total">
+              <span>
                 {row.product ? `₹${row.product.price * row.quantity}` : "-"}
               </span>
 
-              <button
-                className="remove-btn"
-                onClick={() => removeRow(index)}
-                title="Remove row"
-              >
+              <button className="remove-btn" onClick={() => removeRow(index)}>
                 <TiDeleteOutline />
               </button>
             </div>

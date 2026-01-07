@@ -15,6 +15,46 @@
   margin-bottom: 25px;
 }
 
+/* CSV Upload Wrapper */
+.bulk-csv-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+/* Custom File Input Button */
+.csv-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  padding: 10px 16px;
+  background-color: #0d1137;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover Effect */
+.csv-label:hover {
+  background-color: #1a1f5a;
+}
+
+/* Hide Default Input */
+.csv-label input {
+  display: none;
+}
+
+/* Helper Text */
+.csv-hint {
+  font-size: 12px;
+  color: #777;
+}
+
 .bulk-search {
   position: relative;
   margin-bottom: 20px;
