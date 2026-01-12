@@ -23,7 +23,6 @@ const BulkProducts = () => {
 
   const { addToCart } = useCart();
 
-  // Fetch products
   useEffect(() => {
     axios
       .get("https://691c087d3aaeed735c8f339c.mockapi.io/api/v1/product")
@@ -40,7 +39,6 @@ const BulkProducts = () => {
     });
   };
 
-  // ✅ CSV Upload Handler
   const handleCSVUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -52,7 +50,6 @@ const BulkProducts = () => {
     e.target.value = ""; // reset input
   };
 
-  // ✅ CSV Parser (productName, quantity)
   const parseCSV = (text) => {
     const lines = text.trim().split("\n");
 
@@ -110,7 +107,6 @@ const BulkProducts = () => {
     setRows((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // 🔍 Manual search
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -192,7 +188,6 @@ const BulkProducts = () => {
           Quickly add multiple products to your cart
         </p>
 
-        {/* ✅ CSV Upload */}
         <div className="bulk-csv-upload">
           <label className="csv-label">
             Import CSV
@@ -203,7 +198,6 @@ const BulkProducts = () => {
           </span>
         </div>
 
-        {/* Search */}
         <div className="bulk-search">
           <input
             type="text"
@@ -223,7 +217,6 @@ const BulkProducts = () => {
           )}
         </div>
 
-        {/* Table */}
         <div className="bulk-table">
           <div className="bulk-header">
             <span>Product</span>
