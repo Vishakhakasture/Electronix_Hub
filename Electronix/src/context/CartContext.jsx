@@ -19,7 +19,7 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);   // 🔥 NEW
+  const [loading, setLoading] = useState(true); // 🔥 NEW
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -40,7 +40,7 @@ export const CartProvider = ({ children }) => {
         setCartItems([]);
       }
 
-      setLoading(false);   // 🔥 Firebase fetching finished
+      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -111,7 +111,9 @@ export const CartProvider = ({ children }) => {
     const q = query(collection(db, "cart"), where("userId", "==", user.uid));
     const snapshot = await getDocs(q);
 
-    await Promise.all(snapshot.docs.map((d) => deleteDoc(doc(db, "cart", d.id))));
+    await Promise.all(
+      snapshot.docs.map((d) => deleteDoc(doc(db, "cart", d.id)))
+    );
     setCartItems([]);
     toast.success("All products from cart are removed");
   };
@@ -124,7 +126,7 @@ export const CartProvider = ({ children }) => {
         updateQuantity,
         removeFromCart,
         clearCart,
-        loading,    // 🔥 exposing loading state
+        loading, // 🔥 exposing loading state
       }}
     >
       {children}

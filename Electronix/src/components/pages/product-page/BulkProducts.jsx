@@ -47,7 +47,7 @@ const BulkProducts = () => {
     reader.onload = (event) => parseCSV(event.target.result);
     reader.readAsText(file);
 
-    e.target.value = ""; // reset input
+    e.target.value = ""; 
   };
 
   const parseCSV = (text) => {

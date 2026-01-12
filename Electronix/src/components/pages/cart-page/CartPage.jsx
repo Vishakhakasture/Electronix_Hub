@@ -79,7 +79,7 @@ const CartPage = () => {
                         e.target.tagName !== "BUTTON" &&
                         !e.target.classList.contains("remove-btn")
                       ) {
-                        navigate(`/product/${item.id}`);
+                        navigate(`/product/${item.productId}`);
                       }
                     }}
                   >
